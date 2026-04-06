@@ -1,0 +1,35 @@
+{
+    "name": "BX Global Sort",
+    "archiveName": "bx-codemaster/bx-global-sort",
+    "category": "productivity",
+    "developer": "Axel Benkert",
+    "developerWebsite": "https://www.bx-coding.de",
+    "website": "https://www.der-eisenhans.de",
+    "srcDir": "src",
+    "version": "auto",
+    "shortDescription": "Ein Verwaltungstool für Modified eCommerce Shops, das die Sortierung von Produkten auf der Startseite und in Kategorien vereinfacht.",
+    "description": "BX Global Sort ist ein professionelles Verwaltungstool für Modified eCommerce Shopsofware, das die Sortierung von Produkten auf der Startseite und in Kategorien vereinfacht. Mit einer modernen Drag & Drop Oberfläche können Sie Produkte intuitiv per Maus verschieben – die Sortierung wird automatisch gespeichert.",
+    "price": "free", 
+    "date": "2026-03-08 00:00:00",
+    "php": {
+      "version": "^7.4 || ^8.0"
+    },
+    "modifiedCompatibility": [
+      "3.0.1",
+      "3.0.2",
+      "3.1.0",
+      "3.1.1",
+      "3.1.2",
+      "3.1.3",
+      "3.1.4",
+      "3.1.5",
+      "3.1.6",
+      "3.2.0",
+      "3.2.1",
+      "3.3.0"
+    ],
+    "require": {
+      "composer/autoload": "^1.9.0",
+      "robinthehood/modified-std-module": "^0.16.0"
+  }
+}

@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "scopes": {
+        "shop-root": {
+            "hashes": {
+                "/admin/bx_eu_garan.php": "c5b5c1a0b2375248d8f9dea057f39b87",
+                "/admin/images/icons/heading/icon_bx_eu_garan.png": "e7914bacb3fdeddd5a6f12b2b0cbf1ae",
+                "/admin/includes/extra/css/bx_eu_garan.php": "8fd10097c5824d34418faeb93dc386bc",
+                "/admin/includes/extra/filenames/bx_eu_garan.php": "7f6edfd457419d82d19061bf3a933324",
+                "/admin/includes/extra/javascript/bx_eu_garan.php": "5521e92884b57670acf4af12122c2621",
+                "/admin/includes/extra/menu/bx_eu_garan.php": "0c3b28dab55a4f899b2eca21921b07ec",
+                "/admin/includes/extra/modules/new_product/bx_eu_garan.php": "1a207b56d14f956bd40775879aa8ffa5",
+                "/admin/includes/modules/categories/bx_eu_garan_categories.php": "90be5edf83d02596ff2d6c1852a556d9",
+                "/admin/includes/modules/system/bx_eu_garan.php": "a3f806258d117a200e975e8f98a27300",
+                "/lang/english/extra/admin/bx_global_sort.php": "cd1a9bf9766c161e76b5bc23745eb7f6",
+                "/lang/english/modules/categories/bx_eu_garan_categories.php": "d1d5be2779c95e8fa4b48a74414a2059",
+                "/lang/english/modules/system/bx_eu_garan.php": "e5567a3053992db30a67f744976a2d72",
+                "/lang/german/extra/admin/bx_global_sort.php": "bcd3914dbbb264059ce9fb695ace5134",
+                "/lang/german/modules/categories/bx_eu_garan_categories.php": "f07a441181ded68caa1b414630262841",
+                "/lang/german/modules/system/bx_eu_garan.php": "95ed6d3fe8795d5ca5ea2b8b87bdcefb",
+                "/moduleinfo.json": "5b58219b3b9c58339484344f9bdc8af1"
+            }
+        },
+        "shop-vendor-mmlc": {
+            "hashes": []
+        }
+    }
+}
