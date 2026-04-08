@@ -116,10 +116,8 @@ class bx_eu_garan {
 		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_products_warranty_guarantee (
 								id INT AUTO_INCREMENT PRIMARY KEY,
 								products_id INT NOT NULL UNIQUE,
-								enabled TINYINT(1) DEFAULT 0,
+								manufacturer_guarantee_available TINYINT(1) DEFAULT 0,
 								guarantee_years INT DEFAULT 0,
-								manufacturer_name_override VARCHAR(255),
-								model_identifier_override VARCHAR(255),
 								covers_full_product TINYINT(1) DEFAULT 1,
 								requires_additional_cost TINYINT(1) DEFAULT 0,
 								qr_url VARCHAR(500),
@@ -143,7 +141,7 @@ class bx_eu_garan {
 		$this->addProductsForeignKeyIfPossible('bx_products_repairability', 'fk_bx_eu_garan_repair_products');
 	}
 
-	public function update() {}
+		public function update() {}
 
 		/**
 		 * Add products_id foreign key if environment supports it and constraint does not already exist.

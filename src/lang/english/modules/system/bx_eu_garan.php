@@ -27,7 +27,7 @@
   $description = '<h3 style="margin-top:0; display:flex; align-items:center; gap:8px;"><span style="font-size: 2.5em; line-height:1;">🇪🇺</span> BX EU Manufacturer\'s warranty</h3><p>is a professional management tool for Modified eCommerce shop software that simplifies the sorting of products on the homepage and within categories. With a modern drag-and-drop interface, you can intuitively move products using the mouse – the sorting is saved automatically.</p>';
 
   if((!defined('MODULE_BX_EU_GARAN_STATUS')) || (MODULE_BX_EU_GARAN_STATUS != 'True') && basename($_SERVER['PHP_SELF']) == 'module_export.php') { 
-    $description .= '<p><a class="button btnbox but_red" style="text-align:center;" onclick="return confirmLink(\'Delete all files?\', \'\' ,this);" href="'.xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_global_sort&action=custom').'">Delete all module files</a></p>';
+    $description .= '<p><a class="button btnbox but_red" style="text-align:center;" onclick="return confirmLink(\'Delete all files?\', \'\' ,this);" href="'.xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan&action=custom').'">Delete all module files</a></p>';
   }
   define('MODULE_BX_EU_GARAN_DESC', $description);
   

@@ -15,16 +15,16 @@ class bx_eu_garan_categories {
   public $sort_order;
   public $_check;
 
-  private $tableWarranty = 'bx_products_warranty_guarantee';
+  private $tableWarranty      = 'bx_products_warranty_guarantee';
   private $tableRepairability = 'bx_products_repairability';
 
   public function __construct() {
-    $this->code = 'bx_eu_garan_categories';
-    $this->name = 'MODULE_CATEGORIES_'.strtoupper($this->code);
-    $this->title = defined($this->name.'_TITLE') ? constant($this->name.'_TITLE') : 'BX EU Garan Produkt-Hooks';
+    $this->code        = 'bx_eu_garan_categories';
+    $this->name        = 'MODULE_CATEGORIES_'.strtoupper($this->code);
+    $this->title       = defined($this->name.'_TITLE') ? constant($this->name.'_TITLE') : 'BX EU Garan Produkt-Hooks';
     $this->description = defined($this->name.'_DESCRIPTION') ? constant($this->name.'_DESCRIPTION') : 'Speichert EU-Garantie- und Reparierbarkeitsdaten beim Produktspeichern.';
-    $this->enabled = defined($this->name.'_STATUS') && constant($this->name.'_STATUS') == 'true';
-    $this->sort_order = defined($this->name.'_SORT_ORDER') ? constant($this->name.'_SORT_ORDER') : 999;
+    $this->enabled     = defined($this->name.'_STATUS') && constant($this->name.'_STATUS') == 'true';
+    $this->sort_order  = defined($this->name.'_SORT_ORDER') ? constant($this->name.'_SORT_ORDER') : 999;
   }
 
   public function check() {
@@ -71,26 +71,22 @@ class bx_eu_garan_categories {
       return;
     }
 
-    $enabled = isset($products_data['bx_eu_garan_enabled']) ? 1 : 0;
-    $guaranteeYears = isset($products_data['bx_eu_garan_guarantee_years']) ? (int)$products_data['bx_eu_garan_guarantee_years'] : 0;
-    $manufacturerOverride = isset($products_data['bx_eu_garan_manufacturer_name_override']) ? trim((string)$products_data['bx_eu_garan_manufacturer_name_override']) : '';
-    $modelOverride = isset($products_data['bx_eu_garan_model_identifier_override']) ? trim((string)$products_data['bx_eu_garan_model_identifier_override']) : '';
-    $coversFullProduct = isset($products_data['bx_eu_garan_covers_full_product']) ? 1 : 0;
-    $requiresAdditionalCost = isset($products_data['bx_eu_garan_requires_additional_cost']) ? 1 : 0;
-    $qrUrl = isset($products_data['bx_eu_garan_qr_url']) ? trim((string)$products_data['bx_eu_garan_qr_url']) : '';
+    $manufacturerGuaranteeAvailable = (isset($products_data['bx_eu_garan_manufacturer_guarantee_available']) && (int)$products_data['bx_eu_garan_manufacturer_guarantee_available'] === 1) ? 1 : 0;
+    $guaranteeYears         = isset($products_data['bx_eu_garan_guarantee_years']) ? (int)$products_data['bx_eu_garan_guarantee_years'] : 0;
+    $coversFullProduct      = (isset($products_data['bx_eu_garan_covers_full_product']) && (int)$products_data['bx_eu_garan_covers_full_product'] === 1) ? 1 : 0;
+    $requiresAdditionalCost = (isset($products_data['bx_eu_garan_requires_additional_cost']) && (int)$products_data['bx_eu_garan_requires_additional_cost'] === 1) ? 1 : 0;
+    $qrUrl                  = isset($products_data['bx_eu_garan_qr_url']) ? trim((string)$products_data['bx_eu_garan_qr_url']) : '';
 
     if ($guaranteeYears < 0) {
       $guaranteeYears = 0;
     }
 
     $warrantyQuery = "INSERT INTO `".$this->tableWarranty."`
-      (`products_id`, `enabled`, `guarantee_years`, `manufacturer_name_override`, `model_identifier_override`, `covers_full_product`, `requires_additional_cost`, `qr_url`, `created_at`, `updated_at`)
+      (`products_id`, `manufacturer_guarantee_available`, `guarantee_years`, `covers_full_product`, `requires_additional_cost`, `qr_url`, `created_at`, `updated_at`)
       VALUES (
         ".$products_id.",
-        ".$enabled.",
+        ".$manufacturerGuaranteeAvailable.",
         ".$guaranteeYears.",
-        ".$this->toSqlNullableString($manufacturerOverride).",
-        ".$this->toSqlNullableString($modelOverride).",
         ".$coversFullProduct.",
         ".$requiresAdditionalCost.",
         ".$this->toSqlNullableString($qrUrl).",
@@ -98,10 +94,8 @@ class bx_eu_garan_categories {
         NOW()
       )
       ON DUPLICATE KEY UPDATE
-        `enabled` = VALUES(`enabled`),
+        `manufacturer_guarantee_available` = VALUES(`manufacturer_guarantee_available`),
         `guarantee_years` = VALUES(`guarantee_years`),
-        `manufacturer_name_override` = VALUES(`manufacturer_name_override`),
-        `model_identifier_override` = VALUES(`model_identifier_override`),
         `covers_full_product` = VALUES(`covers_full_product`),
         `requires_additional_cost` = VALUES(`requires_additional_cost`),
         `qr_url` = VALUES(`qr_url`),
@@ -117,8 +111,8 @@ class bx_eu_garan_categories {
       $partsAvailable = (int)$products_data['bx_eu_garan_parts_available'] === 1 ? 1 : 0;
     }
 
-    $partsCostInfo = isset($products_data['bx_eu_garan_parts_cost_info']) ? trim((string)$products_data['bx_eu_garan_parts_cost_info']) : '';
-    $manualUrl = isset($products_data['bx_eu_garan_manual_url']) ? trim((string)$products_data['bx_eu_garan_manual_url']) : '';
+    $partsCostInfo      = isset($products_data['bx_eu_garan_parts_cost_info']) ? trim((string)$products_data['bx_eu_garan_parts_cost_info']) : '';
+    $manualUrl          = isset($products_data['bx_eu_garan_manual_url']) ? trim((string)$products_data['bx_eu_garan_manual_url']) : '';
     $repairRestrictions = isset($products_data['bx_eu_garan_repair_restrictions']) ? trim((string)$products_data['bx_eu_garan_repair_restrictions']) : '';
 
     $repairQuery = "INSERT INTO `".$this->tableRepairability."`
@@ -162,13 +156,11 @@ class bx_eu_garan_categories {
       if ($warrantyQuery && xtc_db_num_rows($warrantyQuery) > 0) {
         $row = xtc_db_fetch_array($warrantyQuery);
         $insert = "INSERT INTO `".$this->tableWarranty."`
-          (`products_id`, `enabled`, `guarantee_years`, `manufacturer_name_override`, `model_identifier_override`, `covers_full_product`, `requires_additional_cost`, `qr_url`, `created_at`, `updated_at`)
+          (`products_id`, `manufacturer_guarantee_available`, `guarantee_years`, `covers_full_product`, `requires_additional_cost`, `qr_url`, `created_at`, `updated_at`)
           VALUES (
             ".$dup_products_id.",
-            ".(int)$row['enabled'].",
+            ".(int)$row['manufacturer_guarantee_available'].",
             ".(int)$row['guarantee_years'].",
-            ".$this->toSqlNullableString($row['manufacturer_name_override']).",
-            ".$this->toSqlNullableString($row['model_identifier_override']).",
             ".(int)$row['covers_full_product'].",
             ".(int)$row['requires_additional_cost'].",
             ".$this->toSqlNullableString($row['qr_url']).",

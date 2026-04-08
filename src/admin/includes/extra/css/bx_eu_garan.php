@@ -46,6 +46,54 @@
       margin: 5px 10px;
       /*text-align: center; */
     }
+
+    div.SumoSelect.filter_manufacturers_id,
+    div.SumoSelect.filter_category_id,
+    div.SumoSelect.filter_status {
+      width: 100% !important;
+      max-width: 250px;
+    }
+
+    .tableBXConfig{
+      width:100%;
+      padding:2px;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+    .tableBXConfig td{
+      padding:8px; 
+      border-bottom: 1px solid #aaaaaa;
+      border-top: 1px solid #aaaaaa;
+    }
+    .tableBXConfig td a {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .tableBXConfig td.col-left{
+      font-size:12px;
+      font-weight:bold;
+      width:20%;
+      background-color:#F1F1F1;
+    }
+    .tableBXConfig td.col-middle{
+      background-color:#e8e8e8;
+      width:70px;
+    }
+    .tableBXConfig td.col-right{
+      width:auto;
+      empty-cells: show;
+      background-color:#F1F1F1;
+    }
+    .tableBXConfig td.col-single-right{
+      background-color:#e8e8e8;
+      width:80%;
+    }
+    .tableBXConfig td.mark{
+      background-color:#c8c8c8;
+    }
+    .tableBXConfig td.col-error{
+      background-color:#F2DEDE;
+    }
   </style>
 <?php
   }

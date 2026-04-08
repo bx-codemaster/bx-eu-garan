@@ -3,7 +3,7 @@
 **Dokument:** Harmonisierte Mitteilung über gesetzliches Gewährleistungsrecht & Haltbarkeitsgarantie-Label  
 **Verordnung:** [Durchführungsverordnung (EU) 2025/1960](https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32025R1960)  
 **Gültig ab:** 27. September 2026  
-**Erstellt:** 2. April 2026 | **Aktualisiert:** 5. April 2026 (EU-Primärquelle)  
+**Erstellt:** 2. April 2026 | **Aktualisiert:** 8. April 2026 | **Meilenstein:** Backend produktionsbereit ✅  
 
 ---
 
@@ -751,8 +751,12 @@ ELSE show_warranty_label = FALSE
   - [ ] Haltbarkeits-Label pro Produkt enthalten (wenn zutreffend)
   - [ ] Rechtliche Klärung: E-Mail vs. DIN-A4-Beilage
   
-- [ ] **Admin-Input**
-  - [ ] Neue Felder speichern korrekt
+- [x] **Admin-Input** ✅ Produktionsbereit (08.04.2026)
+  - [x] Neue Felder speichern korrekt
+  - [x] Datenmodell: separate Tabellen `bx_products_warranty_guarantee` + `bx_products_repairability`
+  - [x] Boolean-Felder (covers_full_product, requires_additional_cost) werden korrekt als 0/1 gespeichert
+  - [x] Label-Requirement-Anzeige (Badge grün/rot) nach Geschäftslogik
+  - [x] Referenzdaten (Hersteller, Modellkennung) automatisch aus Produktstamm
   - [ ] Validierung: Jahre nur 0 oder ≥3
   - [ ] Validierung: Wenn enabled=1, dann alle 4 Bedingungen check
 
@@ -807,8 +811,8 @@ ELSE show_warranty_label = FALSE
 | Phase | Dauer | Meilenstein | Status |
 |-------|-------|-------------|--------|
 | **1. Konzept & Jura** | 1–2 Tage | Freigabetexte, Design-Guideline, § 312f-Klärung | 📋 To-Do |
-| **2. Datenmodell** | 1–2 Tage | Schema finalisiert, Migration getestet | 📋 To-Do |
-| **3. Admin** | 2–3 Tage | Eingabe funktioniert, Validierung aktiv | 📋 To-Do |
+| **2. Datenmodell** | 1–2 Tage | Schema finalisiert, Migration getestet | ✅ Abgeschlossen (08.04.2026) |
+| **3. Admin** | 2–3 Tage | Eingabe funktioniert, Validierung aktiv | ✅ Abgeschlossen (08.04.2026) |
 | **4. PDP Frontend** | 2 Tage | Mitteilung + Label korrekt angezeigt | 📋 To-Do |
 | **5. Warenkorb & Checkout** | 3 Tage | **Warenkorb-Pflicht** + Bestätigung + E-Mail | 📋 To-Do |
 | **6. Sprache & Assets** | 2–3 Tage | Alle Texte, SVG, CSS fertig | 📋 To-Do |
