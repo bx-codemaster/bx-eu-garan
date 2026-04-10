@@ -32,6 +32,7 @@
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Please select at least one field to update.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'No products found for the selected filters.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', 'Update successful. Products: %d, warranty updates: %d, repairability updates: %d.');
+  define('TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED', 'Legal warranty content saved successfully.');
   define('TEXT_BX_EU_GARAN_PREVIEW_RESULT', 'Preview: <strong>%d</strong> products affected.');
 
   define('TEXT_BX_EU_GARAN_TABLE_HEADING_FILTER', 'Filter');
@@ -83,7 +84,11 @@
 
   define('BUTTON_BX_EU_GARAN_PREVIEW', 'Show preview');
   define('BUTTON_BX_EU_GARAN_APPLY', 'Apply changes');
+  define('BUTTON_BX_EU_GARAN_SAVE_WARRANTY_CONTENT', 'Save legal warranty content');
   define('TEXT_BX_EU_GARAN_CONFIRM_MASS_UPDATE', 'The selected fields will be set for all filtered products. Continue?');
+
+  define('TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_TITLE', 'Legal warranty');
+  define('TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_DESCRIPTION', 'Select a content entry from the content manager. The coID will be used to build the legal warranty button link.');
 
   define('TEXT_BX_EU_GARAN_INFOBOX_TITLE', 'Information');
   define('TEXT_BX_EU_GARAN_URL_NEW_LABELS', 'https://www.it-recht-kanzlei.de/neue-label-gewaehrleistung-garantie-2026.html');

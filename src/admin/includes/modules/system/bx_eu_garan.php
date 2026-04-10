@@ -76,6 +76,7 @@ class bx_eu_garan {
 		$keys = array('MODULE_BX_EU_GARAN_VERSION',
 					  			'MODULE_BX_EU_GARAN_STATUS',
 					  			'MODULE_BX_EU_GARAN_CONFIG_ID',
+				  				'MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP',
 								 );
 		return $keys;
     }
@@ -110,7 +111,8 @@ class bx_eu_garan {
 														set_function )
 									 VALUES ('MODULE_BX_EU_GARAN_STATUS', 'True', '6', '1', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), '),
 													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '6', '2', NOW(), '', '".self::class."->configurationFieldVersion'),
-													('MODULE_BX_EU_GARAN_CONFIG_ID', $this->freeId, '6', '3', NOW(), '', '".self::class."->configurationFieldVersion')";
+													('MODULE_BX_EU_GARAN_CONFIG_ID', $this->freeId, '6', '3', NOW(), '', '".self::class."->configurationFieldVersion'),
+													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '6', '4', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module(')";
 	  xtc_db_query($query);
 
 		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_products_warranty_guarantee (

@@ -32,6 +32,7 @@
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Bitte mindestens ein Feld zum Setzen auswählen.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'Keine Produkte mit den gewählten Filtern gefunden.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', 'Änderung erfolgreich. Produkte: %d, Garantie-Updates: %d, Reparierbarkeits-Updates: %d.');
+  define('TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED', 'Gewährleistungsinhalt erfolgreich gespeichert.');
   define('TEXT_BX_EU_GARAN_PREVIEW_RESULT', 'Vorschau: <strong>%d</strong> Produkte betroffen.');
 
   define('TEXT_BX_EU_GARAN_TABLE_HEADING_FILTER', 'Filter');
@@ -88,7 +89,11 @@
 
   define('BUTTON_BX_EU_GARAN_PREVIEW', 'Vorschau anzeigen');
   define('BUTTON_BX_EU_GARAN_APPLY', 'Änderungen ausführen');
+  define('BUTTON_BX_EU_GARAN_SAVE_WARRANTY_CONTENT', 'Gewährleistungstext speichern');
   define('TEXT_BX_EU_GARAN_CONFIRM_MASS_UPDATE', 'Die ausgewählten Felder werden für alle gefilterten Produkte gesetzt. Fortfahren?');
+
+  define('TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_TITLE', 'Gewährleistung');
+  define('TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_DESCRIPTION', 'Wählen Sie einen Inhalt aus dem Contentmanager. Aus der coID wird der Link für den Gewährleistungsbutton aufgebaut.');
 
   define('TEXT_BX_EU_GARAN_INFOBOX_TITLE', 'Informationen');
   define('TEXT_BX_EU_GARAN_URL_NEW_LABELS', 'https://www.it-recht-kanzlei.de/neue-label-gewaehrleistung-garantie-2026.html');

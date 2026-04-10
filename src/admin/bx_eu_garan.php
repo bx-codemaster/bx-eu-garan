@@ -30,9 +30,42 @@
   $languagesId  = isset($_SESSION['languages_id']) ? (int)$_SESSION['languages_id'] : 2;
   $previewCount = null;
   $feedback     = array();
+
+  if (!function_exists('bx_eu_garan_get_configuration_value')) {
+    function bx_eu_garan_get_configuration_value($key, $default = '') {
+      $query = xtc_db_query("SELECT configuration_value FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".xtc_db_input($key)."' LIMIT 1");
+      if ($query && xtc_db_num_rows($query) > 0) {
+        $row = xtc_db_fetch_array($query);
+        return isset($row['configuration_value']) ? (string)$row['configuration_value'] : (string)$default;
+      }
+
+      return (string)$default;
+    }
+  }
+
+  if (!function_exists('bx_eu_garan_set_configuration_value')) {
+    function bx_eu_garan_set_configuration_value($key, $value) {
+      $keyEscaped   = xtc_db_input((string)$key);
+      $valueEscaped = xtc_db_input((string)$value);
+      $existsQuery  = xtc_db_query("SELECT configuration_id FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".$keyEscaped."' LIMIT 1");
+
+      if ($existsQuery && xtc_db_num_rows($existsQuery) > 0) {
+        xtc_db_query("UPDATE ".TABLE_CONFIGURATION." SET configuration_value = '".$valueEscaped."', last_modified = NOW() WHERE configuration_key = '".$keyEscaped."'");
+        return;
+      }
+
+      $groupId = defined('MODULE_BX_EU_GARAN_CONFIG_ID') ? (int)constant('MODULE_BX_EU_GARAN_CONFIG_ID') : 6;
+      xtc_db_query("INSERT INTO ".TABLE_CONFIGURATION." (configuration_key, configuration_value, configuration_group_id, sort_order, date_added, set_function, use_function)
+                    VALUES ('".$keyEscaped."', '".$valueEscaped."', '".$groupId."', '50', NOW(), '', '')");
+    }
+  }
+
   $manufacturerGuaranteeAvailableRaw = isset($_POST['configuration']['manufacturer_guarantee_available']) ? (string)$_POST['configuration']['manufacturer_guarantee_available'] : 'false';
   $requiresAdditionalCostRaw         = isset($_POST['configuration']['requires_additional_cost']) ? (string)$_POST['configuration']['requires_additional_cost'] : 'false';
   $parts_availableRaw                = isset($_POST['configuration']['parts_available']) ? (string)$_POST['configuration']['parts_available'] : 'false';
+  $warrantyContentGroupId            = isset($_POST['warranty_content_group'])
+    ? max(0, (int)$_POST['warranty_content_group'])
+    : max(0, (int)bx_eu_garan_get_configuration_value('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0'));
 
   $formData = array(
     'filter_category_id'           => isset($_POST['filter_category_id']) ? (int)$_POST['filter_category_id'] : 0,
@@ -54,6 +87,11 @@
     'set_manual_url'               => isset($_POST['set_manual_url']) ? 1 : 0,
     'manual_url'                   => isset($_POST['manual_url']) ? trim((string)$_POST['manual_url']) : '',
   );
+
+  if ($action === 'save_warranty_content') {
+    bx_eu_garan_set_configuration_value('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', (string)$warrantyContentGroupId);
+    $feedback[] = array('type' => 'success', 'text' => TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED);
+  }
 
   if ($action === 'preview' || $action === 'apply_mass_update') {
     $productIds = bx_eu_garan_get_product_ids(
@@ -311,6 +349,21 @@ require (DIR_WS_INCLUDES.'head.php');
             <!-- boxCenterLeft //-->
             <td class="boxRight">
 <?php
+  $heading  = array();
+  $contents = array();
+
+  $heading[] = array('text' => '<strong>'.TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_TITLE.'</strong>');
+  $warrantyContentFormHtml  = xtc_draw_form('bx_eu_garan_warranty_content_form', 'bx_eu_garan.php');
+  $warrantyContentFormHtml .= '<div class="main" style="margin-bottom:8px;">'.TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_DESCRIPTION.'</div>';
+  $warrantyContentFormHtml .= '<div style="margin-bottom:10px;">'.xtc_cfg_select_content('warranty_content_group', (string)$warrantyContentGroupId).'</div>';
+  $warrantyContentFormHtml .= '<button class="button" type="submit" name="action" value="save_warranty_content">'.BUTTON_BX_EU_GARAN_SAVE_WARRANTY_CONTENT.'</button>';
+  $warrantyContentFormHtml .= '</form>';
+  $contents[] = array('text' => $warrantyContentFormHtml);
+
+  if ( (xtc_not_null($heading)) && (xtc_not_null($contents)) ) {
+    $box = new box;
+    echo $box->infoBox($heading, $contents);
+  }
 
   $heading  = array();
   $contents = array();
