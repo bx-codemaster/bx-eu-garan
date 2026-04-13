@@ -372,6 +372,38 @@ B) **Haltbarkeits-Label** (wenn berechtigt):
 - **Warenkorb:** Kennzeichnung ist Pflicht, wenn Kennzeichnungsvoraussetzungen erfüllt sind
 - **Geschachtelte Darstellung:** nur für die Kennzeichnung bei Online-Verträgen zulässig; vollständige Kennzeichnung muss beim ersten Klick/Hover/Touch erscheinen
 
+#### Modul-Installreihenfolge und Konfiguration (kurz)
+
+**Ziel:** Hinweistext zu Gewaehrleistung/Garantie im Warenkorb und in der Checkout-Bestaetigung anzeigen, ohne Core-Dateien zu aendern.
+
+1. **Systemmodul zuerst aktivieren (Pflichtabhaengigkeit)**
+  - Modul: `bx_eu_garan` (System)
+  - Muss aktiv sein: `MODULE_BX_EU_GARAN_STATUS = 'True'`
+  - Grund: Die Module lesen Produktdaten aus `bx_products_warranty_guarantee` und zeigen nur bei aktivem Systemmodul Hinweise an.
+
+2. **Shopping-Cart-Modul installieren**
+  - Datei: `includes/modules/shopping_cart/bx_eu_garan_cart.php`
+  - Konfiguration:
+    - `MODULE_SHOPPING_CART_BX_EU_GARAN_CART_STATUS = 'true'`
+    - `MODULE_SHOPPING_CART_BX_EU_GARAN_CART_SORT_ORDER` nach Bedarf
+  - Eintrag in `MODULE_SHOPPING_CART_INSTALLED` sicherstellen.
+
+3. **Order-Modul installieren**
+  - Datei: `includes/modules/order/bx_eu_garan_order.php`
+  - Konfiguration:
+    - `MODULE_ORDER_BX_EU_GARAN_ORDER_STATUS = 'true'`
+    - `MODULE_ORDER_BX_EU_GARAN_ORDER_SORT_ORDER` nach Bedarf
+  - Eintrag in `MODULE_ORDER_INSTALLED` sicherstellen.
+
+4. **Ausgabe-Hooks/Template aktiv haben**
+  - Warenkorb-Ausgabe (Hook): `includes/extra/modules/order_details_cart_content/bx_eu_garan.php`
+  - Checkout-Bestaetigung (Nova): `templates/tpl_modified_nova/module/checkout_confirmation.html`
+  - In beiden Faellen wird nur ein optischer Hinweis (`eu_garan_notice`) ausgegeben, kein bestellbares Attribut und keine Bestellpositions-Persistenz.
+
+5. **Fachliche Absicherung**
+  - Kein Eingriff in `checkout_process.php` noetig.
+  - Wenn keine Herstellergarantie vorliegt, bleibt mindestens der gesetzliche Gewaehrleistungs-Hinweis sichtbar.
+
 **Controller-Erweiterung:**
 
 Datei: [checkout_confirmation.php](checkout_confirmation.php)

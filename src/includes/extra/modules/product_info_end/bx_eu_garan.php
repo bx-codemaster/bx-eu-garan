@@ -6,7 +6,7 @@
 if (!isset($info_smarty) || !is_object($info_smarty) || !isset($product) || !is_object($product)) {
   return;
 }
-if (defined('MODULE_BX_EU_GARAN_STATUS') && MODULE_BX_EU_GARAN_STATUS !== 'True') {
+if (defined('MODULE_BX_EU_GARAN_STATUS') && constant('MODULE_BX_EU_GARAN_STATUS') !== 'True') {
   return;
 }
 
@@ -64,61 +64,27 @@ if (!empty($product->data['products_manufacturers_model'])) {
   $modelIdentifier = (string)$product->data['products_model'];
 }
 
-$defaultLegalQrUrl = 'https://europa.eu/youreurope/legal-guarantee/index.htm?lang='.$_SESSION["language_code"];
+$defaultLegalQrUrl = 'https://europa.eu/youreurope/citizens/consumers/shopping/guarantees/index_'.$_SESSION["language_code"].'.htm';
+
 $legalWarrantyContentGroup = defined('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP')
   ? (int)constant('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP')
   : 0;
 
-$contentFilename = defined('FILENAME_CONTENT') ? constant('FILENAME_CONTENT') : 'shop_content.php';
 $legalQrUrlRaw = $legalWarrantyContentGroup > 0
-  ? xtc_href_link($contentFilename, 'coID='.(int)$legalWarrantyContentGroup)
+  ? xtc_href_link(FILENAME_CONTENT, 'coID='.(int)$legalWarrantyContentGroup)
   : $defaultLegalQrUrl;
-
 
 $legalQrUrl    = htmlspecialchars($legalQrUrlRaw, ENT_QUOTES, 'UTF-8');
 
-$labelQrUrlRaw = $warranty['qr_url'] !== '' ? $warranty['qr_url'] : 'https://europa.eu/youreurope/citizens/consumers/shopping/commercial-guarantee-durability/index_'.$_SESSION["language_code"].'.htm';
-$labelQrUrl    = htmlspecialchars($labelQrUrlRaw, ENT_QUOTES, 'UTF-8');
-
-$manufacturerEscaped = htmlspecialchars($manufacturerName !== '' ? $manufacturerName : 'k. A.', ENT_QUOTES, 'UTF-8');
-$modelEscaped        = htmlspecialchars($modelIdentifier !== '' ? $modelIdentifier : 'k. A.', ENT_QUOTES, 'UTF-8');
-
-$noticeHtml = '';
-$noticeHtml .= '<div class="bx-eu-garan-pdp" style="margin:20px 0;">';
-$noticeHtml .= '  <div style="border:1px solid #d0d7de;background:#f8fafc;border-radius:6px;padding:12px 14px;">';
-$noticeHtml .= '    <div style="font-size:14px;font-weight:700;color:#1f2937;margin:0 0 6px 0;">Gesetzliche Gewahrleistung</div>';
-$noticeHtml .= '    <div style="font-size:13px;line-height:1.5;color:#334155;">Verbraucher haben bei Mangeln gesetzliche Gewahrleistungsrechte. Weitere Informationen sind uber den offiziellen EU-Hinweis abrufbar.</div>';
-$noticeHtml .= '    <div style="margin-top:8px;"><a href="'.$legalQrUrl.'" target="_blank" rel="noopener nofollow" style="font-size:12px;color:#0f4c81;">EU-Informationen zur gesetzlichen Gewahrleistung</a></div>';
-$noticeHtml .= '  </div>';
-
-if ($showWarrantyLabel) {
-  $noticeHtml .= '  <div style="border:1px solid #b9d6f2;background:#eef6ff;border-radius:6px;padding:12px 14px;margin-top:10px;">';
-  $noticeHtml .= '    <div style="font-size:14px;font-weight:700;color:#0b3a67;margin:0 0 6px 0;">Harmonisierte Kennzeichnung (GARAN)</div>';
-  $noticeHtml .= '    <div style="font-size:13px;line-height:1.5;color:#1f2937;">';
-  $noticeHtml .= '      Freiwillige Herstellergarantie: <strong>'.(int)$warranty['guarantee_years'].' Jahre</strong><br>';
-  $noticeHtml .= '      Hersteller: <strong>'.$manufacturerEscaped.'</strong><br>';
-  $noticeHtml .= '      Modellkennung: <strong>'.$modelEscaped.'</strong>';
-  $noticeHtml .= '    </div>';
-  $noticeHtml .= '    <div style="margin-top:8px;"><a href="'.$labelQrUrl.'" target="_blank" rel="noopener nofollow" style="font-size:12px;color:#0f4c81;">EU-Informationen zur Haltbarkeitsgarantie</a></div>';
-  $noticeHtml .= '  </div>';
-}
-
-$noticeHtml .= '</div>';
-
-$currentDescription = '';
-if (method_exists($info_smarty, 'getTemplateVars')) {
-  $currentDescription = (string)$info_smarty->getTemplateVars('PRODUCTS_DESCRIPTION');
-} elseif (method_exists($info_smarty, 'get_template_vars')) {
-  $currentDescription = (string)$info_smarty->get_template_vars('PRODUCTS_DESCRIPTION');
-}
-
-if (strpos($currentDescription, 'bx-eu-garan-pdp') === false) {
-  $info_smarty->assign('PRODUCTS_DESCRIPTION', $currentDescription.$noticeHtml);
-}
-
 $legal_label_path = DIR_WS_IMAGES . 'warranty_guarantee/';
-$info_smarty->assign('BX_EU_GARAN_LEGAL_LABEL_BTN', $legal_label_path.'legal_guarantee_btn_'.$_SESSION["language_code"].'.png');
+
+$legal_label_btn = '<a href="'.$legalQrUrl.'">'.PHP_EOL
+                  .'  <img class="bx_eu_garan_legal_label_btn" src="'.$legal_label_path.'legal_guarantee_btn_'.$_SESSION["language_code"].'.png" alt="" width="180" />'.PHP_EOL
+                  .'</a>';
+
+$info_smarty->assign('BX_EU_GARAN_LEGAL_LABEL_BTN', $legal_label_btn);
 $info_smarty->assign('BX_EU_GARAN_LEGAL_LABEL', $legal_label_path.'legal_guarantee_'.$_SESSION["language_code"].'.png');
+
 
 $info_smarty->assign('BX_EU_GARAN_SHOW_WARRANTY_LABEL', $showWarrantyLabel ? '1' : '0');
 $info_smarty->assign('BX_EU_GARAN_WARRANTY_YEARS', (int)$warranty['guarantee_years']);
@@ -153,6 +119,9 @@ if ($showWarrantyLabel) {
     }
   }
 
+  $labelQrUrlRaw = $warranty['qr_url'] !== '' ? $warranty['qr_url'] : 'https://europa.eu/youreurope/citizens/consumers/shopping/commercial-guarantee-durability/index_'.$_SESSION["language_code"].'.htm';
+  $labelQrUrl    = htmlspecialchars($labelQrUrlRaw, ENT_QUOTES, 'UTF-8');
+  
   $qrCodeDataUri = '';
   if (file_exists(DIR_FS_CATALOG . 'includes/classes/bx_dependency_resolver.php')) {
     require_once DIR_FS_CATALOG . 'includes/classes/bx_dependency_resolver.php';
