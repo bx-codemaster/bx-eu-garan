@@ -210,7 +210,7 @@ require (DIR_WS_INCLUDES.'head.php');
       <!-- body_text //-->
       <td class="boxCenter">
 
-        <div class="pageHeadingImage" style="min-width: 40px;"><?php echo xtc_image(DIR_WS_ICONS.'heading/icon_bx_eu_garan.png', HEADING_BX_EU_GARAN_TITLE, '', '', 'style="max-height: 32px;"'); ?></div>
+        <div class="pageHeadingImage" style="min-width: 40px;"><?php echo xtc_image(DIR_WS_ICONS.'heading/bx_eu_garan.png', HEADING_BX_EU_GARAN_TITLE, '', '', 'style="max-height: 32px;"'); ?></div>
         <div class="flt-l">
           <div class="pageHeading pdg2"><?php echo HEADING_BX_EU_GARAN_TITLE; ?></div>
           <div class="main pdg2"><?php echo HEADING_BX_EU_GARAN_SUB_TITLE; ?></div>
@@ -319,8 +319,35 @@ require (DIR_WS_INCLUDES.'head.php');
                       <td class="col-middle txta-c">
 <?php echo xtc_draw_checkbox_field('set_repair_score', '1', $formData['set_repair_score'] === 1); ?>
                       </td>
-                      <td class="col-right"><input type="number" min="0" max="10" step="1" name="repair_score" value="<?php echo (int)$formData['repair_score']; ?>"></td>
-                      <td class="col-right"></td>
+                      <td class="col-right">
+                        <input type="range" min="0" max="10" step="1" id="repair_score" name="repair_score" value="<?php echo (int)$formData['repair_score']; ?>" list="scores" style="min-width: 250px;">
+                        <datalist id="scores">
+                          <option value="0"></option>
+                          <option value="1"></option>
+                          <option value="2"></option>
+                          <option value="3"></option>
+                          <option value="4"></option>
+                          <option value="5"></option>
+                          <option value="6"></option>
+                          <option value="7"></option>
+                          <option value="8"></option>
+                          <option value="9"></option>
+                          <option value="10"></option>
+                        </datalist>
+                      </td>
+                      <td class="col-right">
+                        Aktueller Wert: <span id="repair_score_value" style="font-weight: bold;"><?php echo (int)$formData['repair_score']; ?></span>
+                        <script>
+                          var slider = document.getElementById("repair_score");
+                          var output = document.getElementById("repair_score_value");
+                          output.innerHTML = slider.value; // Zeigt den Standardwert an
+
+                          // Aktualisiert den Wert, wenn der Benutzer schiebt
+                          slider.oninput = function() {
+                          output.innerHTML = this.value;
+                          }
+                      </script>
+                      </td>
                     </tr>
                     <tr>
                       <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE; ?></td>

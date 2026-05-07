@@ -24,11 +24,21 @@
 
   define('MODULE_BX_EU_GARAN_TITLE', 'BX EU Manufacturer\'s warranty');
 
-  $description = '<h3 style="margin-top:0; display:flex; align-items:center; gap:8px;"><span style="font-size: 2.5em; line-height:1;">🇪🇺</span> BX EU Manufacturer\'s warranty</h3><p>is a professional management tool for Modified eCommerce shop software that simplifies the sorting of products on the homepage and within categories. With a modern drag-and-drop interface, you can intuitively move products using the mouse – the sorting is saved automatically.</p>';
-
-  if((!defined('MODULE_BX_EU_GARAN_STATUS')) || (MODULE_BX_EU_GARAN_STATUS != 'True') && basename($_SERVER['PHP_SELF']) == 'module_export.php') { 
+  $description = '
+  <details class="bxac-card">
+    <summary class="bxac-summary" style="list-style: none;">
+      <span class="bxac-arrow">▸</span>
+      <span class="bxac-title">' . xtc_image(DIR_WS_ICONS.'heading/bx_eu_garan.png', 'BX EU Manufacturer\'s warranty', '', '', 'style="max-height: 32px; vertical-align: middle; margin-right: 8px;"') . 'BX EU Manufacturer\'s warranty</span>
+    </summary>
+    <div class="bxac-body">
+    <h3 style="margin-top: 0;">Manufacturer\'s warranty and EU compliance</h3>
+    <p>is a professional management tool for Modified eCommerce shop software.</p>';
+  
+  if((!defined('MODULE_BX_EU_GARAN_STATUS')) || (MODULE_BX_EU_GARAN_STATUS != 'True') && basename($_SERVER['PHP_SELF']) == 'module_export.php') {
     $description .= '<p><a class="button btnbox but_red" style="text-align:center;" onclick="return confirmLink(\'Delete all files?\', \'\' ,this);" href="'.xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan&action=custom').'">Delete all module files</a></p>';
   }
+  $description .= '</div></details>';
+  
   define('MODULE_BX_EU_GARAN_DESC', $description);
   
   define('MODULE_BX_EU_GARAN_STATUS_TITLE', 'Module active?');
