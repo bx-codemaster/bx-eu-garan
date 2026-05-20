@@ -35,7 +35,7 @@ class BxDependencyException extends Exception {
      * @param Throwable|null $previous Vorherige Exception (für Exception-Chaining)
      * @param array $context Zusätzliche Context-Daten für Debugging
      */
-    public function __construct($message = "", $code = 0, Throwable $previous = null, array $context = []) {
+    public function __construct($message = "", $code = 0, ?Throwable $previous = null, array $context = []) {
         parent::__construct($message, $code, $previous);
         $this->context = $context;
     }

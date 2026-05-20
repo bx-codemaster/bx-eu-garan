@@ -29,7 +29,7 @@ class bx_eu_garan_cart
   /** @var string Language key for the module description. */
   public $description;
 
-  /** @var bool Whether module output is currently enabled. */
+  /** @var string Whether module output is currently enabled. */
   public $enabled;
 
   /** @var int|string Sort order configured in module settings. */
@@ -51,12 +51,13 @@ class bx_eu_garan_cart
   */
   public function __construct()
   {
-    $this->code          = 'bx_eu_garan_cart';
-    $this->name          = 'MODULE_SHOPPING_CART_'.strtoupper($this->code);
-    $this->title         = defined($this->name.'_TITLE') ? constant($this->name.'_TITLE') : 'BX EU Garan';
-    $this->description   = defined($this->name.'_DESCRIPTION') ? constant($this->name.'_DESCRIPTION') : 'BX EU Garan - Shopping Cart Module';
-    $this->enabled       = strtolower((string)constant($this->name.'_STATUS')) === 'true';
-    $this->sort_order    = constant($this->name.'_SORT_ORDER');
+    $this->code        = 'bx_eu_garan_cart';
+    $this->name        = 'MODULE_SHOPPING_CART_'.strtoupper($this->code);
+    $this->title       = defined($this->name.'_TITLE') ? constant($this->name.'_TITLE') : 'BX EU Garan';
+    $this->description = defined($this->name.'_DESCRIPTION') ? constant($this->name.'_DESCRIPTION') : 'BX EU Garan - Shopping Cart Module';
+    $this->enabled     = defined($this->name . '_STATUS') && constant($this->name . '_STATUS') == 'true' ? 'true' : 'false';
+    $this->sort_order  = defined($this->name . '_SORT_ORDER') ? constant($this->name . '_SORT_ORDER') : '10';
+
     $this->context_cache = [];
   }
 
@@ -88,6 +89,11 @@ class bx_eu_garan_cart
    */
   public function keys()
   {
+    defined($this->name.'_STATUS_TITLE') OR define($this->name.'_STATUS_TITLE', TEXT_DEFAULT_STATUS_TITLE);
+    defined($this->name.'_STATUS_DESC') OR define($this->name.'_STATUS_DESC', TEXT_DEFAULT_STATUS_DESC);
+    defined($this->name.'_SORT_ORDER_TITLE') OR define($this->name.'_SORT_ORDER_TITLE', TEXT_DEFAULT_SORT_ORDER_TITLE);
+    defined($this->name.'_SORT_ORDER_DESC') OR define($this->name.'_SORT_ORDER_DESC', TEXT_DEFAULT_SORT_ORDER_DESC);
+        
     return [
       $this->name.'_STATUS',
       $this->name.'_SORT_ORDER',

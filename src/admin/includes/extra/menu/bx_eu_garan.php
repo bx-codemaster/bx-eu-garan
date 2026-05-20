@@ -42,7 +42,7 @@ if (defined("MODULE_BX_EU_GARAN_STATUS") && 'True' === MODULE_BX_EU_GARAN_STATUS
   }
 
   // BOX_HEADING_TOOLS = Werkzeuge-Menü im Admin
-  $add_contents[BOX_HEADING_TOOLS][] = array( 
+  $add_contents[BOX_HEADING_BX_MODULES][] = array( 
     'admin_access_name' => 'bx_eu_garan',
     'filename'          => 'bx_eu_garan.php',
     'boxname'           => MENU_NAME_BX_EU_GARAN,
