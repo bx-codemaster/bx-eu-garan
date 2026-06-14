@@ -1,11 +1,13 @@
 <main class="container">
 <article class="card">
-<header><img alt="Gewährleistung" src="http://localhost/modified/images/commercial_guarantee/legal_guarantee_de.jpg" style="width: 1200px; height: 1642px;" />
-<h1>Gewährleistung und Garantie im deutschen Recht</h1>
+<header>
+	<?php echo xtc_image(DIR_WS_IMAGES . 'warranty_guarantee/legal_guarantee_de.jpg', 'Gewährleistung und Garantie im deutschen Recht'); ?>
 
-<p>In Deutschland werden die Begriffe Gewährleistung und Garantie im Alltag oft synonym verwendet, rechtlich gesehen beschreiben sie jedoch zwei völlig unterschiedliche Konzepte.</p>
+	<h1>Gewährleistung und Garantie im deutschen Recht</h1>
 
-<p>Hier ist eine Übersicht, die Ordnung in das juristische Chaos bringt.</p>
+	<p>In Deutschland werden die Begriffe Gewährleistung und Garantie im Alltag oft synonym verwendet, rechtlich gesehen beschreiben sie jedoch zwei völlig unterschiedliche Konzepte.</p>
+
+	<p>Hier ist eine Übersicht, die Ordnung in das juristische Chaos bringt.</p>
 </header>
 
 <section>

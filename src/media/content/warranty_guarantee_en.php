@@ -1,11 +1,12 @@
 <main class="container">
 <article class="card">
-<header><img alt="Gewährleistung" src="http://localhost/modified/images/commercial_guarantee/legal_guarantee_en.jpg" style="width: 1200px; height: 1642px;" />
-<h1>Warranty and Guarantee under German Law</h1>
+<header>
+	<?php echo xtc_image(DIR_WS_IMAGES . 'warranty_guarantee/legal_guarantee_en.jpg', 'Warranty and Guarantee under German Law'); ?>
+	<h1>Warranty and Guarantee under German Law</h1>
 
-<p>In Germany, the terms warranty and guarantee are often used synonymously in everyday language, but from a legal perspective they describe two completely different concepts.</p>
+	<p>In Germany, the terms warranty and guarantee are often used synonymously in everyday language, but from a legal perspective they describe two completely different concepts.</p>
 
-<p>Here is an overview that brings clarity to the legal confusion.</p>
+	<p>Here is an overview that brings clarity to the legal confusion.</p>
 </header>
 
 <section>
