@@ -232,13 +232,12 @@ require (DIR_WS_INCLUDES.'head.php');
 
 <?php
   foreach ($feedback as $message) {
-    $bgColor = $message['type'] === 'success' ? '#e7f7ea' : '#fdeaea';
-    $bdColor = $message['type'] === 'success' ? '#6aa56f' : '#cf6a6a';
-    echo '<div style="background: '.$bgColor.'; border:1px solid '.$bdColor.'; padding:10px; margin-bottom:10px;">'.htmlspecialchars($message['text']).'</div>';
+    $message_type = $message['type'] === 'error' ? 'error' : 'success';    
+    echo '<div class="'. $message_type .'_message">'.htmlspecialchars($message['text']).'</div>';
   }
 
   if ($previewCount !== null) {
-    echo '<div style="background:#f0f4fb; border:1px solid #9bb0d3; padding:10px; margin-bottom:10px;">'.sprintf(TEXT_BX_EU_GARAN_PREVIEW_RESULT, (int)$previewCount).'</div>';
+    echo '<div class="success_message">'.sprintf(TEXT_BX_EU_GARAN_PREVIEW_RESULT, (int)$previewCount).'</div>';
   }
 
   echo xtc_draw_form('bx_eu_garan_form', 'bx_eu_garan.php');

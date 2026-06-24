@@ -55,30 +55,30 @@
   define('TEXT_BX_EU_GARAN_FIELD_REPAIR_SCORE', 'Reparierbarkeits-Score (0-10)');
   define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE', 'Ersatzteile verfügbar');
   define('TEXT_BX_EU_GARAN_FIELD_MANUAL_URL', 'Handbuch URL');
-  define('TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE', 'Gesetzliche Gewährleistung: immer relevant und automatisch anzuzeigen.<br>Freiwillige Herstellergarantie: nur angeben, wenn sie für dieses Produkt tatsächlich besteht.');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE', '<strong>Gesetzliche Gewährleistung:</strong> immer relevant und automatisch anzuzeigen.<br><strong>Freiwillige Herstellergarantie:</strong> nur angeben, wenn sie für dieses Produkt tatsächlich besteht.');
   define('TEXT_BX_EU_GARAN_PRODUCT_ENABLED', 'Freiwillige Herstellergarantie vorhanden');
   define('TEXT_BX_EU_GARAN_PRODUCT_ENABLED_NOTE', 'Steuert ausschließlich das Garantie-Etikett.<br>Die harmonisierte Gewährleistungsmitteilung ist davon unabhängig und immer relevant.<br>Keine Nachforschungspflicht: Kennzeichnung nur bei vom Hersteller bereitgestellten Informationen.');
   define('TEXT_BX_EU_GARAN_PRODUCT_GUARANTEE_YEARS', 'Dauer der Herstellergarantie (Jahre)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO', 'Hersteller (automatisch)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_AUTO', 'Modellkennung (automatisch)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_NOTE', 'Ermittlung automatisch aus Herstellermodell, EAN oder Artikelnummer.');
-    define('TEXT_BX_EU_GARAN_PRODUCT_COVERS_FULL_PRODUCT', 'Deckt gesamtes Produkt ab');
-    define('TEXT_BX_EU_GARAN_PRODUCT_REQUIRES_ADDITIONAL_COST', 'Zusatzkosten erforderlich');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT', 'Garantie-Kennzeichnung erforderlich');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIRED', 'Ja');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_NOT_REQUIRED', 'Nein');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE', 'Erforderlich nur wenn:
-      <ul>
-      <li>freiwillige Herstellergarantie vorliegt</li>
-      <li>mehr als 2 Jahre gilt</li>
-      <li>keine Zusatzkosten anfallen</li>
-      </ul>');
-    define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR-URL (optional)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Reparierbarkeitswert (0-10)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_AVAILABLE', 'Ersatzteile verfügbar');
-    define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_COST_INFO', 'Kosteninfo Ersatzteile');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Reparaturanleitung (URL)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Reparatureinschränkungen');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO', 'Hersteller (automatisch)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_AUTO', 'Modellkennung (automatisch)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_NOTE', 'Ermittlung automatisch aus Herstellermodell, EAN oder Artikelnummer.');
+  define('TEXT_BX_EU_GARAN_PRODUCT_COVERS_FULL_PRODUCT', 'Deckt gesamtes Produkt ab');
+  define('TEXT_BX_EU_GARAN_PRODUCT_REQUIRES_ADDITIONAL_COST', 'Zusatzkosten erforderlich');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT', 'Garantie-Kennzeichnung erforderlich');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIRED', 'Ja');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_NOT_REQUIRED', 'Nein');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE', '<strong>Erforderlich nur wenn:</strong>
+    <ul>
+    <li>✅ freiwillige Herstellergarantie vorliegt</li>
+    <li>✅ mehr als 2 Jahre gilt</li>
+    <li>✅ keine Zusatzkosten anfallen</li>
+    </ul>');
+  define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR-URL (optional)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Reparierbarkeitswert (0-10)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_AVAILABLE', 'Ersatzteile verfügbar');
+  define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_COST_INFO', 'Kosteninfo Ersatzteile');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Reparaturanleitung (URL)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Reparatureinschränkungen');
 
   define('TEXT_BX_EU_GARAN_FILTER_ALL_CATEGORIES', 'Alle Kategorien');
   define('TEXT_BX_EU_GARAN_FILTER_ALL_MANUFACTURERS', 'Alle Hersteller');

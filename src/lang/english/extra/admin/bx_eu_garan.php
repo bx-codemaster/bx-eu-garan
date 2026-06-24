@@ -55,25 +55,31 @@
   define('TEXT_BX_EU_GARAN_FIELD_REPAIR_SCORE', 'Repairability score (0-10)');
   define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE', 'Spare parts available');
   define('TEXT_BX_EU_GARAN_FIELD_MANUAL_URL', 'Manual URL');
-  define('TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE', 'Legal warranty: always relevant and displayed automatically. Voluntary manufacturer guarantee: only enter it if it actually exists for this product.');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE', '<strong>Legal warranty:</strong> always relevant and displayed automatically.<br><strong>Voluntary manufacturer guarantee:</strong> only enter it if it actually exists for this product.');
   define('TEXT_BX_EU_GARAN_PRODUCT_ENABLED', 'Voluntary manufacturer guarantee available');
   define('TEXT_BX_EU_GARAN_PRODUCT_ENABLED_NOTE', 'Controls only the guarantee label. The harmonized legal warranty notice is independent and always relevant. No duty to investigate: label only if information is provided by the manufacturer.');
   define('TEXT_BX_EU_GARAN_PRODUCT_GUARANTEE_YEARS', 'Manufacturer guarantee period (years)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO', 'Manufacturer (automatic)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_AUTO', 'Model identifier (automatic)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_NOTE', 'Determined automatically from manufacturer model, EAN, or product number.');
-    define('TEXT_BX_EU_GARAN_PRODUCT_COVERS_FULL_PRODUCT', 'Covers full product');
-    define('TEXT_BX_EU_GARAN_PRODUCT_REQUIRES_ADDITIONAL_COST', 'Additional cost required');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT', 'Guarantee label required');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIRED', 'Yes');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_NOT_REQUIRED', 'No');
-    define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE', 'Required only if a voluntary manufacturer guarantee exists, exceeds 2 years, and no additional costs apply.');
-    define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR URL (optional)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Repairability score (0-10)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_AVAILABLE', 'Spare parts available');
-    define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_COST_INFO', 'Spare parts cost info');
-    define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Repair instructions (URL)');
-    define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Repair restrictions');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO', 'Manufacturer (automatic)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_AUTO', 'Model identifier (automatic)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_NOTE', 'Determined automatically from manufacturer model, EAN, or product number.');
+  define('TEXT_BX_EU_GARAN_PRODUCT_COVERS_FULL_PRODUCT', 'Covers full product');
+  define('TEXT_BX_EU_GARAN_PRODUCT_REQUIRES_ADDITIONAL_COST', 'Additional cost required');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT', 'Guarantee label required');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIRED', 'Yes');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_NOT_REQUIRED', 'No');
+  define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE', '<strong>Required only if:</strong> 
+  <ul>
+    <li>✅ a voluntary manufacturer guarantee exists, 
+    <li>✅ exceeds 2 years, 
+    <li>✅ and no additional costs apply.
+  </ul>
+  ');
+  define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR URL (optional)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Repairability score (0-10)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_AVAILABLE', 'Spare parts available');
+  define('TEXT_BX_EU_GARAN_PRODUCT_PARTS_COST_INFO', 'Spare parts cost info');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Repair instructions (URL)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Repair restrictions');
 
   define('TEXT_BX_EU_GARAN_FILTER_ALL_CATEGORIES', 'All categories');
   define('TEXT_BX_EU_GARAN_FILTER_ALL_MANUFACTURERS', 'All manufacturers');

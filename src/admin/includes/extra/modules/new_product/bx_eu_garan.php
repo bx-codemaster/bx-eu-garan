@@ -90,88 +90,134 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 ?>
 <div style="clear:both;"></div>
 
-<div class="main" style="margin: 0 0 10px 0; padding: 8px 10px; border: 1px solid #d6d6d6; background: #f7f7f7;">
+<div class="info_message" style="margin-bottom:10px;">
 	<?php echo TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE; ?>
 </div>
 
-<div class="main div_header"><b><?php echo HEADING_BX_EU_GARAN_PRODUCT_WARRANTY; ?></b></div>
-<div class="clear div_box mrg5">
-	<table class="tableInput border0">
-		<tr>
-			<td style="width:280px;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_ENABLED; ?></span></td>
-			<td><span class="main"><?php echo draw_on_off_selection('bx_eu_garan_manufacturer_guarantee_available', 'checkbox', ((int)$bx_eu_garan_values['manufacturer_guarantee_available'] === 1)); ?></span></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_ENABLED_NOTE; ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_GUARANTEE_YEARS; ?></span></td>
-			<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_guarantee_years', $bx_eu_garan_values['guarantee_years'], 'style="width: 155px"'); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO; ?></span></td>
-			<td><span class="main"><?php echo $bx_eu_garan_reference['manufacturer_name'] !== '' ? htmlspecialchars($bx_eu_garan_reference['manufacturer_name']) : TEXT_BX_EU_GARAN_NO_INFO_PROVIDED; ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_AUTO; ?></span></td>
-			<td><span class="main"><?php echo $bx_eu_garan_reference['model_identifier'] !== '' ? htmlspecialchars($bx_eu_garan_reference['model_identifier']) : TEXT_BX_EU_GARAN_NO_INFO_PROVIDED; ?></span></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_NOTE; ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_COVERS_FULL_PRODUCT; ?></span></td>
-			<td><span class="main"><?php echo draw_on_off_selection('bx_eu_garan_covers_full_product', 'checkbox', ((int)$bx_eu_garan_values['covers_full_product'] === 1)); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REQUIRES_ADDITIONAL_COST; ?></span></td>
-			<td><span class="main"><?php echo draw_on_off_selection('bx_eu_garan_requires_additional_cost', 'checkbox', ((int)$bx_eu_garan_values['requires_additional_cost'] === 1)); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT; ?></span></td>
-			<td>
-				<span class="main">
-					<span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;line-height:1.4;color:#fff;background:<?php echo $labelRequirementColor; ?>;">
-						<?php echo $labelRequirementText; ?>
+<details class="bxac-card" style="margin-bottom:10px;">
+	<summary class="bxac-summary">
+		<span class="bxac-arrow">▸</span>
+		<span class="bxac-title">
+			<?php echo HEADING_BX_EU_GARAN_PRODUCT_WARRANTY; ?>
+		</span>
+	</summary>
+	<div class="bxac-body">
+		<table class="tableInput border0">
+			<tr>
+				<td style="width:280px;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_ENABLED; ?></span></td>
+				<td><span class="main"><?php echo draw_on_off_selection('bx_eu_garan_manufacturer_guarantee_available', 'checkbox', ((int)$bx_eu_garan_values['manufacturer_guarantee_available'] === 1)); ?></span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_ENABLED_NOTE; ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_GUARANTEE_YEARS; ?></span></td>
+				<td>
+					<span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_guarantee_years', $bx_eu_garan_values['guarantee_years'], 'style="width: 85px"', false, 'number'); ?></span>
+				</td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO; ?></span></td>
+				<td><span class="main"><?php echo $bx_eu_garan_reference['manufacturer_name'] !== '' ? htmlspecialchars($bx_eu_garan_reference['manufacturer_name']) : TEXT_BX_EU_GARAN_NO_INFO_PROVIDED; ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_AUTO; ?></span></td>
+				<td><span class="main"><?php echo $bx_eu_garan_reference['model_identifier'] !== '' ? htmlspecialchars($bx_eu_garan_reference['model_identifier']) : TEXT_BX_EU_GARAN_NO_INFO_PROVIDED; ?></span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MODEL_IDENTIFIER_NOTE; ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_COVERS_FULL_PRODUCT; ?></span></td>
+				<td><span class="main"><?php echo draw_on_off_selection('bx_eu_garan_covers_full_product', 'checkbox', ((int)$bx_eu_garan_values['covers_full_product'] === 1)); ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REQUIRES_ADDITIONAL_COST; ?></span></td>
+				<td><span class="main"><?php echo draw_on_off_selection('bx_eu_garan_requires_additional_cost', 'checkbox', ((int)$bx_eu_garan_values['requires_additional_cost'] === 1)); ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT; ?></span></td>
+				<td>
+					<span class="main">
+						<span style="display:inline-block;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:700;line-height:15px;color:#fff;background:<?php echo $labelRequirementColor; ?>;">
+							<?php echo $labelRequirementText; ?>
+						</span>
 					</span>
-				</span>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE; ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_QR_URL; ?></span></td>
-			<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_qr_url', $bx_eu_garan_values['qr_url'], 'style="width: 100%"'); ?></span></td>
-		</tr>
-	</table>
-</div>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE; ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_QR_URL; ?></span></td>
+				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_qr_url', $bx_eu_garan_values['qr_url'], 'style="width: 100%"'); ?></span></td>
+			</tr>
+		</table>
+	</div>
+</details>
 
-<div class="main div_header"><b><?php echo HEADING_BX_EU_GARAN_PRODUCT_REPAIRABILITY; ?></b></div>
-<div class="clear div_box mrg5">
-	<table class="tableInput border0">
-		<tr>
-			<td style="width:280px;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE; ?></span></td>
-			<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_repair_score', $bx_eu_garan_values['repair_score'], 'style="width: 155px"'); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_PARTS_AVAILABLE; ?></span></td>
-			<td><span class="main fixed_sumo" style="width:155px;"><?php echo xtc_draw_pull_down_menu('bx_eu_garan_parts_available', $parts_available_array, $bx_eu_garan_values['parts_available'], 'style="width: 155px"'); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_PARTS_COST_INFO; ?></span></td>
-			<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_parts_cost_info', $bx_eu_garan_values['parts_cost_info'], 'style="width: 100%"'); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL; ?></span></td>
-			<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_manual_url', $bx_eu_garan_values['manual_url'], 'style="width: 100%"'); ?></span></td>
-		</tr>
-		<tr>
-			<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS; ?></span></td>
-			<td><span class="main"><?php echo xtc_draw_textarea_field('bx_eu_garan_repair_restrictions', 'soft', 70, 4, $bx_eu_garan_values['repair_restrictions']); ?></span></td>
-		</tr>
-	</table>
-</div>
+<details class="bxac-card">
+	<summary class="bxac-summary">
+		<span class="bxac-arrow">▸</span>
+		<span class="bxac-title">
+			<?php echo HEADING_BX_EU_GARAN_PRODUCT_REPAIRABILITY; ?>
+		</span>
+	</summary>
+	<div class="bxac-body">
+		<table class="tableInput border0">
+			<tr>
+				<td style="width:280px;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE; ?></span></td>
+				<td class="main" style="display: flex; align-items: center; gap: 15px;">
+					<div id="repair_score_slider">
+						<input type="range" min="0" max="10" step="1" id="bx_eu_garan_repair_score" name="bx_eu_garan_repair_score" value="<?php echo (int)$bx_eu_garan_values['repair_score']; ?>" list="scores" style="min-width: 250px;">
+						<datalist id="scores">
+							<option value="0"></option>
+							<option value="1"></option>
+							<option value="2"></option>
+							<option value="3"></option>
+							<option value="4"></option>
+							<option value="5"></option>
+							<option value="6"></option>
+							<option value="7"></option>
+							<option value="8"></option>
+							<option value="9"></option>
+							<option value="10"></option>
+						</datalist>
+					</div>
+					<div >
+						Aktueller Wert: <span id="repair_score_value" style="font-weight: bold;"><?php echo (int)$bx_eu_garan_values['repair_score']; ?></span>
+						<script>
+							var slider = document.getElementById("bx_eu_garan_repair_score");
+							var output = document.getElementById("repair_score_value");
+							output.innerHTML = slider.value; // Zeigt den Standardwert an
+
+							// Aktualisiert den Wert, wenn der Benutzer schiebt
+							slider.oninput = function() {
+							output.innerHTML = this.value;
+							}
+					</script>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_PARTS_AVAILABLE; ?></span></td>
+				<td><span class="main fixed_sumo" style="width:155px;"><?php echo xtc_draw_pull_down_menu('bx_eu_garan_parts_available', $parts_available_array, $bx_eu_garan_values['parts_available'], 'style="width: 155px"'); ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_PARTS_COST_INFO; ?></span></td>
+				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_parts_cost_info', $bx_eu_garan_values['parts_cost_info'], 'style="width: 100%"'); ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL; ?></span></td>
+				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_manual_url', $bx_eu_garan_values['manual_url'], 'style="width: 100%"'); ?></span></td>
+			</tr>
+			<tr>
+				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS; ?></span></td>
+				<td><span class="main"><?php echo xtc_draw_textarea_field('bx_eu_garan_repair_restrictions', 'soft', 70, 4, $bx_eu_garan_values['repair_restrictions']); ?></span></td>
+			</tr>
+		</table>
+	</div>
+</details>
