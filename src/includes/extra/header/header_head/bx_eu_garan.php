@@ -10,7 +10,7 @@
   #bx-eu-garan-label-small,
   .bx-eu-garan-label-small {
     display: inline-block;
-    max-width: 250px;
+    max-width: 200px;
     position: relative;
     cursor: pointer;
   }

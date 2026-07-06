@@ -30,111 +30,174 @@
   $languagesId  = isset($_SESSION['languages_id']) ? (int)$_SESSION['languages_id'] : 2;
   $previewCount = null;
   $feedback     = array();
-
-  if (!function_exists('bx_eu_garan_get_configuration_value')) {
-    function bx_eu_garan_get_configuration_value($key, $default = '') {
-      $query = xtc_db_query("SELECT configuration_value FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".xtc_db_input($key)."' LIMIT 1");
-      if ($query && xtc_db_num_rows($query) > 0) {
-        $row = xtc_db_fetch_array($query);
-        return isset($row['configuration_value']) ? (string)$row['configuration_value'] : (string)$default;
-      }
-
-      return (string)$default;
-    }
-  }
-
-  if (!function_exists('bx_eu_garan_set_configuration_value')) {
-    function bx_eu_garan_set_configuration_value($key, $value) {
-      $keyEscaped   = xtc_db_input((string)$key);
-      $valueEscaped = xtc_db_input((string)$value);
-      $existsQuery  = xtc_db_query("SELECT configuration_id FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".$keyEscaped."' LIMIT 1");
-
-      if ($existsQuery && xtc_db_num_rows($existsQuery) > 0) {
-        xtc_db_query("UPDATE ".TABLE_CONFIGURATION." SET configuration_value = '".$valueEscaped."', last_modified = NOW() WHERE configuration_key = '".$keyEscaped."'");
-        return;
-      }
-
-      $groupId = defined('MODULE_BX_EU_GARAN_CONFIG_ID') ? (int)constant('MODULE_BX_EU_GARAN_CONFIG_ID') : 6;
-      xtc_db_query("INSERT INTO ".TABLE_CONFIGURATION." (configuration_key, configuration_value, configuration_group_id, sort_order, date_added, set_function, use_function)
-                    VALUES ('".$keyEscaped."', '".$valueEscaped."', '".$groupId."', '50', NOW(), '', '')");
-    }
-  }
-
-  $manufacturerGuaranteeAvailableRaw = isset($_POST['configuration']['manufacturer_guarantee_available']) ? (string)$_POST['configuration']['manufacturer_guarantee_available'] : 'false';
-  $requiresAdditionalCostRaw         = isset($_POST['configuration']['requires_additional_cost']) ? (string)$_POST['configuration']['requires_additional_cost'] : 'false';
-  $parts_availableRaw                = isset($_POST['configuration']['parts_available']) ? (string)$_POST['configuration']['parts_available'] : 'false';
-  $warrantyContentGroupId            = isset($_POST['warranty_content_group'])
+  $warrantyContentGroupId = isset($_POST['warranty_content_group'])
     ? max(0, (int)$_POST['warranty_content_group'])
     : max(0, (int)bx_eu_garan_get_configuration_value('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0'));
 
-  $formData = array(
-    'filter_category_id'           => isset($_POST['filter_category_id']) ? (int)$_POST['filter_category_id'] : 0,
-    'filter_include_subcategories' => isset($_POST['filter_include_subcategories']) ? 1 : 0,
-    'filter_manufacturers_id'      => isset($_POST['filter_manufacturers_id']) ? (string)$_POST['filter_manufacturers_id'] : '',
-    'filter_status'                => isset($_POST['filter_status']) ? (string)$_POST['filter_status'] : '',
-    'set_manufacturer_guarantee_available' => isset($_POST['set_manufacturer_guarantee_available']) ? 1 : 0,
-    'manufacturer_guarantee_available'     => ($manufacturerGuaranteeAvailableRaw === 'true') ? 1 : 0,
-    'set_guarantee_years'          => isset($_POST['set_guarantee_years']) ? 1 : 0,
-    'guarantee_years'              => isset($_POST['guarantee_years']) ? max(0, (int)$_POST['guarantee_years']) : 2,
-    'set_requires_additional_cost' => isset($_POST['set_requires_additional_cost']) ? 1 : 0,
-    'requires_additional_cost'     => ($requiresAdditionalCostRaw === 'true') ? 1 : 0,
-    'set_qr_url'                   => isset($_POST['set_qr_url']) ? 1 : 0,
-    'qr_url'                       => isset($_POST['qr_url']) ? trim((string)$_POST['qr_url']) : '',
-    'set_repair_score'             => isset($_POST['set_repair_score']) ? 1 : 0,
-    'repair_score'                 => isset($_POST['repair_score']) ? max(0, min(10, (int)$_POST['repair_score'])) : 0,
-    'set_parts_available'          => isset($_POST['set_parts_available']) ? 1 : 0,
-    'parts_available'              => ($parts_availableRaw === 'true') ? 1 : 0,
-    'set_manual_url'               => isset($_POST['set_manual_url']) ? 1 : 0,
-    'manual_url'                   => isset($_POST['manual_url']) ? trim((string)$_POST['manual_url']) : '',
-  );
+  // 1. Priorität: Das Formular wurde abgeschickt (POST) -> Werte live parsen
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $manufacturerGuaranteeAvailableRaw = isset($_POST['configuration']['manufacturer_guarantee_available']) ? (string)$_POST['configuration']['manufacturer_guarantee_available'] : 'false';
+    $requiresAdditionalCostRaw         = isset($_POST['configuration']['requires_additional_cost']) ? (string)$_POST['configuration']['requires_additional_cost'] : 'false';
+    $coversFullProductRaw              = isset($_POST['configuration']['covers_full_product']) ? (string)$_POST['configuration']['covers_full_product'] : 'false';
+    $parts_availableRaw                = isset($_POST['configuration']['parts_available']) ? (string)$_POST['configuration']['parts_available'] : 'false';
 
-  if ($action === 'save_warranty_content') {
-    bx_eu_garan_set_configuration_value('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', (string)$warrantyContentGroupId);
-    $feedback[] = array('type' => 'success', 'text' => TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED);
+    $formData = array(
+      'filter_category_id'           => isset($_POST['filter_category_id']) ? (int)$_POST['filter_category_id'] : 0,
+      'filter_include_subcategories' => isset($_POST['filter_include_subcategories']) ? 1 : 0,
+      'filter_manufacturers_id'      => isset($_POST['filter_manufacturers_id']) ? (string)$_POST['filter_manufacturers_id'] : '',
+      'filter_status'                => isset($_POST['filter_status']) ? (string)$_POST['filter_status'] : '',
+      
+      'set_manufacturer_guarantee_available' => isset($_POST['set_manufacturer_guarantee_available']) ? 1 : 0,
+      'manufacturer_guarantee_available'     => ($manufacturerGuaranteeAvailableRaw === 'true') ? 1 : 0,
+      
+      'set_guarantee_years'          => isset($_POST['set_guarantee_years']) ? 1 : 0,
+      'guarantee_years'              => isset($_POST['guarantee_years']) ? max(0, (int)$_POST['guarantee_years']) : 2,
+
+      'set_covers_full_product'      => isset($_POST['set_covers_full_product']) ? 1 : 0,
+      'covers_full_product'          => ($coversFullProductRaw === 'true') ? 1 : 0,
+
+      'set_requires_additional_cost' => isset($_POST['set_requires_additional_cost']) ? 1 : 0,
+      'requires_additional_cost'     => ($requiresAdditionalCostRaw === 'true') ? 1 : 0,
+      
+      'set_qr_url'                   => isset($_POST['set_qr_url']) ? 1 : 0,
+      'qr_url'                       => isset($_POST['qr_url']) ? trim((string)$_POST['qr_url']) : '',
+      
+      'set_repair_score'             => isset($_POST['set_repair_score']) ? 1 : 0,
+      'repair_score'                 => isset($_POST['repair_score']) ? max(0, min(10, (int)$_POST['repair_score'])) : 0,
+      
+      'set_parts_available'          => isset($_POST['set_parts_available']) ? 1 : 0,
+      'parts_available'              => ($parts_availableRaw === 'true') ? 1 : 0,
+
+      'set_parts_cost_info'          => isset($_POST['set_parts_cost_info']) ? 1 : 0,
+      'parts_cost_info'              => isset($_POST['parts_cost_info']) ? trim((string)$_POST['parts_cost_info']) : '',
+      
+      'set_repair_restrictions'      => isset($_POST['set_repair_restrictions']) ? 1 : 0,
+      'repair_restrictions'          => isset($_POST['repair_restrictions']) ? trim((string)$_POST['repair_restrictions']) : '',
+
+      'set_parts_availability_years' => isset($_POST['set_parts_availability_years']) ? 1 : 0,
+      'parts_availability_years'     => isset($_POST['parts_availability_years']) ? trim((string)$_POST['parts_availability_years']) : '',
+      
+      'set_repair_service_url'       => isset($_POST['set_repair_service_url']) ? 1 : 0,
+      'repair_service_url'           => isset($_POST['repair_service_url']) ? trim((string)$_POST['repair_service_url']) : '',
+
+      'set_manual_url'               => isset($_POST['set_manual_url']) ? 1 : 0,
+      'manual_url'                   => isset($_POST['manual_url']) ? trim((string)$_POST['manual_url']) : '',
+    );      
+    // Neue Werte direkt für den nächsten (Redirect-)Aufruf sichern
+    $_SESSION['bx_eu_garan_last_filters'] = $formData;
+
+  // 2. Priorität: Kein POST, aber alte Werte im Session-Speicher (z.B. nach einem xtc_redirect)
+  } elseif (isset($_SESSION['bx_eu_garan_last_filters'])) {
+    $formData = $_SESSION['bx_eu_garan_last_filters'];
+
+  // 3. Priorität: Erster Aufruf der Seite (weder POST noch Session vorhanden) -> Leere Standardwerte
+  } else {
+    $formData = array(
+      'filter_category_id'           => 0,
+      'filter_include_subcategories' => 1,
+      'filter_manufacturers_id'      => '',
+      'filter_status'                => '',
+      'set_manufacturer_guarantee_available' => 0, 'manufacturer_guarantee_available' => 0,
+      'set_guarantee_years'          => 0, 'guarantee_years' => 2,
+      'set_covers_full_product'      => 0, 'covers_full_product' => 0,
+      'set_requires_additional_cost' => 0, 'requires_additional_cost' => 0,
+      'set_qr_url'                   => 0, 'qr_url' => '',
+      'set_repair_score'             => 0, 'repair_score' => 0,
+      'set_parts_available'          => 0, 'parts_available' => 0,
+      'set_parts_cost_info'          => 0, 'parts_cost_info' => '',
+      'set_repair_restrictions'      => 0, 'repair_restrictions' => '',
+      'set_parts_availability_years' => 0, 'parts_availability_years' => 0,
+      'set_repair_service_url'       => 0, 'repair_service_url' => '',
+      'set_manual_url'               => 0, 'manual_url' => ''
+    );
+    $_SESSION['bx_eu_garan_last_filters'] = $formData;
   }
 
-  if ($action === 'preview' || $action === 'apply_mass_update') {
-    $productIds = bx_eu_garan_get_product_ids(
-      $formData['filter_category_id'],
-      $formData['filter_include_subcategories'] === 1,
-      $formData['filter_manufacturers_id'],
-      $formData['filter_status']
-    );
+  switch ($action) {
+    case 'save_warranty_content':
+      bx_eu_garan_set_configuration_value('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', (string)$warrantyContentGroupId);
 
-    $previewCount = count($productIds);
+      $messageStack->add_session(TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED, 'success');
+      xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
+      break;
 
-    if ($action === 'apply_mass_update') {
-      $warrantyUpdates = array();
-      $repairUpdates   = array();
+    case 'preview':
+    case 'apply_mass_update':
+      // 1. GEMEINSAMER ANFANG: Betroffene Produkte ermitteln
+      $productIds = bx_eu_garan_get_product_ids(
+        $formData['filter_category_id'],
+        $formData['filter_include_subcategories'] === 1,
+        $formData['filter_manufacturers_id'],
+        $formData['filter_status']
+      );
 
-      if ($formData['set_manufacturer_guarantee_available'] === 1) {
-        $warrantyUpdates[] = "`manufacturer_guarantee_available` = '".(int)$formData['manufacturer_guarantee_available']."'";
-      }
-      if ($formData['set_guarantee_years'] === 1) {
-        $warrantyUpdates[] = "`guarantee_years` = '".(int)$formData['guarantee_years']."'";
-      }
-      if ($formData['set_requires_additional_cost'] === 1) {
-        $warrantyUpdates[] = "`requires_additional_cost` = '".($formData['requires_additional_cost'] === 1 ? 1 : 0)."'";
-      }
-      if ($formData['set_qr_url'] === 1) {
-        $warrantyUpdates[] = "`qr_url` = ".bx_eu_garan_to_nullable_string($formData['qr_url']);
-      }
+      $previewCount = count($productIds);
 
-      if ($formData['set_repair_score'] === 1) {
-        $repairUpdates[] = "`repair_score` = '".(int)$formData['repair_score']."'";
-      }
-      if ($formData['set_parts_available'] === 1) {
-        $repairUpdates[] = "`parts_available` = '".($formData['parts_available'] === 1 ? 1 : 0)."'";
-      }
-      if ($formData['set_manual_url'] === 1) {
-        $repairUpdates[] = "`manual_url` = ".bx_eu_garan_to_nullable_string($formData['manual_url']);
+      // Gemeinsamer Check: Wenn gar keine Produkte gefunden wurden, brechen wir für beide Aktionen ab
+      if ($previewCount === 0) {
+        $messageStack->add_session(TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND, 'error');
+        xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
       }
 
-      if (empty($warrantyUpdates) && empty($repairUpdates)) {
-        $feedback[] = array('type' => 'error', 'text' => TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD);
-      } elseif ($previewCount === 0) {
-        $feedback[] = array('type' => 'error', 'text' => TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND);
-      } else {
+      // ---------------------------------------------------------------------------------
+      // FALL A: Reine Vorschau (Wurde 'preview' geklickt?)
+      // ---------------------------------------------------------------------------------
+      if ($action === 'preview') {
+        $messageStack->add_session(sprintf(TEXT_BX_EU_GARAN_PREVIEW_RESULT, (int)$previewCount), 'success');
+        xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
+      }
+
+      // ---------------------------------------------------------------------------------
+      // FALL B: Massenupdate ausführen (Wurde 'apply_mass_update' geklickt?)
+      // ---------------------------------------------------------------------------------
+      if ($action === 'apply_mass_update') {
+        $warrantyUpdates = array();
+        $repairUpdates   = array();
+
+        if ($formData['set_manufacturer_guarantee_available'] === 1) {
+          $warrantyUpdates[] = "manufacturer_guarantee_available = '".(int)$formData['manufacturer_guarantee_available']."'";
+        }
+        if ($formData['set_guarantee_years'] === 1) {
+          $warrantyUpdates[] = "guarantee_years = '".(int)$formData['guarantee_years']."'";
+        }
+        if ($formData['set_covers_full_product'] === 1) {
+          $warrantyUpdates[] = "covers_full_product = '".(int)$formData['covers_full_product']."'";
+        }
+        if ($formData['set_requires_additional_cost'] === 1) {
+          $warrantyUpdates[] = "requires_additional_cost = '".(int)$formData['requires_additional_cost']."'";
+        }
+        if ($formData['set_qr_url'] === 1) {
+          $warrantyUpdates[] = "qr_url = ".bx_eu_garan_to_nullable_string($formData['qr_url']);
+        }
+        if ($formData['set_repair_score'] === 1) {
+          $repairUpdates[] = "repair_score = '".(int)$formData['repair_score']."'";
+        }
+        if ($formData['set_parts_available'] === 1) {
+          $repairUpdates[] = "parts_available = '".(int)$formData['parts_available']."'";
+        }
+        if ($formData['set_parts_cost_info'] === 1) {
+          $repairUpdates[] = "parts_cost_info = ".bx_eu_garan_to_nullable_string($formData['parts_cost_info']);
+        }
+        if ($formData['set_repair_restrictions'] === 1) {
+          $repairUpdates[] = "repair_restrictions = ".bx_eu_garan_to_nullable_string($formData['repair_restrictions']);
+        }
+        if ($formData['set_parts_availability_years'] === 1) {
+          $repairUpdates[] = "parts_availability_years = '".(int)$formData['parts_availability_years']."'";
+        }
+        if ($formData['set_repair_service_url'] === 1) {
+          $repairUpdates[] = "repair_service_url = ".bx_eu_garan_to_nullable_string($formData['repair_service_url']);
+        }
+        if ($formData['set_manual_url'] === 1) {
+          $repairUpdates[] = "manual_url = ".bx_eu_garan_to_nullable_string($formData['manual_url']);
+        }
+
+        // Check: Wurde überhaupt mindestens eine Checkbox zum Ändern angehakt?
+        if (empty($warrantyUpdates) && empty($repairUpdates)) {
+          $messageStack->add_session(TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD, 'error');
+          xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
+        }
+
+        // Hier startet die eigentliche Speicherung, da $previewCount garantiert > 0 ist
         $updatedProducts = 0;
         $warrantyCount   = 0;
         $repairCount     = 0;
@@ -143,17 +206,17 @@
           $productId = (int)$productId;
 
           if (!empty($warrantyUpdates)) {
-            $warrantySql = "INSERT INTO `bx_products_warranty_guarantee` (`products_id`, `created_at`, `updated_at`)
+            $warrantySql = "INSERT INTO bx_products_warranty_guarantee (products_id, created_at, updated_at)
                             VALUES ('".$productId."', NOW(), NOW())
-                            ON DUPLICATE KEY UPDATE ".implode(', ', $warrantyUpdates).", `updated_at` = NOW()";
+                            ON DUPLICATE KEY UPDATE ".implode(', ', $warrantyUpdates).", updated_at = NOW()";
             xtc_db_query($warrantySql);
             $warrantyCount++;
           }
 
           if (!empty($repairUpdates)) {
-            $repairSql = "INSERT INTO `bx_products_repairability` (`products_id`, `created_at`, `updated_at`)
+            $repairSql = "INSERT INTO bx_products_repairability (products_id, created_at, updated_at)
                           VALUES ('".$productId."', NOW(), NOW())
-                          ON DUPLICATE KEY UPDATE ".implode(', ', $repairUpdates).", `updated_at` = NOW()";
+                          ON DUPLICATE KEY UPDATE ".implode(', ', $repairUpdates).", updated_at = NOW()";
             xtc_db_query($repairSql);
             $repairCount++;
           }
@@ -161,12 +224,99 @@
           $updatedProducts++;
         }
 
-        $feedback[] = array(
-          'type' => 'success',
-          'text' => sprintf(TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS, $updatedProducts, $warrantyCount, $repairCount)
-        );
+        // --- PHASE 2: DATENBANK-LOG ---
+        if ($updatedProducts > 0) {
+            // Wir trennen die Filter von den gesetzten Werten für bessere Übersicht im Log
+            $logFilters = [
+                'filter_category_id'           => $formData['filter_category_id'],
+                'filter_include_subcategories' => $formData['filter_include_subcategories'],
+                'filter_manufacturers_id'      => $formData['filter_manufacturers_id'],
+                'filter_status'                => $formData['filter_status']
+            ];
+
+            $logChanges = [];
+            if ($formData['set_manufacturer_guarantee_available']) $logChanges['manufacturer_guarantee_available'] = $formData['manufacturer_guarantee_available'];
+            if ($formData['set_guarantee_years'])                  $logChanges['guarantee_years']                  = $formData['guarantee_years'];
+            if ($formData['set_covers_full_product'])              $logChanges['covers_full_product']              = $formData['covers_full_product'];
+            if ($formData['set_requires_additional_cost'])         $logChanges['requires_additional_cost']         = $formData['requires_additional_cost'];
+            if ($formData['set_qr_url'])                           $logChanges['qr_url']                           = $formData['qr_url'];
+            if ($formData['set_repair_score'])                     $logChanges['repair_score']                     = $formData['repair_score'];
+            if ($formData['set_parts_available'])                  $logChanges['parts_available']                  = $formData['parts_available'];
+            if ($formData['set_parts_cost_info'])                  $logChanges['parts_cost_info']                  = $formData['parts_cost_info'];
+            if ($formData['set_repair_restrictions'])              $logChanges['repair_restrictions']              = $formData['repair_restrictions'];
+            if ($formData['set_parts_availability_years'])         $logChanges['parts_availability_years']         = $formData['parts_availability_years'];
+            if ($formData['set_repair_service_url'])               $logChanges['repair_service_url']               = $formData['repair_service_url'];
+            if ($formData['set_manual_url'])                       $logChanges['manual_url']                       = $formData['manual_url'];
+
+            // Log-Eintrag in die Datenbank schreiben
+            xtc_db_query("
+                INSERT INTO bx_eu_garan_mass_log 
+                (executed_at, affected_products_count, filters_json, changes_json) 
+                VALUES (
+                    NOW(),
+                    " . (int)$updatedProducts . ",
+                    '" . xtc_db_input(json_encode($logFilters, JSON_UNESCAPED_UNICODE)) . "',
+                    '" . xtc_db_input(json_encode($logChanges, JSON_UNESCAPED_UNICODE)) . "'
+                )
+            ");
+        }
+        // --- ENDE PHASE 2 ---
+        
+        $messageStack->add_session(sprintf(TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS, $updatedProducts, $warrantyCount, $repairCount), 'success');
+      
+      if (isset($_SESSION['bx_eu_garan_last_filters'])) {
+        unset($_SESSION['bx_eu_garan_last_filters']);
       }
-    }
+        xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
+      }  
+      break;
+
+    // --- PHASE 3: PRESET ACTIONS ---
+    case 'save_preset':
+      $presetName = isset($_POST['preset_name']) ? trim((string)$_POST['preset_name']) : '';
+      if (!empty($presetName)) {
+        // Wir speichern das komplette aktuelle $formData-Array ab
+        xtc_db_query("
+            INSERT INTO `bx_eu_garan_presets` 
+            (`preset_name`, `preset_data_json`, `created_at`) 
+            VALUES (
+                '" . xtc_db_input($presetName) . "',
+                '" . xtc_db_input(json_encode($formData, JSON_UNESCAPED_UNICODE)) . "',
+                NOW()
+            )
+        ");
+        // Erfolgsmeldung setzen (Falls dein System eine MessageStack-Klasse nutzt)
+        $messageStack->add_session('Preset erfolgreich gespeichert!', 'success');
+      }
+      xtc_redirect(xtc_href_link('bx_eu_garan.php'));
+      break;
+    case 'load_preset':
+      $presetId = isset($_GET['preset_id']) ? (int)$_GET['preset_id'] : 0;
+      if ($presetId > 0) {
+        $preset_query = xtc_db_query("SELECT preset_data_json FROM bx_eu_garan_presets WHERE id = '" . $presetId . "' LIMIT 1");
+        if ($preset_query && xtc_db_num_rows($preset_query) > 0) {
+          $preset_arr = xtc_db_fetch_array($preset_query);
+          $decodedData = json_decode($preset_arr['preset_data_json'], true);
+          
+          if (is_array($decodedData)) {
+            // Überschreibe das Session-Array mit den geladenen Preset-Daten
+            $_SESSION['bx_eu_garan_last_filters'] = $decodedData;
+            $formData = $decodedData;
+          }
+        }
+      }
+      xtc_redirect(xtc_href_link('bx_eu_garan.php'));
+      break;
+    case 'delete_preset':
+      $presetId = isset($_GET['preset_id']) ? (int)$_GET['preset_id'] : 0;
+      if ($presetId > 0) {
+        xtc_db_query("DELETE FROM bx_eu_garan_presets WHERE id = '" . $presetId . "'");
+      }
+      xtc_redirect(xtc_href_link('bx_eu_garan.php'));
+      break;
+    // --- ENDE PHASE 3 ACTIONS ---    
+    default:
+      $action = null;
   }
 
   $categorySelectData = array_merge(
@@ -189,6 +339,8 @@
   );
 
 require (DIR_WS_INCLUDES.'head.php');
+
+$messageStack->output();
 ?>
 </head>
 <body>
@@ -225,24 +377,48 @@ require (DIR_WS_INCLUDES.'head.php');
                 </div>
               </div>
 
-              <div valign="top" class="clear div_box" style="max-width: 100%;">
-                <h3 style="margin-top:0;"><?php echo HEADING_BX_EU_GARAN_MASS_EDIT_TITLE; ?></h3>
-                <p class="main" style="margin:0 0 12px 0;"><?php echo TEXT_BX_EU_GARAN_MASS_EDIT_DESCRIPTION; ?></p>
-                <p class="main" style="margin:0 0 12px 0;"><?php echo TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE; ?></p>
-
 <?php
-  foreach ($feedback as $message) {
-    $message_type = $message['type'] === 'error' ? 'error' : 'success';    
-    echo '<div class="'. $message_type .'_message">'.htmlspecialchars($message['text']).'</div>';
-  }
-
-  if ($previewCount !== null) {
-    echo '<div class="success_message">'.sprintf(TEXT_BX_EU_GARAN_PREVIEW_RESULT, (int)$previewCount).'</div>';
-  }
-
   echo xtc_draw_form('bx_eu_garan_form', 'bx_eu_garan.php');
 ?>
-
+                <div class="clear div_box" style="max-width: 100%; border-radius: 4px;">
+                  <table style="width: 100%;">
+                    <tr>
+                      <td style="vertical-align: top; width: 40%;">
+                        <h3><?php echo TEXT_BX_EU_GARAN_SAVE_PRESET; ?></h3>
+                        <input type="text" name="preset_name" placeholder="z.B. Samsung Waschmaschinen Garantie" style="width: 70%; padding: 4px;" />
+                        <button type="submit" formaction="<?php echo xtc_href_link('bx_eu_garan.php', 'action=save_preset'); ?>" class="button" style="padding: 4px 10px;"><?php echo BUTTON_BX_EU_GARAN_SAVE_PRESET; ?></button>
+                      </td>
+                      
+                      <td style="vertical-align: top; width: 60%; border-left: 1px solid #ddd; padding-left: 20px;">
+                        <h3><?php echo TEXT_BX_EU_GARAN_LOAD_PRESETS; ?></h3>
+                        <?php
+                        $presets_query = xtc_db_query("SELECT id, preset_name, created_at FROM bx_eu_garan_presets ORDER BY preset_name ASC");
+                        if ($presets_query && xtc_db_num_rows($presets_query) > 0) {
+                            echo '<table style="width: 100%; border-collapse: collapse;">';
+                            while ($p_row = xtc_db_fetch_array($presets_query)) {
+                                $load_url = xtc_href_link('bx_eu_garan.php', 'action=load_preset&preset_id=' . $p_row['id']);
+                                $del_url  = xtc_href_link('bx_eu_garan.php', 'action=delete_preset&preset_id=' . $p_row['id']);
+                                echo '<tr style="border-bottom: 1px dashed #eee;">';
+                                echo '<td class="main" style="padding: 5px 0;">' . htmlspecialchars($p_row['preset_name']) . ' <small style="color:#777;">(' . date('d.m.Y H:i', strtotime($p_row['created_at'])) . ')</small></td>';
+                                echo '<td style="text-align: right; padding: 5px 0;">';
+                                echo '<a href="' . $load_url . '" class="button" style="padding: 2px 6px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 3px; font-size: 11px; margin-right: 5px;">'.BUTTON_BX_EU_GARAN_LOAD_PRESET.'</a>';
+                                echo '<a href="' . $del_url . '" class="button" style="padding: 2px 6px; background-color: #f44336; color: white; text-decoration: none; border-radius: 3px; font-size: 11px;" onclick="return confirm(\''.BUTTON_BX_EU_GARAN_DELETE_PRESET_CONFIRM.'\')">'.BUTTON_BX_EU_GARAN_DELETE_PRESET.'</a>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                            echo '</table>';
+                        } else {
+                            echo '<span class="main" style="color: #777; font-style: italic;">'.TEXT_BX_EU_GARAN_NO_PRESETS.'</span>';
+                        }
+                        ?>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="clear div_box" style="max-width: 100%; border-radius: 4px;">
+                  <h3><?php echo HEADING_BX_EU_GARAN_MASS_EDIT_TITLE; ?></h3>
+                  <p class="main" style="margin:0 0 12px 0;"><?php echo TEXT_BX_EU_GARAN_MASS_EDIT_DESCRIPTION; ?></p>
+                  <p class="info_message" style="margin:0 0 12px 0;"><?php echo TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE; ?></p>
                   <table class="tableConfig">
                     <tr class="dataTableHeadingRow" style="border-left: 1px solid #aaaaaa;">
                       <td class="dataTableHeadingContent" colspan="2"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_FILTER; ?></td>
@@ -269,107 +445,227 @@ require (DIR_WS_INCLUDES.'head.php');
                       </td>
                     </tr>
                   </table>
+                </div>
 
-                  <table class="tableBXConfig">
-                    <tr class="dataTableHeadingRow" style="border-left: 1px solid #aaaaaa;">
-                      <td class="dataTableHeadingContent"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_FIELD; ?></td>
-                      <td class="dataTableHeadingContent txta-c"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_SET; ?></td>
-                      <td class="dataTableHeadingContent"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_VALUE; ?></td>
-                      <td class="dataTableHeadingContent"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_NOTE; ?></td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_ACTIVE; ?></td>
-                      <td class="col-middle txta-c">
-<?php echo xtc_draw_checkbox_field('set_manufacturer_guarantee_available', '1', $formData['set_manufacturer_guarantee_available'] === 1); ?>
-                      </td>
-                      <td class="col-right">
-<?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['manufacturer_guarantee_available'] === 1 ? 'true' : 'false'), 'manufacturer_guarantee_available'); ?>
-                      </td>
-                      <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_ACTIVE_NOTE; ?></td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_YEARS; ?></td>
-                      <td class="col-middle txta-c">
-<?php echo xtc_draw_checkbox_field('set_guarantee_years', '1', $formData['set_guarantee_years'] === 1); ?>
-                      </td>
-                      <td class="col-right" style="width: 30%;"><input type="number" min="0" step="1" name="guarantee_years" value="<?php echo (int)$formData['guarantee_years']; ?>"></td>
-                      <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_YEARS_NOTE; ?></td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST; ?></td>
-                      <td class="col-middle txta-c">
-<?php echo xtc_draw_checkbox_field('set_requires_additional_cost', '1', $formData['set_requires_additional_cost'] === 1); ?>
-                      </td>
-                      <td class="col-right">
-<?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['requires_additional_cost'] === 1 ? 'true' : 'false'), 'requires_additional_cost'); ?>
-                      </td>
-                      <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST_NOTE; ?></td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_QR_URL; ?></td>
-                      <td class="col-middle txta-c">
-<?php echo xtc_draw_checkbox_field('set_qr_url', '1', $formData['set_qr_url'] === 1); ?>
-                      </td>
-                      <td class="col-right"><input type="text" name="qr_url" value="<?php echo htmlspecialchars($formData['qr_url']); ?>"></td>
-                      <td class="col-right"></td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_REPAIR_SCORE; ?></td>
-                      <td class="col-middle txta-c">
-<?php echo xtc_draw_checkbox_field('set_repair_score', '1', $formData['set_repair_score'] === 1); ?>
-                      </td>
-                      <td class="col-right">
-                        <input type="range" min="0" max="10" step="1" id="repair_score" name="repair_score" value="<?php echo (int)$formData['repair_score']; ?>" list="scores" style="min-width: 250px;">
-                        <datalist id="scores">
-                          <option value="0"></option>
-                          <option value="1"></option>
-                          <option value="2"></option>
-                          <option value="3"></option>
-                          <option value="4"></option>
-                          <option value="5"></option>
-                          <option value="6"></option>
-                          <option value="7"></option>
-                          <option value="8"></option>
-                          <option value="9"></option>
-                          <option value="10"></option>
-                        </datalist>
-                      </td>
-                      <td class="col-right">
-                        Aktueller Wert: <span id="repair_score_value" style="font-weight: bold;"><?php echo (int)$formData['repair_score']; ?></span>
-                        <script>
-                          var slider = document.getElementById("repair_score");
-                          var output = document.getElementById("repair_score_value");
-                          output.innerHTML = slider.value; // Zeigt den Standardwert an
+                <details class="bxac-card" style="margin-bottom: 1em;" open>
+                  <summary class="bxac-summary">
+                    <span class="bxac-arrow" style="font-size: 25px; line-height: 16px;">▸</span>
+                    <span class="bxac-title">
+                      <?php echo HEADING_BX_EU_GARAN_PRODUCT_WARRANTY; ?>
+                    </span>
+                  </summary>
+                  <div class="bxac-body" style="padding: 0;">
+                    <table class="tableBXConfig" style="margin-top: 0;">
+                      <tr class="dataTableHeadingRow" style="border-left: 1px solid #aaaaaa;">
+                        <td class="dataTableHeadingContent"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_FIELD; ?></td>
+                        <td class="dataTableHeadingContent txta-c"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_SET; ?></td>
+                        <td class="dataTableHeadingContent"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_VALUE; ?></td>
+                        <td class="dataTableHeadingContent"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_NOTE; ?></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_ACTIVE; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_manufacturer_guarantee_available', '1', $formData['set_manufacturer_guarantee_available'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+  <?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['manufacturer_guarantee_available'] === 1 ? 'true' : 'false'), 'manufacturer_guarantee_available'); ?>
+                        </td>
+                        <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_ACTIVE_NOTE; ?></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_YEARS; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_guarantee_years', '1', $formData['set_guarantee_years'] === 1); ?>
+                        </td>
+                        <td class="col-right" style="width: 30%;"><input type="number" min="0" step="1" name="guarantee_years" value="<?php echo (int)$formData['guarantee_years']; ?>"></td>
+                        <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_GUARANTEE_YEARS_NOTE; ?></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_COVERS_FULL_PRODUCT; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_covers_full_product', '1', $formData['set_covers_full_product'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+  <?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['covers_full_product'] === 1 ? 'true' : 'false'), 'covers_full_product'); ?>
+                        </td>
+                        <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_COVERS_FULL_PRODUCT_NOTE; ?></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_requires_additional_cost', '1', $formData['set_requires_additional_cost'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+  <?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['requires_additional_cost'] === 1 ? 'true' : 'false'), 'requires_additional_cost'); ?>
+                        </td>
+                        <td class="col-right"><?php echo TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST_NOTE; ?></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_QR_URL; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_qr_url', '1', $formData['set_qr_url'] === 1); ?>
+                        </td>
+                        <td class="col-right"><input type="text" name="qr_url" value="<?php echo htmlspecialchars($formData['qr_url']); ?>"></td>
+                        <td class="col-right"></td>
+                      </tr>
+                    </table>
+                  </div>
+                </details>
 
-                          // Aktualisiert den Wert, wenn der Benutzer schiebt
-                          slider.oninput = function() {
-                          output.innerHTML = this.value;
-                          }
-                      </script>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE; ?></td>
-                      <td class="col-middle txta-c">
-<?php echo xtc_draw_checkbox_field('set_parts_available', '1', $formData['set_parts_available'] === 1); ?>
-                      </td>
-                      <td class="col-right">
-<?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['parts_available'] === 1 ? 'true' : 'false'), 'parts_available'); ?>
-                      </td>
-                      <td class="col-right"></td>
-                    </tr>
-                    <tr>
-                      <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_MANUAL_URL; ?></td>
-                      <td class="col-middle txta-c"><?php echo xtc_draw_checkbox_field('set_manual_url', '1', $formData['set_manual_url'] === 1); ?></td>
-                      <td class="col-right"><input type="text" name="manual_url" value="<?php echo htmlspecialchars($formData['manual_url']); ?>"></td>
-                      <td class="col-right"></td>
-                    </tr>
-                  </table>
+                <details class="bxac-card">
+                  <summary class="bxac-summary">
+                    <span class="bxac-arrow" style="font-size: 25px; line-height: 16px;">▸</span>
+                    <span class="bxac-title">
+                      <?php echo HEADING_BX_EU_GARAN_PRODUCT_REPAIRABILITY; ?>
+                    </span>
+                  </summary>
+                  <div class="bxac-body" style="padding: 0;">
+                    <table class="tableBXConfig" style="margin-top: 0;">
+                      <tr class="dataTableHeadingRow" style="border-left: 1px solid #aaaaaa;">
+                        <td class="dataTableHeadingContent" style="width: 25%;"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_FIELD; ?></td>
+                        <td class="dataTableHeadingContent txta-c" style="width: 5%;"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_SET; ?></td>
+                        <td class="dataTableHeadingContent" style="width: 50%;"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_VALUE; ?></td>
+                        <td class="dataTableHeadingContent" style="width: 20%;"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_NOTE; ?></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_REPAIR_SCORE; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_repair_score', '1', $formData['set_repair_score'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+                          <input type="range" min="0" max="10" step="1" id="repair_score" name="repair_score" value="<?php echo (int)$formData['repair_score']; ?>" list="repair_scores" style="min-width: 250px;">
+                          <datalist id="repair_scores">
+                            <option value="0"></option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                            <option value="4"></option>
+                            <option value="5"></option>
+                            <option value="6"></option>
+                            <option value="7"></option>
+                            <option value="8"></option>
+                            <option value="9"></option>
+                            <option value="10"></option>
+                          </datalist>
+                        </td>
+                        <td class="col-right">
+                          <?php echo TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE; ?> <span id="repair_score_value" style="font-weight: bold;"><?php echo (int)$formData['repair_score']; ?></span>
+                          <script>
+                            var slider = document.getElementById("repair_score");
+                            var output = document.getElementById("repair_score_value");
+                            output.innerHTML = slider.value; // Zeigt den Standardwert an
 
+                            // Aktualisiert den Wert, wenn der Benutzer schiebt
+                            slider.oninput = function() {
+                            output.innerHTML = this.value;
+                            }
+                        </script>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_parts_available', '1', $formData['set_parts_available'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+  <?php echo xtc_cfg_select_option(array('true', 'false'), ($formData['parts_available'] === 1 ? 'true' : 'false'), 'parts_available'); ?>
+                        </td>
+                        <td class="col-right"></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_parts_cost_info', '1', $formData['set_parts_cost_info'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+                          <input type="text" name="parts_cost_info" value="<?php echo htmlspecialchars($formData['parts_cost_info']); ?>">
+                        </td>
+                        <td class="col-right"></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE_YEARS; ?></td>
+                        <td class="col-middle txta-c">
+  <?php echo xtc_draw_checkbox_field('set_parts_availability_years', '1', $formData['set_parts_availability_years'] === 1); ?>
+                        </td>
+                        <td class="col-right">
+                          <input type="range" min="0" max="30" step="1" id="parts_availability_years" name="parts_availability_years" value="<?php echo (int)$formData['parts_availability_years']; ?>" list="availability_years_scores" style="min-width: 250px;">
+                          <datalist id="availability_years_scores">
+                            <option value="0"></option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                            <option value="4"></option>
+                            <option value="5"></option>
+                            <option value="6"></option>
+                            <option value="7"></option>
+                            <option value="8"></option>
+                            <option value="9"></option>
+                            <option value="10"></option>
+                            <option value="11"></option>
+                            <option value="12"></option>
+                            <option value="13"></option>
+                            <option value="14"></option>
+                            <option value="15"></option>
+                            <option value="16"></option>
+                            <option value="17"></option>
+                            <option value="18"></option>
+                            <option value="19"></option>
+                            <option value="20"></option>
+                            <option value="21"></option>
+                            <option value="22"></option>
+                            <option value="23"></option>
+                            <option value="24"></option>
+                            <option value="25"></option>
+                            <option value="26"></option>
+                            <option value="27"></option>
+                            <option value="28"></option>
+                            <option value="29"></option>
+                            <option value="30"></option>
+                          </datalist>
+                        </td>
+                        <td class="col-right">
+                          <?php echo TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE; ?> <span id="parts_availability_years_value" style="font-weight: bold;"><?php echo (int)$formData['parts_availability_years']; ?></span>
+                          <script>
+                            var years_slider = document.getElementById("parts_availability_years");
+                            var years_output = document.getElementById("parts_availability_years_value");
+                            years_output.innerHTML = years_slider.value; // Zeigt den Standardwert an
+
+                            // Aktualisiert den Wert, wenn der Benutzer schiebt
+                            years_slider.oninput = function() {
+                            years_output.innerHTML = this.value;
+                            }
+                        </script>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL; ?></td>
+                        <td class="col-middle txta-c"><?php echo xtc_draw_checkbox_field('set_repair_service_url', '1', $formData['set_repair_service_url'] === 1); ?></td>
+                        <td class="col-right"><input type="text" name="repair_service_url" value="<?php echo htmlspecialchars($formData['repair_service_url']); ?>"></td>
+                        <td class="col-right"></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL; ?></td>
+                        <td class="col-middle txta-c"><?php echo xtc_draw_checkbox_field('set_manual_url', '1', $formData['set_manual_url'] === 1); ?></td>
+                        <td class="col-right"><input type="text" name="manual_url" value="<?php echo htmlspecialchars($formData['manual_url']); ?>"></td>
+                        <td class="col-right"></td>
+                      </tr>
+                      <tr>
+                        <td class="col-left"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS; ?></td>
+                        <td class="col-middle txta-c"><?php echo xtc_draw_checkbox_field('set_repair_restrictions', '1', $formData['set_repair_restrictions'] === 1); ?></td>
+                        <td class="col-right">
+                          <?php echo xtc_draw_textarea_field('repair_restrictions', 'soft', 70, 4, $formData['repair_restrictions']); ?>
+                        </td>
+                        <td class="col-right"></td>
+                      </tr>
+                    </table>
+                  </div>
+                </details>
+
+                <div class="clear" style="max-width: 100%;">
                   <button class="button" type="submit" name="action" value="preview"><?php echo BUTTON_BX_EU_GARAN_PREVIEW; ?></button>
                   <button class="button" type="submit" name="action" value="apply_mass_update" onclick="return confirm('<?php echo TEXT_BX_EU_GARAN_CONFIRM_MASS_UPDATE; ?>');"><?php echo BUTTON_BX_EU_GARAN_APPLY; ?></button>
-                </form>
-              </div>
+                </div>
+              </form>
 
             </td>
             <!-- boxCenterLeft //-->

@@ -99,6 +99,12 @@
       background-color:#F2DEDE;
     }
 
+    table.tableBXConfig tr:not(.dataTableHeadingRow),
+    table.tableConfig tr:not(.dataTableHeadingRow) {
+      border-left: 1px solid #aaa;
+      border-right: 1px solid #aaa;
+    }
+
     .bxac-card {
       position: relative;
       border: 1px solid #d9dee8;
@@ -157,6 +163,19 @@
     }
     .bxac-link {
       margin-top: 12px;
+    }
+
+    /* Future: fixed message stack (animated via JS) */
+    .fixed_messageStack {
+      position: fixed;
+      top: 88px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: 80%;
+      padding: 10px 0;
+      text-align: center;
+      display: none;
     }
 
   </style>

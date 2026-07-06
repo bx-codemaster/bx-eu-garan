@@ -59,7 +59,21 @@
       setTimeout(function() { toast.remove(); }, 300);
     }, 4000);
   }
-
+  /**
+   * Blendet die feste Message-Stack-Box kurz ein und automatisch wieder aus.
+   * Diese kleine Komfortfunktion sorgt dafür, dass Statusmeldungen nach dem
+   * Laden sichtbar sind, aber den Adminbereich nach kurzer Zeit wieder freigeben.
+   *
+   * @returns {void}
+   */
+  function autoHideFixedMessageStack() {
+    $(".fixed_messageStack").slideDown("slow", function() {
+      setTimeout(function() {
+        $(".fixed_messageStack").slideUp("slow");
+      }, 2000);
+    });
+  }
+  $(document).ready(autoHideFixedMessageStack);
 </script>
 <?php
  }

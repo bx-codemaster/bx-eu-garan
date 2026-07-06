@@ -139,6 +139,21 @@ class bx_eu_garan {
 								updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
+		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_eu_garan_mass_log (
+								id INT AUTO_INCREMENT PRIMARY KEY,
+								executed_at DATETIME NOT NULL,
+								affected_products_count INT NOT NULL,
+								filters_json TEXT NOT NULL,
+								changes_json TEXT NOT NULL
+							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_eu_garan_presets (
+								id INT AUTO_INCREMENT PRIMARY KEY,
+								preset_name VARCHAR(255) NOT NULL,
+								preset_data_json TEXT NOT NULL,
+								created_at DATETIME NOT NULL
+							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
 		$this->addProductsForeignKeyIfPossible('bx_products_warranty_guarantee', 'fk_bx_eu_garan_warranty_products');
 		$this->addProductsForeignKeyIfPossible('bx_products_repairability', 'fk_bx_eu_garan_repair_products');
 	}
@@ -162,9 +177,9 @@ class bx_eu_garan {
 				return;
 			}
 
-			xtc_db_query("ALTER TABLE `".$tableName."`
-				ADD CONSTRAINT `".$constraintName."`
-				FOREIGN KEY (`products_id`) REFERENCES `".TABLE_PRODUCTS."`(`products_id`) ON DELETE CASCADE");
+			xtc_db_query("ALTER TABLE ".$tableName."
+				ADD CONSTRAINT ".$constraintName."
+				FOREIGN KEY (products_id) REFERENCES ".TABLE_PRODUCTS."(products_id) ON DELETE CASCADE");
 		}
 
 		/**
@@ -225,6 +240,8 @@ class bx_eu_garan {
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." DROP ".$this->code);
 		xtc_db_query("DROP TABLE IF EXISTS bx_products_warranty_guarantee");
 		xtc_db_query("DROP TABLE IF EXISTS bx_products_repairability");
+		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_mass_log");
+		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_presets");
   }
 
 	public function process() { }
