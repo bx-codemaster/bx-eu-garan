@@ -20,9 +20,9 @@
             'dev_requirement' => false,
         ),
         'bacon/bacon-qr-code' => array(
-            'pretty_version' => 'v3.0.3',
-            'version' => '3.0.3.0',
-            'reference' => '36a1cb2b81493fa5b82e50bf8068bf84d1542563',
+            'pretty_version' => 'v3.1.1',
+            'version' => '3.1.1.0',
+            'reference' => '4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../bacon/bacon-qr-code',
             'aliases' => array(),

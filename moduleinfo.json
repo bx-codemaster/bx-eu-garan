@@ -7,9 +7,9 @@
     "website": "https://www.der-eisenhans.de",
     "srcDir": "src",
     "version": "auto",
-    "shortDescription": "Ein Verwaltungstool für Modified eCommerce Shops, das die Sortierung von Produkten auf der Startseite und in Kategorien vereinfacht.",
-    "description": "BX EU Garan ist ein professionelles Verwaltungstool für Modified eCommerce Shopsofware, das die Sortierung von Produkten auf der Startseite und in Kategorien vereinfacht. Mit einer modernen Drag & Drop Oberfläche können Sie Produkte intuitiv per Maus verschieben – die Sortierung wird automatisch gespeichert.",
-    "price": "299.00", 
+    "shortDescription": "Harmonisierte Mitteilung - Harmonisierte Kennzeichnung - Reparierbarkeitswert",
+    "description": "Diese Modul setzt die Vorgaben zur Harmonisierte Mitteilung - Harmonisierte Kennzeichnung - Reparierbarkeitswert um. Es werden die entsprechenden Felder in den Produktdetails und in der Produktliste angezeigt. Die Daten werden über die Produktverwaltung gepflegt.",
+    "price": "free", 
     "date": "2026-04-04 00:00:00",
     "php": {
       "version": "^7.4 || ^8.0"
