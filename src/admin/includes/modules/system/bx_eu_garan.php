@@ -20,8 +20,6 @@ class bx_eu_garan {
 	public string $description;
 	public int $sort_order;
 	public string $enabled;
-	private int $freeId;
-	private int $freeSort;
 	private bool $_check;
 
 	public function __construct() {
@@ -32,21 +30,7 @@ class bx_eu_garan {
 	  $this->description = MODULE_BX_EU_GARAN_DESC;
 	  $this->sort_order  = defined('MODULE_BX_EU_GARAN_SORT_ORDER') ? MODULE_BX_EU_GARAN_SORT_ORDER : 0;
 	  $this->enabled     = ((defined('MODULE_BX_EU_GARAN_STATUS') && MODULE_BX_EU_GARAN_STATUS == 'True') ? true : false);
-
-	  $freeId_query = xtc_db_query("SELECT MIN(configuration_group_id+1) AS id 
-			                           					FROM ".TABLE_CONFIGURATION_GROUP." 
-																				  WHERE (configuration_group_id+1) 
-                                        		NOT IN (SELECT configuration_group_id FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_id IS NOT NULL);");
-	  $freeId = xtc_db_fetch_array($freeId_query);
-	  $this->freeId = $freeId["id"];
-
- 	  $freeSort_query = xtc_db_query("SELECT MIN(sort_order+1) AS sort_order 
-                                           FROM ".TABLE_CONFIGURATION_GROUP." 
-                                          WHERE (sort_order+1) 
-                                         NOT IN (SELECT sort_order FROM ".TABLE_CONFIGURATION_GROUP." WHERE sort_order IS NOT NULL);");
-	  $freeSort = xtc_db_fetch_array($freeSort_query);
-	  $this->freeSort = $freeSort["sort_order"];
-    }
+  }
 
 	/**
      * Returns whether the module is installed.
@@ -89,16 +73,31 @@ class bx_eu_garan {
 	public function install(): void {
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." ADD ".$this->code." INTEGER(1) DEFAULT 0");
 	  xtc_db_query("UPDATE ".TABLE_ADMIN_ACCESS." SET ".$this->code." = 1");
-		  
+
+	  $freeId_query = xtc_db_query("SELECT MIN(configuration_group_id+1) AS id 
+			                           					FROM ".TABLE_CONFIGURATION_GROUP." 
+																				  WHERE (configuration_group_id+1) 
+                                        		NOT IN (SELECT configuration_group_id FROM ".TABLE_CONFIGURATION_GROUP." 
+																						         WHERE configuration_group_id IS NOT NULL);");
+	  $freeId = xtc_db_fetch_array($freeId_query);
+
+
+ 	  $freeSort_query = xtc_db_query("SELECT MIN(sort_order+1) AS sort_order 
+                                           FROM ".TABLE_CONFIGURATION_GROUP." 
+                                          WHERE (sort_order+1) NOT IN (SELECT sort_order FROM ".TABLE_CONFIGURATION_GROUP." 
+																					                              WHERE sort_order IS NOT NULL);");
+	  $freeSort = xtc_db_fetch_array($freeSort_query);
+
+
 	  xtc_db_query("INSERT INTO ".TABLE_CONFIGURATION_GROUP." ( configuration_group_id, 
 																configuration_group_title, 
 																configuration_group_description, 
 																sort_order, 
 																visible) 
-													   VALUES ( ".$this->freeId.", 
+													   VALUES ( ".$freeId["id"].", 
 																'BX EU Garan Konfiguration', 
 																'Modul einstellen und konfigurieren',
-																".$this->freeSort.", 
+																".$freeSort["sort_order"].", 
 																1)");
 
 	  $query = "INSERT INTO ".TABLE_CONFIGURATION." ( 
@@ -110,8 +109,8 @@ class bx_eu_garan {
 														use_function, 
 														set_function )
 									 VALUES ('MODULE_BX_EU_GARAN_STATUS', 'True', '6', '1', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), '),
-													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '6', '2', NOW(), '', '".self::class."->configurationFieldVersion'),
-													('MODULE_BX_EU_GARAN_CONFIG_ID', $this->freeId, '6', '3', NOW(), '', '".self::class."->configurationFieldVersion'),
+													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '6', '2', NOW(), '', 'bx_configuration_field_version('),
+													('MODULE_BX_EU_GARAN_CONFIG_ID', '".$freeId["id"]."', '6', '3', NOW(), '', 'bx_configuration_field_version('),
 													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '6', '4', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module(')";
 	  xtc_db_query($query);
 
@@ -244,28 +243,15 @@ class bx_eu_garan {
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_presets");
   }
 
-	public function process() { }
+	public function process(): void { }
 	  
 	/**
 	  * Additional HTML to show during module configuration.
 	  *
 	  * @return array
-	  */
-	  
-	public function display() {
-       return array('text' => '<div style="text-align: center;">'.xtc_button(BUTTON_SAVE).xtc_button_link(BUTTON_CANCEL, xtc_href_link(FILENAME_MODULE_EXPORT, 'set='.$_GET['set'].'&module='.$this->code))."</div>");
-     }
-	  
-	/**
-	  * Action to perform when the configuration key '_VERSION' is being displayed.
-	  *
-	  * @param string $value
-	  * @param string $constant
-	  *
-	  * @return string
-	  */
-	public function configurationFieldVersion(string $value, string $constant): string {
-	  return xtc_draw_input_field( 'configuration['.$constant.']', $value, 'readonly="true" style="opacity: 0.4;"');
+	  */ 
+	public function display(): array {
+    return array('text' => '<div style="text-align: center;">'.xtc_button(BUTTON_SAVE).xtc_button_link(BUTTON_CANCEL, xtc_href_link(FILENAME_MODULE_EXPORT, 'set='.$_GET['set'].'&module='.$this->code))."</div>");
   }
 	  
 	public function custom() {
@@ -307,7 +293,7 @@ class bx_eu_garan {
 	  unlink(DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/system/bx_eu_garan.php');
   }
 	  
-	private function rrmdir($dir): bool {
+	private function rrmdir(string $dir): bool {
 	  if (is_dir($dir)) {
 			$objects = scandir($dir);
 			foreach ($objects as $object) {

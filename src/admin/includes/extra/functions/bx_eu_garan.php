@@ -224,3 +224,12 @@
                     VALUES ('".$keyEscaped."', '".$valueEscaped."', '".$groupId."', '50', NOW(), '', '')");
     }
   }
+
+  /**
+   * Konfigurationseingabefeld für die Modulversion (read-only)
+   */
+  if (!function_exists('bx_configuration_field_version')) {
+    function bx_configuration_field_version(string $value, string $constant): string {
+      return xtc_draw_input_field( 'configuration['.$constant.']', $value, 'readonly="true" style="opacity: 0.4;"');
+    }
+  }

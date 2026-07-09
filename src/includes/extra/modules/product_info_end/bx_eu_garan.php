@@ -79,7 +79,7 @@ $legalQrUrl    = htmlspecialchars($legalQrUrlRaw, ENT_QUOTES, 'UTF-8');
 $legal_label_path = DIR_WS_IMAGES . 'warranty_guarantee/';
 
 $legal_label_btn = '<a href="'.$legalQrUrl.'">'.PHP_EOL
-                  .'  <img class="bx_eu_garan_legal_label_btn" src="'.$legal_label_path.'legal_guarantee_btn_'.$_SESSION["language_code"].'.png" alt="" style="max-width: 150px;" />'.PHP_EOL
+                  . xtc_image(DIR_WS_IMAGES . 'warranty_guarantee/legal_guarantee_btn_' . $_SESSION["language_code"] . '.png', '', '', '', 'style="max-width: 150px;" class="bx_eu_garan_legal_label_btn"') . PHP_EOL
                   .'</a>';
 
 $info_smarty->assign('BX_EU_GARAN_LEGAL_LABEL_BTN', $legal_label_btn);
