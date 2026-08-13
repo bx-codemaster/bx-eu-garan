@@ -97,7 +97,8 @@
       'filter_include_subcategories' => 1,
       'filter_manufacturers_id'      => '',
       'filter_status'                => '',
-      'set_manufacturer_guarantee_available' => 0, 'manufacturer_guarantee_available' => 0,
+      'manufacturer_guarantee_available' => 0,
+      'set_manufacturer_guarantee_available' => 0, 
       'set_guarantee_years'          => 0, 'guarantee_years' => 2,
       'set_covers_full_product'      => 0, 'covers_full_product' => 0,
       'set_requires_additional_cost' => 0, 'requires_additional_cost' => 0,
@@ -377,9 +378,9 @@ $messageStack->output();
                 </div>
               </div>
 
-<?php
-  echo xtc_draw_form('bx_eu_garan_form', 'bx_eu_garan.php');
-?>
+              <?php
+                echo xtc_draw_form('bx_eu_garan_form', 'bx_eu_garan.php');
+              ?>
                 <div class="clear div_box" style="max-width: 100%; border-radius: 4px;">
                   <table style="width: 100%;">
                     <tr>

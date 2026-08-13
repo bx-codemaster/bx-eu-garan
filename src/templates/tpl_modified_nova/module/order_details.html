@@ -37,13 +37,14 @@
           </div>        
 
           {if $module_data.PRODUCTS_SHORT_DESCRIPTION}<div class="of_description">{$module_data.PRODUCTS_SHORT_DESCRIPTION}</div>{/if}
-
+          <!-- BOF $BX_EU_GARAN -->
           {if $module_data.EU_GARAN_LEGAL_LABEL_BTN || $module_data.EU_GARAN_LABEL_SMALL}
             <div class="of_description" style="display:flex; gap:8px; align-items:flex-start; flex-wrap:wrap; overflow:visible;">
               {if $module_data.EU_GARAN_LEGAL_LABEL_BTN}{$module_data.EU_GARAN_LEGAL_LABEL_BTN}{/if}
               {if $module_data.EU_GARAN_LABEL_SMALL}{$module_data.EU_GARAN_LABEL_SMALL}{/if}
             </div>
           {/if}
+          <!-- EOF $BX_EU_GARAN -->
 
           {if $module_data.PRODUCTS_MODEL || $module_data.PRODUCTS_SHIPPING_TIME || $module_data.PRODUCTS_VPE}
             <div class="of_inforows">

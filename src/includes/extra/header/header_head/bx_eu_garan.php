@@ -10,7 +10,7 @@
   #bx-eu-garan-label-small,
   .bx-eu-garan-label-small {
     display: inline-block;
-    max-width: 200px;
+    max-width: 145px;
     position: relative;
     cursor: pointer;
   }
@@ -51,12 +51,14 @@
     align-items:flex-start;
     gap:12px;
     flex-wrap:wrap;
+    margin-top: 12px;
   }
   .bx_eu_garan_labels > * {
     flex: 0 0 auto;
   }
   .bx_eu_garan_labels .bx_eu_garan_legal_label_btn {
-    display:block;
+    display: block;
+    max-width: 150px;
   }
 </style>
 <script>
