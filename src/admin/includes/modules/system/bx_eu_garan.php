@@ -108,10 +108,10 @@ class bx_eu_garan {
 														date_added, 
 														use_function, 
 														set_function )
-									 VALUES ('MODULE_BX_EU_GARAN_STATUS', 'True', '6', '1', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), '),
-													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '6', '2', NOW(), '', 'bx_configuration_field_version('),
-													('MODULE_BX_EU_GARAN_CONFIG_ID', '".$freeId["id"]."', '6', '3', NOW(), '', 'bx_configuration_field_version('),
-													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '6', '4', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module(')";
+									 VALUES ('MODULE_BX_EU_GARAN_STATUS', 'True', '".$freeId["id"]."', '1', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), '),
+													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '".$freeId["id"]."', '2', NOW(), '', 'bx_configuration_field_version('),
+													('MODULE_BX_EU_GARAN_CONFIG_ID', '".$freeId["id"]."', '".$freeId["id"]."', '3', NOW(), '', 'bx_configuration_field_version('),
+													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '".$freeId["id"]."', '4', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module(')";
 	  xtc_db_query($query);
 
 		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_products_warranty_guarantee (
@@ -234,6 +234,26 @@ class bx_eu_garan {
 	  */
 	  
 	public function remove(): void {
+		global $messageStack;
+
+		if ($this->bx_module_installed(MODULE_CATEGORIES_INSTALLED, 'bx_eu_garan_categories.php')) {
+    	$messageStack->add_session(MODULE_BX_EU_GARAN_CATEGORIES_DEINSTALL_FIRST, 'error');
+			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
+			exit();
+		}
+		
+		if ($this->bx_module_installed(MODULE_ORDER_INSTALLED, 'bx_eu_garan_order.php')) {
+    	$messageStack->add_session(MODULE_BX_EU_GARAN_ORDER_DEINSTALL_FIRST, 'error');
+			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
+			exit();
+		}
+		
+		if ($this->bx_module_installed(MODULE_SHOPPING_CART_INSTALLED, 'bx_eu_garan_cart.php')) {
+    	$messageStack->add_session(MODULE_BX_EU_GARAN_CART_DEINSTALL_FIRST, 'error');
+			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
+			exit();
+		}
+
 	  xtc_db_query("DELETE FROM ".TABLE_CONFIGURATION." WHERE configuration_key in ('".implode("', '", $this->keys())."')");
 	  xtc_db_query("DELETE FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_title = 'BX EU Garan Konfiguration'");
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." DROP ".$this->code);
@@ -241,6 +261,9 @@ class bx_eu_garan {
 		xtc_db_query("DROP TABLE IF EXISTS bx_products_repairability");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_mass_log");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_presets");
+		
+		xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system'));
+		exit();
   }
 
 	public function process(): void { }
@@ -257,62 +280,178 @@ class bx_eu_garan {
 	public function custom() {
 	  global $messageStack;
 	  $result = true;
-		  
-	  // Systemmodule deinstallieren
-	  $this->remove();
-		  
+
 	  // Dateien definieren
 	  $dirs_and_files   = array();
-	  $dirs_and_files[] = DIR_FS_ADMIN.'bx_eu_garan.php';
-		
-	  $dirs_and_files[] = DIR_FS_ADMIN.DIR_WS_INCLUDES.'extra/css/bx_eu_garan.php';
-	  $dirs_and_files[] = DIR_FS_ADMIN.DIR_WS_INCLUDES.'extra/filenames/bx_eu_garan.php';
-	  $dirs_and_files[] = DIR_FS_ADMIN.DIR_WS_INCLUDES.'extra/javascript/bx_eu_garan.php';
-	  $dirs_and_files[] = DIR_FS_ADMIN.DIR_WS_INCLUDES.'extra/menu/bx_eu_garan.php';
-	  
-	  $dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/system/bx_eu_garan.php';
-	  $dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/system/bx_eu_garan.php';
-	  $dirs_and_files[] = DIR_FS_CATALOG.'lang/german/admin/bx_eu_garan.php';
-	  $dirs_and_files[] = DIR_FS_CATALOG.'lang/english/admin/bx_eu_garan.php';
-		  
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'images/icons/heading/bx_eu_garan.png';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/css/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/filenames/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/functions/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/javascript/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/menu/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/modules/new_product/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/categories/bx_eu_garan_categories.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/system/bx_eu_garan.php';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/classes/bx_dependency_resolver.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/extra/header/header_head/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/extra/modules/order_details_cart_content/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/extra/modules/product_info_end/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/modules/order/bx_eu_garan_order.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/modules/shopping_cart/bx_eu_garan_cart.php';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'media/content/warranty_guarantee.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'images/warranty_guarantee/';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/extra/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/categories/bx_eu_garan_categories.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/order/bx_eu_garan_order.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/shopping_cart/bx_eu_garan_cart.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/system/bx_eu_garan.php';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/extra/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/categories/bx_eu_garan_categories.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/order/bx_eu_garan_order.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/shopping_cart/bx_eu_garan_cart.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/system/bx_eu_garan.php';
+/*
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/module/checkout_confirmation.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/module/order_details.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/module/product_info/product_info_v1_tabs.html';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/module/checkout_confirmation.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/module/order_details.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/module/product_info/product_info_tabs_v1.html';
+*/
 	  // Dateien löschen
 	  foreach ($dirs_and_files as $dir_or_file) {
-			if (!$this->rrmdir($dir_or_file)) {
-				$messageStack->add_session($dir_or_file.MODULE_BX_EU_GARAN_TEXT_COULD_NOT_BE_DELETED, 'error');
+			if (!$this->secureDelete($dir_or_file)) {
+				$messageStack->add_session(MODULE_BX_EU_GARAN_TEXT_COULD_NOT_BE_DELETED.' '.$dir_or_file, 'error');
 				$result = false;
 			}
 	  }
 		  
 	  if ($result === true) {
 		  $messageStack->add_session(MODULE_BX_EU_GARAN_TEXT_SUCCESSFULLY_REMOVED, 'success');
-      } else {
+    } else {
 		  $messageStack->add_session(MODULE_BX_EU_GARAN_TEXT_REMOVAL_INCOMPLETE, 'error');
-      }
+    }
 		  
 	  // Datei selbst löschen
-	  unlink(DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/system/bx_eu_garan.php');
+	  $this->secureDelete(DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/system/bx_eu_garan.php');
+
+    xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system'));
   }
-	  
-	private function rrmdir(string $dir): bool {
-	  if (is_dir($dir)) {
-			$objects = scandir($dir);
-			foreach ($objects as $object) {
-				if ($object != "." && $object != "..") {
-					if (filetype($dir."/".$object) == "dir") {
-						$this->rrmdir($dir."/".$object);
-					} else {
-						unlink($dir."/".$object);
-					}
-				}
-			}
-			reset($objects);
-			rmdir($dir);
-			return true;
-    } elseif (is_file($dir)) {
-	    unlink($dir);
-			return true;
-    } else {
-	    return false;
+
+  private function secureDelete(string $path): bool {
+    // 1. Existiert der Pfad überhaupt?
+    if (!file_exists($path)) {
+      return true;
+    }
+
+    // --- SICHERHEITS-CHECK ---
+    // Holt den echten, bereinigten Pfad (löst relative Teile auf)
+    $realPath  = realpath($path);
+    $rootPath = realpath(DIR_FS_CATALOG);
+
+    // Sicherheitsregel A: Pfad darf nicht leer sein
+    if (empty($realPath) || empty($rootPath)) {
+      return false;
+    }
+
+    // Sicherheitsregel B: Wenn der Pfad EXAKT dein Admin-Hauptordner 
+    // oder das Hauptverzeichnis (/) ist -> SOFORT ABBRECHEN!
+    if ($realPath === $rootPath || $realPath === DIRECTORY_SEPARATOR) {
+      return false;
+    }
+
+    // Sicherheitsregel C: Der Pfad muss unterhalb von $rootPath liegen.
+    if (strpos($realPath, $rootPath . DIRECTORY_SEPARATOR) !== 0) {
+      return false;
+    }
+    // -----------------------------------
+
+    if (!is_writable($realPath)) {
+      return false;
+    }
+
+    // Wenn es eine Datei oder ein Symlink ist -> nur diese löschen und beenden!
+    if (!is_dir($realPath) || is_link($realPath)) {
+      return unlink($realPath);
+    }
+
+    // Nur wenn es ein Ordner ist, wird tiefer gegangen
+    // Eigene Rekursion statt RecursiveDirectoryIterator: so entscheiden wir
+    // selbst, dass Symlinks auf Verzeichnisse NICHT verfolgt werden, und
+    // prüfen bei jedem einzelnen Element erneut, ob wir noch innerhalb von
+    // $rootPath sind (Schutz vor präparierten Symlinks im Verzeichnisbaum).
+    if (!$this->deleteDirectoryContents($realPath, $rootPath)) {
+      return false;
+    }
+
+    return rmdir($realPath);
   }
+
+  /**
+   * Recursively deletes the contents of a directory without following
+   * symlinked subdirectories, verifying that every item stays within
+   * $rootPath before it is touched.
+   *
+   * @param string $dir       Real, resolved path of the directory to empty.
+   * @param string $rootPath Real, resolved path of the allowed root.
+   *
+   * @return bool
+   */
+  private function deleteDirectoryContents(string $dir, string $rootPath): bool {
+    $entries = scandir($dir);
+    if ($entries === false) {
+      return false;
+    }
+
+    foreach ($entries as $entry) {
+      if ($entry === '.' || $entry === '..') {
+        continue;
+      }
+
+      $itemPath = $dir . DIRECTORY_SEPARATOR . $entry;
+
+      // Symlinks NIEMALS verfolgen - nur den Link selbst entfernen, nie das Ziel.
+      if (is_link($itemPath)) {
+        if (!unlink($itemPath)) {
+          return false;
+        }
+        continue;
+      }
+
+      // Defense in depth: bei jedem Element erneut sicherstellen, dass der
+      // aufgelöste Pfad noch innerhalb von $rootPath liegt.
+      $realItemPath = realpath($itemPath);
+      if ($realItemPath === false || strpos($realItemPath, $rootPath . DIRECTORY_SEPARATOR) !== 0) {
+        return false;
+      }
+
+      if (!is_writable($realItemPath)) {
+        return false;
+      }
+
+      if (is_dir($realItemPath)) {
+        if (!$this->deleteDirectoryContents($realItemPath, $rootPath)) {
+          return false;
+        }
+        if (!rmdir($realItemPath)) {
+          return false;
+        }
+      } else {
+        if (!unlink($realItemPath)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+	private function bx_module_installed(string $moduleList, string $moduleFile): bool {
+		return in_array($moduleFile, explode(';', $moduleList), true);
 	}
 }

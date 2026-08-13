@@ -174,4 +174,7 @@
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_2', 'Verbraucherzentrale: Provides detailed guides on current rulings and practical enforcement (e.g., on the 2022 reform of the law of obligations).');
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_3', 'Stiftung Warentest: Regularly publishes comparisons on handling complaints with major retailers.');
   define('TEXT_WARRANTY_AND_GUARANTEE_NOTE', 'Note: This explanation is for informational purposes and does not constitute legal advice.');
-  
+    
+  define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST', 'Please install the "BX EU Garan Categories" module first before using the main module. (Modules -> Class Extensions -> Categories)');
+  define('MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST', 'Please install the "BX EU Garan Orders" module first before using the main module. (Modules -> Class Extensions -> Orders)');
+  define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Please install the "BX EU Garan Cart" module first before using the main module. (Modules -> Class Extensions -> Cart)');

@@ -10,7 +10,7 @@
     "shortDescription": "Harmonisierte Mitteilung - Harmonisierte Kennzeichnung - Reparierbarkeitswert",
     "description": "Diese Modul setzt die Vorgaben zur Harmonisierte Mitteilung - Harmonisierte Kennzeichnung - Reparierbarkeitswert um. Es werden die entsprechenden Felder in den Produktdetails und in der Produktliste angezeigt. Die Daten werden über die Produktverwaltung gepflegt.",
     "price": "free", 
-    "date": "2026-04-04 00:00:00",
+    "date": "2026-08-13 00:00:00",
     "php": {
       "version": "^7.4 || ^8.0"
     },

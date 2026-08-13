@@ -12,9 +12,9 @@
  * @subpackage Admin
  * @category   Product Management
  * @author     Axel Benkert
- * @version    1.0.0
- * @date       2026-04-05
- * @copyright  2020-2025 Axel Benkert
+ * @version    1.7.2
+ * @date       2026-08-15
+ * @copyright  2020-2026 Axel Benkert
  * @license    GNU General Public License
  * 
  * @changelog
@@ -24,6 +24,18 @@
   require('includes/application_top.php');
 
   include_once(DIR_FS_INC.'xtc_get_manufacturers.inc.php');
+
+  if (strpos(MODULE_CATEGORIES_INSTALLED, 'bx_eu_garan_categories.php') === false) {
+    $messageStack->add(MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST, 'error');
+  }
+  
+  if (strpos(MODULE_ORDER_INSTALLED, 'bx_eu_garan_order.php') === false) {
+    $messageStack->add(MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST, 'error');
+  }
+  
+  if (strpos(MODULE_SHOPPING_CART_INSTALLED, 'bx_eu_garan_cart.php') === false) {
+    $messageStack->add(MODULE_BX_EU_GARAN_CART_INSTALL_FIRST, 'error');
+  }
   
   $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : NULL);
 

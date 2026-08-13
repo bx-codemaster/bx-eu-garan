@@ -59,6 +59,7 @@
       setTimeout(function() { toast.remove(); }, 300);
     }, 4000);
   }
+
   /**
    * Blendet die feste Message-Stack-Box kurz ein und automatisch wieder aus.
    * Diese kleine Komfortfunktion sorgt dafür, dass Statusmeldungen nach dem
@@ -70,7 +71,7 @@
     $(".fixed_messageStack").slideDown("slow", function() {
       setTimeout(function() {
         $(".fixed_messageStack").slideUp("slow");
-      }, 2000);
+      }, 5000);
     });
   }
   $(document).ready(autoHideFixedMessageStack);

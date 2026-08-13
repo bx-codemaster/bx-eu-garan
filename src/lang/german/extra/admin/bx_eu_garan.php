@@ -175,3 +175,6 @@
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_3', 'Stiftung Warentest: Veröffentlicht regelmäßig Vergleiche zur Handhabung von Reklamationen bei großen Händlern.');
   define('TEXT_WARRANTY_AND_GUARANTEE_NOTE', 'Hinweis: Diese Erläuterung dient der Information und stellt keine Rechtsberatung dar.');
   
+  define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Kategorien" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Kategorien)');
+  define('MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Bestellungen" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Bestellungen)');
+  define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Warenkorb" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Warenkorb)');
