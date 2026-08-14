@@ -24,7 +24,7 @@ class bx_eu_garan {
 
 	public function __construct() {
 	  $this->code        = 'bx_eu_garan';
-	  $this->version     = '1.0.0';
+	  $this->version     = '1.7.2';
 		$this->development_status = 'd'; // 'p' = production ready, 'd' = in development
 	  $this->title       = MODULE_BX_EU_GARAN_TITLE;
 	  $this->description = MODULE_BX_EU_GARAN_DESC;
