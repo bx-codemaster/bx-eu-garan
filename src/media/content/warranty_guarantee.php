@@ -3,9 +3,9 @@ require_once (DIR_WS_LANGUAGES.$_SESSION['language'].'/extra/admin/bx_eu_garan.p
 ?>
 
 <main class="container">
-<article class="card">
+<article class="card" style="padding: 1rem; margin: 1rem auto; max-width: 1000px;">
 <header>
-	<?php echo xtc_image(DIR_WS_IMAGES . 'warranty_guarantee/legal_guarantee_' . $_SESSION["language_code"] . '.jpg', TEXT_WARRANTY_AND_GUARANTEE_TITLE); ?>
+	<?php echo xtc_image(DIR_WS_IMAGES . 'warranty_guarantee/legal_guarantee_' . $_SESSION["language_code"] . '.jpg', TEXT_WARRANTY_AND_GUARANTEE_TITLE, '', '', 'style="max-width: 100%; margin-bottom: 1em;"'); ?>
 
 	<h1><?php echo TEXT_WARRANTY_AND_GUARANTEE_TITLE; ?></h1>
 
