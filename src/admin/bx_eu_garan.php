@@ -164,44 +164,72 @@
       // FALL B: Massenupdate ausführen (Wurde 'apply_mass_update' geklickt?)
       // ---------------------------------------------------------------------------------
       if ($action === 'apply_mass_update') {
+        $warrantyColumns = array();
+        $warrantyValues  = array();
         $warrantyUpdates = array();
+        $repairColumns   = array();
+        $repairValues    = array();
         $repairUpdates   = array();
 
         if ($formData['set_manufacturer_guarantee_available'] === 1) {
-          $warrantyUpdates[] = "manufacturer_guarantee_available = '".(int)$formData['manufacturer_guarantee_available']."'";
+          $warrantyColumns[] = 'manufacturer_guarantee_available';
+          $warrantyValues[]  = "'".(int)$formData['manufacturer_guarantee_available']."'";
+          $warrantyUpdates[] = "manufacturer_guarantee_available = VALUES(manufacturer_guarantee_available)";
         }
         if ($formData['set_guarantee_years'] === 1) {
-          $warrantyUpdates[] = "guarantee_years = '".(int)$formData['guarantee_years']."'";
+          $warrantyColumns[] = 'guarantee_years';
+          $warrantyValues[]  = "'".(int)$formData['guarantee_years']."'";
+          $warrantyUpdates[] = "guarantee_years = VALUES(guarantee_years)";
         }
         if ($formData['set_covers_full_product'] === 1) {
-          $warrantyUpdates[] = "covers_full_product = '".(int)$formData['covers_full_product']."'";
+          $warrantyColumns[] = 'covers_full_product';
+          $warrantyValues[]  = "'".(int)$formData['covers_full_product']."'";
+          $warrantyUpdates[] = "covers_full_product = VALUES(covers_full_product)";
         }
         if ($formData['set_requires_additional_cost'] === 1) {
-          $warrantyUpdates[] = "requires_additional_cost = '".(int)$formData['requires_additional_cost']."'";
+          $warrantyColumns[] = 'requires_additional_cost';
+          $warrantyValues[]  = "'".(int)$formData['requires_additional_cost']."'";
+          $warrantyUpdates[] = "requires_additional_cost = VALUES(requires_additional_cost)";
         }
         if ($formData['set_qr_url'] === 1) {
-          $warrantyUpdates[] = "qr_url = ".bx_eu_garan_to_nullable_string($formData['qr_url']);
+          $warrantyColumns[] = 'qr_url';
+          $warrantyValues[]  = bx_eu_garan_to_nullable_string($formData['qr_url']);
+          $warrantyUpdates[] = "qr_url = VALUES(qr_url)";
         }
         if ($formData['set_repair_score'] === 1) {
-          $repairUpdates[] = "repair_score = '".(int)$formData['repair_score']."'";
+          $repairColumns[] = 'repair_score';
+          $repairValues[]  = "'".(int)$formData['repair_score']."'";
+          $repairUpdates[] = "repair_score = VALUES(repair_score)";
         }
         if ($formData['set_parts_available'] === 1) {
-          $repairUpdates[] = "parts_available = '".(int)$formData['parts_available']."'";
+          $repairColumns[] = 'parts_available';
+          $repairValues[]  = "'".(int)$formData['parts_available']."'";
+          $repairUpdates[] = "parts_available = VALUES(parts_available)";
         }
         if ($formData['set_parts_cost_info'] === 1) {
-          $repairUpdates[] = "parts_cost_info = ".bx_eu_garan_to_nullable_string($formData['parts_cost_info']);
+          $repairColumns[] = 'parts_cost_info';
+          $repairValues[]  = bx_eu_garan_to_nullable_string($formData['parts_cost_info']);
+          $repairUpdates[] = "parts_cost_info = VALUES(parts_cost_info)";
         }
         if ($formData['set_repair_restrictions'] === 1) {
-          $repairUpdates[] = "repair_restrictions = ".bx_eu_garan_to_nullable_string($formData['repair_restrictions']);
+          $repairColumns[] = 'repair_restrictions';
+          $repairValues[]  = bx_eu_garan_to_nullable_string($formData['repair_restrictions']);
+          $repairUpdates[] = "repair_restrictions = VALUES(repair_restrictions)";
         }
         if ($formData['set_parts_availability_years'] === 1) {
-          $repairUpdates[] = "parts_availability_years = '".(int)$formData['parts_availability_years']."'";
+          $repairColumns[] = 'parts_availability_years';
+          $repairValues[]  = "'".(int)$formData['parts_availability_years']."'";
+          $repairUpdates[] = "parts_availability_years = VALUES(parts_availability_years)";
         }
         if ($formData['set_repair_service_url'] === 1) {
-          $repairUpdates[] = "repair_service_url = ".bx_eu_garan_to_nullable_string($formData['repair_service_url']);
+          $repairColumns[] = 'repair_service_url';
+          $repairValues[]  = bx_eu_garan_to_nullable_string($formData['repair_service_url']);
+          $repairUpdates[] = "repair_service_url = VALUES(repair_service_url)";
         }
         if ($formData['set_manual_url'] === 1) {
-          $repairUpdates[] = "manual_url = ".bx_eu_garan_to_nullable_string($formData['manual_url']);
+          $repairColumns[] = 'manual_url';
+          $repairValues[]  = bx_eu_garan_to_nullable_string($formData['manual_url']);
+          $repairUpdates[] = "manual_url = VALUES(manual_url)";
         }
 
         // Check: Wurde überhaupt mindestens eine Checkbox zum Ändern angehakt?
@@ -218,17 +246,18 @@
         foreach ($productIds as $productId) {
           $productId = (int)$productId;
 
+          // Werte müssen auch im INSERT-Teil stehen, sonst bleiben sie bei einer neuen Zeile auf den Spalten-Defaults
           if (!empty($warrantyUpdates)) {
-            $warrantySql = "INSERT INTO bx_products_warranty_guarantee (products_id, created_at, updated_at)
-                            VALUES ('".$productId."', NOW(), NOW())
+            $warrantySql = "INSERT INTO bx_products_warranty_guarantee (products_id, ".implode(', ', $warrantyColumns).", created_at, updated_at)
+                            VALUES ('".$productId."', ".implode(', ', $warrantyValues).", NOW(), NOW())
                             ON DUPLICATE KEY UPDATE ".implode(', ', $warrantyUpdates).", updated_at = NOW()";
             xtc_db_query($warrantySql);
             $warrantyCount++;
           }
 
           if (!empty($repairUpdates)) {
-            $repairSql = "INSERT INTO bx_products_repairability (products_id, created_at, updated_at)
-                          VALUES ('".$productId."', NOW(), NOW())
+            $repairSql = "INSERT INTO bx_products_repairability (products_id, ".implode(', ', $repairColumns).", created_at, updated_at)
+                          VALUES ('".$productId."', ".implode(', ', $repairValues).", NOW(), NOW())
                           ON DUPLICATE KEY UPDATE ".implode(', ', $repairUpdates).", updated_at = NOW()";
             xtc_db_query($repairSql);
             $repairCount++;
