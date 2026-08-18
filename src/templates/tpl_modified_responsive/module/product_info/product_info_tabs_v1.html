@@ -36,8 +36,8 @@
           {if $PRODUCTS_MANUFACTURERS_MODEL != ''}<meta itemprop="mpn" content="{$PRODUCTS_MANUFACTURERS_MODEL}" />{/if}
           <meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
         
-          <div class="pd_price{if $PRODUCTS_FSK18 == '1'} pd_fsk_padding{/if}">
-            {if $PRODUCTS_FSK18 == '1'}<div class="pd_fsk18"></div>{/if}
+          <div class="pd_price{if $PRODUCTS_FSK18 == 'true'} pd_fsk_padding{/if}">
+            {if $PRODUCTS_FSK18 == 'true'}<div class="pd_fsk18"></div>{/if}
             <div id="pd_puprice">
               {foreach name=inner item=price_data from=$PRODUCTS_PRICE_ARRAY}
                 {include file="module/includes/price_info.html"}
@@ -46,11 +46,11 @@
           </div>
           {if $PRODUCTS_PRICE_ARRAY.0.PRODUCTS_PRICE_FLAG != 'NotAllowed'}
             {if $PRODUCTS_VPE}<div class="pd_vpe">{$PRODUCTS_VPE}</div>{/if}
-            <div class="pd_tax{if $PRODUCTS_FSK18 == '1'} pd_fsk_padding{/if}">{$PRODUCTS_TAX_INFO}{if $PRODUCTS_SHIPPING_LINK}{$PRODUCTS_SHIPPING_LINK}{/if}</div>
+            <div class="pd_tax{if $PRODUCTS_FSK18 == 'true'} pd_fsk_padding{/if}">{$PRODUCTS_TAX_INFO}{if $PRODUCTS_SHIPPING_LINK}{$PRODUCTS_SHIPPING_LINK}{/if}</div>
           {/if}
           {if isset($MODULE_graduated_price) && $MODULE_graduated_price != ''}{$MODULE_graduated_price}{/if}
           {if isset($MODULE_product_options) && $MODULE_product_options != ''}
-            {if $MODULE_product_options_template == 'multi_options_1.html' || strpos($MODULE_product_options_template, 'dropdown') !== false}
+	          {if $MODULE_product_options_template == 'multi_options_1.html' || strpos($MODULE_product_options_template, 'dropdown') !== false}
               {$MODULE_product_options}
             {/if}
           {/if}
@@ -93,7 +93,7 @@
             {$EASYCREDIT}
           {/if}
         
-          {if $ADD_CART_BUTTON == '' && $PRODUCTS_FSK18 == '1'}<div class="pd_inforow_message">{#products_fsk18_check#}</div>{/if}
+          {if $ADD_CART_BUTTON == '' && $PRODUCTS_FSK18 == 'true'}<div class="pd_inforow_message">{#products_fsk18_check#}</div>{/if}
           {if $ADD_CART_BUTTON == '' && $PRODUCTS_GIFT_FORBIDDEN == 'true'}<div class="pd_inforow_message">{#products_gift_forbidden#}</div>{/if}
           {if isset($PRODUCTS_DATE_AVAILABLE) && $PRODUCTS_DATE_AVAILABLE != ''}<div class="pd_inforow_message">{$PRODUCTS_DATE_AVAILABLE}</div>{/if}
         </div>
@@ -115,7 +115,7 @@
         {if $PRODUCTS_MODEL != ''}<div class="pd_inforow"><strong>{#model#}</strong> <span itemprop="sku">{$PRODUCTS_MODEL}</span></div>{/if}
         {if $PRODUCTS_EAN != ''}<div class="pd_inforow"><strong>{#ean#}</strong> <span itemprop="gtin{$PRODUCTS_EAN|strlen}">{$PRODUCTS_EAN}</span></div>{/if}
         {if isset($PRODUCTS_RATING_COUNT)}
-          {if $PRODUCTS_RATING_COUNT > 1}
+          {if ($PRODUCTS_RATING_COUNT > 1) && ($smarty.session.customers_status.customers_status_read_reviews == 1)}
           <div class="pd_inforow" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
             <strong>{#info_reviews#}</strong> 
             <span class="pd_rating_icons"><i class="fas fa-star{if $PRODUCTS_AVERAGE_RATING >= 1} full{/if}"></i><i class="fas fa-star{if $PRODUCTS_AVERAGE_RATING >= 2} full{/if}"></i><i class="fas fa-star{if $PRODUCTS_AVERAGE_RATING >= 3} full{/if}"></i><i class="fas fa-star{if $PRODUCTS_AVERAGE_RATING >= 4} full{/if}"></i><i class="fas fa-star{if $PRODUCTS_AVERAGE_RATING >= 5} full{/if}"></i></span>
@@ -150,14 +150,18 @@
 
         <ul class="pd_iconlist">
           <li class="print">{$PRODUCTS_PRINT_LAYER}</li>
-          {if isset($PRODUCTS_WRITE_REVIEW)}
-           <li class="vote">{$PRODUCTS_WRITE_REVIEW}</li>
+          {if ($smarty.session.customers_status.customers_status_write_reviews == 1) && ($smarty.session.customers_status.customers_status_read_reviews == 1)}
+            <li class="vote">{$PRODUCTS_WRITE_REVIEW}</li>
           {/if}
           {if isset($EXPRESS_LINK)}<li class="express">{$EXPRESS_LINK}</li>{/if}
           {if $ADD_CART_BUTTON_WISHLIST_TEXT}<li class="wishlist">{$ADD_CART_BUTTON_WISHLIST_TEXT}</li>{/if}
         </ul>
-      </div>      
+        {if isset($KLARNA_PPBOX) && !$PAYPALPLAN}{$KLARNA_PPBOX}{/if}
+      </div>
       <br class="clearfix" />
+      {if isset($XTB_REDIRECT_USER_TO) && $XTB_REDIRECT_USER_TO == 'product'}
+        <div class="xtb_booster_redirect_message"><strong>Sie haben die eBay Auktion gewonnen!</strong><br />Bitte w&auml;hlen Sie nun noch die gew&uuml;nschten Produkteigenschaften und legen Sie den Artikel danach in den Warenkorb, um mit der Zahlung fortzufahren und das Produkt versandfertig zu machen!</div>
+      {/if}
       {if isset($MODULE_product_options) && $MODULE_product_options != ''}
         {if $MODULE_product_options_template != 'multi_options_1.html' && strpos($MODULE_product_options_template, 'dropdown') === false}
           {$MODULE_product_options}

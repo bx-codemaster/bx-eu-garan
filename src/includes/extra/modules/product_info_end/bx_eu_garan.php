@@ -78,7 +78,12 @@ $legalQrUrl    = htmlspecialchars($legalQrUrlRaw, ENT_QUOTES, 'UTF-8');
 
 $legal_label_path = DIR_WS_IMAGES . 'warranty_guarantee/';
 
-$legal_label_btn = '<a href="'.$legalQrUrl.'">'.PHP_EOL
+$legal_link_new_window = '';
+if (defined('MODULE_BX_EU_GARAN_NEW_WINDOW') && constant('MODULE_BX_EU_GARAN_NEW_WINDOW') === 'True') {
+  $legal_link_new_window = ' target="_blank" rel="noopener noreferrer"';
+}
+
+$legal_label_btn = '<a href="'.$legalQrUrl.'"'.$legal_link_new_window.'>'.PHP_EOL
                   . xtc_image(DIR_WS_IMAGES . 'warranty_guarantee/legal_guarantee_btn_' . $_SESSION["language_code"] . '.png', 'Warranty Guarantee', '', '', 'class="bx_eu_garan_legal_label_btn"') . PHP_EOL
                   .'</a>';
 

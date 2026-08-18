@@ -58,6 +58,8 @@
   define('MODULE_BX_EU_GARAN_TEXT_COULD_NOT_BE_DELETED', 'Die folgenden Dateien konnten nicht gelöscht werden:');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_TITLE', 'Garantieinformationen');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_DESC', 'Hier können Sie die Garantieinformationen für Ihre Produkte eingeben. Diese Informationen werden auf der Produktdetailseite angezeigt und informieren Ihre Kunden über die Herstellergarantie und EU-Konformität Ihrer Produkte.');
+  define('MODULE_BX_EU_GARAN_NEW_WINDOW_TITLE', 'In neuem Fenster öffnen?');
+  define('MODULE_BX_EU_GARAN_NEW_WINDOW_DESC', 'Soll der Link in einem neuen Fenster geöffnet werden?');
 
   define('MODULE_BX_EU_GARAN_CATEGORIES_DEINSTALL_FIRST', 'Bitte deinstallieren Sie zuerst das Modul "BX EU Garan Kategorien" bevor Sie das Hauptmodul deinstallieren. (Module -> Klassenerweiterungen -> Kategorien)');
   define('MODULE_BX_EU_GARAN_ORDER_DEINSTALL_FIRST', 'Bitte deinstallieren Sie zuerst das Modul "BX EU Garan Bestellungen" bevor Sie das Hauptmodul deinstallieren. (Module -> Klassenerweiterungen -> Bestellungen)');

@@ -57,6 +57,8 @@
   define('MODULE_BX_EU_GARAN_TEXT_REMOVAL_INCOMPLETE', 'BX EU Garan was partially removed. Please check the error messages and delete the remaining files manually via FTP.');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_TITLE', 'Warranty Information');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_DESC', 'Here you can enter the warranty information for your products. This information will be displayed on the product detail page and informs your customers about the manufacturer\'s warranty and EU compliance of your products.');
+  define('MODULE_BX_EU_GARAN_NEW_WINDOW_TITLE', 'Open in a new window?');
+  define('MODULE_BX_EU_GARAN_NEW_WINDOW_DESC', 'Should the link be opened in a new window?');
 
   define('MODULE_BX_EU_GARAN_CATEGORIES_DEINSTALL_FIRST', 'Please uninstall the "BX EU Garan Categories" module first before uninstalling the main module. (Modules -> Class Extensions -> Categories)');
   define('MODULE_BX_EU_GARAN_ORDER_DEINSTALL_FIRST', 'Please uninstall the "BX EU Garan Orders" module first before uninstalling the main module. (Modules -> Class Extensions -> Orders)');
