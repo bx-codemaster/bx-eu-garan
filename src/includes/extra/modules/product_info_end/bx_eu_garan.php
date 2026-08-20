@@ -117,7 +117,7 @@ if ($showWarrantyLabel) {
       if ($smallSvgNode instanceof DOMElement && strtolower($smallSvgNode->tagName) === 'svg') {
         $labelSmallSvg = $smallDom->saveXML($smallSvgNode);
         if ($labelSmallSvg !== false && $labelSmallSvg !== '') {
-          $labelSmall = '<div id="bx-eu-garan-label-small">'.$labelSmallSvg.'<div id="bx-eu-garan-label-big"></div></div>';
+          $labelSmall = '<div class="bx-eu-garan-label-small">'.$labelSmallSvg.'<div class="bx-eu-garan-label-big"></div></div>';
           $info_smarty->assign('BX_EU_GARAN_LABEL_SMALL', $labelSmall);
         }
       }
@@ -221,7 +221,7 @@ if ($showWarrantyLabel) {
             $smallLabel = (string)$info_smarty->get_template_vars('BX_EU_GARAN_LABEL_SMALL');
           }
           if ($smallLabel !== '') {
-            $smallLabel = str_replace('<div id="bx-eu-garan-label-big"></div>', '<div id="bx-eu-garan-label-big">'.$labelBig.'</div>', $smallLabel);
+            $smallLabel = str_replace('<div class="bx-eu-garan-label-big"></div>', '<div class="bx-eu-garan-label-big">'.$labelBig.'</div>', $smallLabel);
             $info_smarty->assign('BX_EU_GARAN_LABEL_SMALL', $smallLabel);
           }
           $info_smarty->assign('BX_EU_GARAN_LABEL_BIG', '');

@@ -179,6 +179,15 @@
           {if isset($MODULE_product_options) && $MODULE_product_options != ''}{$MODULE_product_options}{/if}
         </div>
 
+        <!-- BOF $BX_EU_GARAN -->
+        {if $BX_EU_GARAN_SHOW_WARRANTY_LABEL || $BX_EU_GARAN_LEGAL_LABEL_BTN}
+          <div class="bx_eu_garan_labels">
+            {if $BX_EU_GARAN_LEGAL_LABEL_BTN}{$BX_EU_GARAN_LEGAL_LABEL_BTN}{/if}
+            {if $BX_EU_GARAN_SHOW_WARRANTY_LABEL}{$BX_EU_GARAN_LABEL_SMALL}{/if}
+          </div>
+        {/if}
+        <!-- EOF $BX_EU_GARAN -->
+        
         {if $PAYPALPLAN}{$PAYPALPLAN}{/if}
 
         {if $ADD_CART_BUTTON != ''}
@@ -216,20 +225,13 @@
 
         {if $EASYCREDIT && !$PAYPALPLAN}{$EASYCREDIT}{/if}
 
-        {if $BX_EU_GARAN_SHOW_WARRANTY_LABEL || $BX_EU_GARAN_LEGAL_LABEL_BTN}
-          <div class="bx_eu_garan_labels">
-            {if $BX_EU_GARAN_SHOW_WARRANTY_LABEL}{$BX_EU_GARAN_LABEL_SMALL}{/if}
-            {if $BX_EU_GARAN_LEGAL_LABEL_BTN}{$BX_EU_GARAN_LEGAL_LABEL_BTN}{/if}
-          </div>
-        {/if}
-        {if $BX_EU_GARAN_SHOW_WARRANTY_LABEL}{$BX_EU_GARAN_LABEL_BIG}{/if}
-        
       </div>      
 
     </div>
     {$FORM_END}
   </div>
-    
+  
+  
   <div class="content_full_colored my_50">
     <div class="content_medium cf">
 

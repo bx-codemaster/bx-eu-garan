@@ -36,29 +36,6 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 <script>
   "use strict";
-  // Toast Notification Function
-  function showToast(message, type) {
-    type = type || 'success';
-    var iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
-    
-    var toast = $('<div class="bx-toast ' + type + '">' +
-      '<i class="fas ' + iconClass + ' bx-toast-icon"></i>' +
-      '<div class="bx-toast-message">' + message + '</div>' +
-      '<span class="bx-toast-close">&times;</span>' +
-    '</div>');
-    
-    $('body').append(toast);
-    
-    toast.find('.bx-toast-close').on('click', function() {
-      toast.addClass('hiding');
-      setTimeout(function() { toast.remove(); }, 300);
-    });
-    
-    setTimeout(function() {
-      toast.addClass('hiding');
-      setTimeout(function() { toast.remove(); }, 300);
-    }, 4000);
-  }
 
   /**
    * Blendet die feste Message-Stack-Box kurz ein und automatisch wieder aus.

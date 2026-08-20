@@ -24,7 +24,7 @@ class bx_eu_garan {
 
 	public function __construct() {
 	  $this->code        = 'bx_eu_garan';
-	  $this->version     = '1.7.2';
+	  $this->version     = '1.7.3';
 		$this->development_status = 'd'; // 'p' = production ready, 'd' = in development
 	  $this->title       = MODULE_BX_EU_GARAN_TITLE;
 	  $this->description = MODULE_BX_EU_GARAN_DESC;
@@ -33,10 +33,10 @@ class bx_eu_garan {
   }
 
 	/**
-     * Returns whether the module is installed.
-     * @return bool
-     * 
-     * */
+	 * Returns whether the module is installed.
+	 * @return bool
+	 * 
+	 * */
 	public function check(): bool {
       if (!isset($this->_check)) {
         if (defined('MODULE_BX_EU_GARAN_STATUS')) {
@@ -53,6 +53,7 @@ class bx_eu_garan {
 
 	/**
 	  * Configuration keys used by the module. Used when installing and removing the module.
+		* The order of the elements in the array determines the order in which they are displayed in the module configuration.
 	  *
 	  * @return array
 	  */
@@ -159,99 +160,101 @@ class bx_eu_garan {
 		$this->addProductsForeignKeyIfPossible('bx_products_repairability', 'fk_bx_eu_garan_repair_products');
 	}
 
-		public function update() {}
+	public function update() {}
 
-		/**
-		 * Add products_id foreign key if environment supports it and constraint does not already exist.
-		 *
-		 * @param string $tableName
-		 * @param string $constraintName
-		 *
-		 * @return void
-		 */
-		private function addProductsForeignKeyIfPossible(string $tableName, string $constraintName): void {
-			if ($this->foreignKeyExists($tableName, $constraintName) === true) {
-				return;
-			}
-
-			if ($this->isInnoDbTable($tableName) === false || $this->isInnoDbTable(TABLE_PRODUCTS) === false) {
-				return;
-			}
-
-			xtc_db_query("ALTER TABLE ".$tableName."
-				ADD CONSTRAINT ".$constraintName."
-				FOREIGN KEY (products_id) REFERENCES ".TABLE_PRODUCTS."(products_id) ON DELETE CASCADE");
+	/**
+	 * Add products_id foreign key if environment supports it and constraint does not already exist.
+	 *
+	 * @param string $tableName
+	 * @param string $constraintName
+	 *
+	 * @return void
+	 */
+	private function addProductsForeignKeyIfPossible(string $tableName, string $constraintName): void {
+		if ($this->foreignKeyExists($tableName, $constraintName) === true) {
+			return;
 		}
 
-		/**
-		 * Checks whether a foreign key already exists.
-		 *
-		 * @param string $tableName
-		 * @param string $constraintName
-		 *
-		 * @return bool
-		 */
-		private function foreignKeyExists(string $tableName, string $constraintName): bool {
-			$dbQuery = xtc_db_query("SELECT DATABASE() AS db_name");
-			if ($dbQuery === false || xtc_db_num_rows($dbQuery) < 1) {
-				return false;
-			}
-
-			$dbRow = xtc_db_fetch_array($dbQuery);
-			if (empty($dbRow['db_name'])) {
-				return false;
-			}
-
-			$constraintQuery = xtc_db_query("SELECT CONSTRAINT_NAME
-				FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
-				WHERE CONSTRAINT_SCHEMA = '".xtc_db_input($dbRow['db_name'])."'
-					AND TABLE_NAME = '".xtc_db_input($tableName)."'
-					AND CONSTRAINT_NAME = '".xtc_db_input($constraintName)."'
-					AND CONSTRAINT_TYPE = 'FOREIGN KEY'");
-
-			return ($constraintQuery !== false && xtc_db_num_rows($constraintQuery) > 0);
+		if ($this->isInnoDbTable($tableName) === false || $this->isInnoDbTable(TABLE_PRODUCTS) === false) {
+			return;
 		}
 
-		/**
-		 * Checks if a table uses the InnoDB storage engine.
-		 *
-		 * @param string $tableName
-		 *
-		 * @return bool
-		 */
-		private function isInnoDbTable(string $tableName): bool {
-			$statusQuery = xtc_db_query("SHOW TABLE STATUS LIKE '".xtc_db_input($tableName)."'");
-			if ($statusQuery === false || xtc_db_num_rows($statusQuery) < 1) {
-				return false;
-			}
+		xtc_db_query("ALTER TABLE ".$tableName."
+			ADD CONSTRAINT ".$constraintName."
+			FOREIGN KEY (products_id) REFERENCES ".TABLE_PRODUCTS."(products_id) ON DELETE CASCADE");
+	}
 
-			$statusRow = xtc_db_fetch_array($statusQuery);
-			return (isset($statusRow['Engine']) && strtoupper((string)$statusRow['Engine']) === 'INNODB');
+	/**
+	 * Checks whether a foreign key already exists.
+	 *
+	 * @param string $tableName
+	 * @param string $constraintName
+	 *
+	 * @return bool
+	 */
+	private function foreignKeyExists(string $tableName, string $constraintName): bool {
+		$dbQuery = xtc_db_query("SELECT DATABASE() AS db_name");
+		if ($dbQuery === false || xtc_db_num_rows($dbQuery) < 1) {
+			return false;
 		}
+
+		$dbRow = xtc_db_fetch_array($dbQuery);
+		if (empty($dbRow['db_name'])) {
+			return false;
+		}
+
+		$constraintQuery = xtc_db_query("SELECT CONSTRAINT_NAME
+			FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+			WHERE CONSTRAINT_SCHEMA = '".xtc_db_input($dbRow['db_name'])."'
+				AND TABLE_NAME = '".xtc_db_input($tableName)."'
+				AND CONSTRAINT_NAME = '".xtc_db_input($constraintName)."'
+				AND CONSTRAINT_TYPE = 'FOREIGN KEY'");
+
+		return ($constraintQuery !== false && xtc_db_num_rows($constraintQuery) > 0);
+	}
+
+	/**
+	 * Checks if a table uses the InnoDB storage engine.
+	 *
+	 * @param string $tableName
+	 *
+	 * @return bool
+	 */
+	private function isInnoDbTable(string $tableName): bool {
+		$statusQuery = xtc_db_query("SHOW TABLE STATUS LIKE '".xtc_db_input($tableName)."'");
+		if ($statusQuery === false || xtc_db_num_rows($statusQuery) < 1) {
+			return false;
+		}
+
+		$statusRow = xtc_db_fetch_array($statusQuery);
+		return (isset($statusRow['Engine']) && strtoupper((string)$statusRow['Engine']) === 'INNODB');
+	}
 	  
 	/**
 	  * Actions performed when the user clicks the uninstall button.
 	  *
 	  * @return void
-	  */
-	  
+	  */	  
 	public function remove(): void {
 		global $messageStack;
+		$install_error = false;
 
 		if ($this->bx_module_installed(MODULE_CATEGORIES_INSTALLED, 'bx_eu_garan_categories.php')) {
     	$messageStack->add_session(MODULE_BX_EU_GARAN_CATEGORIES_DEINSTALL_FIRST, 'error');
-			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
-			exit();
+			$install_error = true;
 		}
 		
 		if ($this->bx_module_installed(MODULE_ORDER_INSTALLED, 'bx_eu_garan_order.php')) {
     	$messageStack->add_session(MODULE_BX_EU_GARAN_ORDER_DEINSTALL_FIRST, 'error');
-			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
-			exit();
+			$install_error = true;
 		}
 		
 		if ($this->bx_module_installed(MODULE_SHOPPING_CART_INSTALLED, 'bx_eu_garan_cart.php')) {
     	$messageStack->add_session(MODULE_BX_EU_GARAN_CART_DEINSTALL_FIRST, 'error');
+			$install_error = true;
+		}
+
+		if ($install_error === true) {
 			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
 			exit();
 		}
@@ -278,8 +281,13 @@ class bx_eu_garan {
 	public function display(): array {
     return array('text' => '<div style="text-align: center;">'.xtc_button(BUTTON_SAVE).xtc_button_link(BUTTON_CANCEL, xtc_href_link(FILENAME_MODULE_EXPORT, 'set='.$_GET['set'].'&module='.$this->code))."</div>");
   }
-	  
-	public function custom() {
+	
+	/**
+	  * Custom actions
+	  *
+	  * @return void
+	  */
+	public function custom(): never {
 	  global $messageStack;
 	  $result = true;
 
@@ -345,6 +353,13 @@ class bx_eu_garan {
     xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system'));
   }
 
+
+	/**
+	 * Safely deletes a file or directory, ensuring that the path is within the allowed root path.
+	 * 
+	 * @param string $path The path to the file or directory to delete.
+	 * @return bool True on success, false on failure.
+	 */
   private function secureDelete(string $path): bool {
     // 1. Existiert der Pfad überhaupt?
     if (!file_exists($path)) {
@@ -399,7 +414,7 @@ class bx_eu_garan {
    * symlinked subdirectories, verifying that every item stays within
    * $rootPath before it is touched.
    *
-   * @param string $dir       Real, resolved path of the directory to empty.
+   * @param string $dir      Real, resolved path of the directory to empty.
    * @param string $rootPath Real, resolved path of the allowed root.
    *
    * @return bool
@@ -453,6 +468,13 @@ class bx_eu_garan {
     return true;
   }
 
+	/**
+	 * Checks if a specific module is installed based on the provided module list.
+	 *
+	 * @param string $moduleList A semicolon-separated list of installed modules.
+	 * @param string $moduleFile The filename of the module to check for.
+	 * @return bool True if the module is installed, false otherwise.
+	 */
 	private function bx_module_installed(string $moduleList, string $moduleFile): bool {
 		return in_array($moduleFile, explode(';', $moduleList), true);
 	}

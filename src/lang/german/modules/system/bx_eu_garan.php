@@ -22,13 +22,14 @@
  * @license    GNU General Public License
  */
 
-  define('MODULE_BX_EU_GARAN_TITLE', 'BX EU Herstellergarantie');
+  define('MODULE_BX_EU_GARAN_TITLE', 'BX EU Garan');
 
   $description = '
   <details class="bxac-card">
     <summary class="bxac-summary" style="list-style: none;">
       <span class="bxac-arrow">▸</span>
-      <span class="bxac-title">' . xtc_image(DIR_WS_ICONS.'heading/bx_eu_garan.png', 'BX EU Herstellergarantie', '', '', 'style="max-height: 32px; vertical-align: middle; margin-right: 8px;"') . 'BX EU Herstellergarantie</span>
+      ' . xtc_image(DIR_WS_ICONS.'heading/bx_eu_garan.png', 'BX EU Garan', '', '', 'style="max-height: 32px; margin: 2px;"') . '
+      <span class="bxac-title">BX EU Garan</span>
     </summary>
     <div class="bxac-body">
     <h3 style="margin-top: 0;">Herstellergarantie und EU-Konformität</h3>

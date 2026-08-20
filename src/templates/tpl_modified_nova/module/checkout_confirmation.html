@@ -138,13 +138,6 @@
                 </div>        
 
                 {if $data.order_description}<div class="of_description">{$data.order_description}</div>{/if}
-                
-                {if $data.eu_garan_legal_label_btn || $data.eu_garan_label_small}
-                  <div class="of_description" style="display:flex; gap:8px; align-items:flex-start; flex-wrap:wrap; overflow: visible;">
-                    {if $data.eu_garan_legal_label_btn}{$data.eu_garan_legal_label_btn}{/if}
-                    {if $data.eu_garan_label_small}{$data.eu_garan_label_small}{/if}
-                  </div>
-                {/if}
 
                 {if isset($data.products_tags)}
                   <ul class="of_attributes">
@@ -174,7 +167,14 @@
                     {/foreach}
                   </ul>
                 {/if}
-
+                <!-- BOF $BX_EU_GARAN -->
+                {if $data.eu_garan_legal_label_btn || $data.eu_garan_label_small}
+                  <div class="bx_eu_garan_labels">
+                    {if $data.eu_garan_legal_label_btn}{$data.eu_garan_legal_label_btn}{/if}
+                    {if $data.eu_garan_label_small}{$data.eu_garan_label_small}{/if}
+                  </div>
+                {/if}
+                <!-- EOF $BX_EU_GARAN -->
               </div>
       
               <div class="of_col_summary">

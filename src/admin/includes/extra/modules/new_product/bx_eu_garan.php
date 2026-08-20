@@ -96,11 +96,7 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 ?>
 <div style="clear:both;"></div>
 
-<div class="info_message" style="margin-bottom:10px;">
-	<?php echo TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE; ?>
-</div>
-
-<details id="details-warranty" class="bxac-card store-state" style="margin-bottom:10px;">
+<details id="details-warranty" class="bxac-card store-state">
 	<summary class="bxac-summary">
 		<span class="bxac-arrow">▸</span>
 		<span class="bxac-title">
@@ -108,6 +104,9 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 		</span>
 	</summary>
 	<div class="bxac-body">
+		<div class="info_message" style="margin-bottom:10px;">
+			<?php echo TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE; ?>
+		</div>
 		<table class="tableInput border0">
 			<tr>
 				<td style="width:280px;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_ENABLED; ?></span></td>

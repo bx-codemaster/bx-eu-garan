@@ -12,8 +12,9 @@
  * @subpackage Admin
  * @category   Product Management
  * @author     Axel Benkert
- * @version    1.7.2
- * @date       2026-08-15
+ * @website    https://www.bx-coding.de
+ * @version    1.8.5
+ * @date       2026-08-19
  * @copyright  2020-2026 Axel Benkert
  * @license    GNU General Public License
  * 
@@ -413,7 +414,7 @@ $messageStack->output();
         <table class="tableCenter">
           <tr>
             <td class="boxCenterLeft">
-              <div id="bx_eu_garan_header" class="main">
+              <div id="headboard">
                 <div class="main">
                   <?php echo HEADING_BX_EU_GARAN_TITLE; ?>
                 </div>
@@ -743,6 +744,44 @@ $messageStack->output();
     $box = new box;
     echo $box->infoBox($heading, $contents);
   }
+
+
+  $heading  = array();
+  $contents = array();
+
+  if (count($messageStack->errors['error']) > 0) {
+    echo '<audio id="bx-eu-garan-error-sound" autoplay src="../media/sounds/kave_msri-police-intro-sfx-323774.mp3"></audio>';
+
+    $heading[]  = array('text' => '<strong id="bx-eu-garan-error_heading" style="display:none;">'.TEXT_BX_EU_GARAN_AUTOPLAY_WARNING_TITLE.'</strong>');
+    $contents[] = array('text' => '<span id="bx-eu-garan-autoplay-warning" class="error_message" style="display:none;">'.TEXT_BX_EU_GARAN_AUTOPLAY_WARNING.'</span>');  
+  }
+
+  if ( (xtc_not_null($heading)) && (xtc_not_null($contents)) ) {
+    $box = new box;
+    echo $box->infoBox($heading, $contents);
+  }
+
+  if (count($messageStack->errors['error']) > 0) {
+    echo '<script>
+      (function() {
+        var audio   = document.getElementById("bx-eu-garan-error-sound");
+        var warning = document.getElementById("bx-eu-garan-autoplay-warning");
+        var error_heading = document.getElementById("bx-eu-garan-error_heading");
+
+        if (!audio || !warning || !error_heading) {
+          return;
+        }
+
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function() {
+            warning.style.display = "inline-block";
+            error_heading.style.display = "inline-block";
+          });
+        }
+      }());
+    </script>';
+  }
 ?>
             </td>
             <!-- boxRight //-->
@@ -760,6 +799,7 @@ $messageStack->output();
   <!-- footer //-->
   <?php require(DIR_WS_INCLUDES.'footer.php'); ?>
   <!-- footer_eof //-->
+
 </body>
 </html>
 <?php require(DIR_WS_INCLUDES.'application_bottom.php'); ?>

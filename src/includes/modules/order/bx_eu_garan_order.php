@@ -224,9 +224,14 @@ class bx_eu_garan_order
       : 'https://europa.eu/youreurope/citizens/consumers/shopping/commercial-guarantee-durability/index_'.$language_code.'.htm';
     $label_qr_url = htmlspecialchars($label_qr_url_raw, ENT_QUOTES, 'UTF-8');
 
+    $legal_link_new_window = '';
+    if (defined('MODULE_BX_EU_GARAN_NEW_WINDOW') && constant('MODULE_BX_EU_GARAN_NEW_WINDOW') === 'True') {
+      $legal_link_new_window = ' target="_blank" rel="noopener noreferrer"';
+    }
+
     $legal_label_path = DIR_WS_IMAGES.'warranty_guarantee/';
-    $context['legal_label_btn'] = '<a href="'.$legal_qr_url.'" target="_blank" rel="noopener nofollow">'
-                                 .'<img class="bx_eu_garan_legal_label_btn" src="'.$legal_label_path.'legal_guarantee_btn_'.$language_code.'.png" alt="" width="100" />'
+    $context['legal_label_btn'] = '<a href="'.$label_qr_url.'"'.$legal_link_new_window.'>'
+                                 .'<img class="bx_eu_garan_legal_label_btn" src="'.$legal_label_path.'legal_guarantee_btn_'.$language_code.'.png" alt="legal_guarantee_btn_'.$language_code.'">'
                                  .'</a>';
 
     if ($show_warranty_label) {
@@ -249,7 +254,7 @@ class bx_eu_garan_order
           if ($small_svg_node instanceof DOMElement && strtolower($small_svg_node->tagName) === 'svg') {
             $svg_markup = $small_dom->saveXML($small_svg_node);
             if ($svg_markup !== false && $svg_markup !== '') {
-              $label_small = '<div class="bx-eu-garan-label-small" style="max-width: 140px;">'.$svg_markup.'<div class="bx-eu-garan-label-big"></div></div>';
+              $label_small = '<div class="bx-eu-garan-label-small">'.$svg_markup.'<div class="bx-eu-garan-label-big"></div></div>';
             }
           }
         }
@@ -259,7 +264,7 @@ class bx_eu_garan_order
 
       if ($label_small === '') {
         $label_small = '<div class="bx-eu-garan-label-small">'
-                      .'<img class="bx_eu_garan_label_small" src="'.$legal_label_path.'garan.svg" alt="" width="92" />'
+                      .'<img src="'.$legal_label_path.'garan.svg" alt="SVG-Image">'
                       .'<div class="bx-eu-garan-label-big"></div>'
                       .'</div>';
       }

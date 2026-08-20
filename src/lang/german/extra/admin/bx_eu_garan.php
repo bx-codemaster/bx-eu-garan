@@ -34,6 +34,8 @@
   define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', 'Änderung erfolgreich. Produkte: %d, Garantie-Updates: %d, Reparierbarkeits-Updates: %d.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED', 'Gewährleistungsinhalt erfolgreich gespeichert.');
   define('TEXT_BX_EU_GARAN_PREVIEW_RESULT', 'Vorschau: <strong>%d</strong> Produkte betroffen.');
+  define('TEXT_BX_EU_GARAN_AUTOPLAY_WARNING_TITLE', 'WARNUNG!');
+  define('TEXT_BX_EU_GARAN_AUTOPLAY_WARNING', 'Ihr Browser blockiert die automatische Wiedergabe des Warntons.');
 
   define('TEXT_BX_EU_GARAN_TABLE_HEADING_FILTER', 'Filter');
   define('TEXT_BX_EU_GARAN_TABLE_HEADING_FIELD', 'Feld');
