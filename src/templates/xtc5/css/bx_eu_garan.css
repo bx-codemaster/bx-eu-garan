@@ -1,0 +1,264 @@
+
+.bx_coding_hero {
+  margin: 20px 0;
+  padding: 28px 24px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(41, 106, 171, 0.08), transparent 42%),
+    linear-gradient(180deg, #fafafa 0%, #f5f5f5 100%);
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+}
+
+.bx_coding_hero_badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid #cbd7e5;
+  background: #eef4fb;
+  color: #2a5f97;
+  font-size: 11px;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 14px 0;
+  font-weight: 700;
+}
+
+.bx_coding_hero_title {
+  color: #333;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 14px 0;
+  border: none;
+  padding: 0;
+}
+
+.bx_coding_hero_text {
+  color: #666;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 0 24px 0;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.bx_coding_hero_actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 26px 0;
+}
+
+.bx_coding_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 11px 18px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: all 0.25s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.bx_coding_btn:hover {
+  text-decoration: none;
+}
+
+.bx_coding_btn_primary {
+  color: #fff;
+  background: linear-gradient(180deg, #4f93d0 0%, #3f7fb8 100%);
+  border-color: rgba(63, 127, 184, 0.45);
+}
+
+.bx_coding_btn_primary:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, #5a9dda 0%, #4988c0 100%);
+}
+
+.bx_coding_btn_secondary {
+  color: #555;
+  background: #ffffff;
+  border-color: #d0d0d0;
+}
+
+.bx_coding_btn_secondary:hover {
+  color: #333;
+  border-color: #bdbdbd;
+  background: #f5f5f5;
+}
+
+.bx_coding_hero_features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media only screen and (min-width: 850px) {
+  .bx_coding_hero_features {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.bx_coding_hero_feature {
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 6px;
+  padding: 14px 14px 12px;
+}
+
+.bx_coding_hero_feature .fa-solid {
+  font-size: 16px;
+  color: #296aab;
+  margin: 0 0 10px 0;
+}
+
+.bx_coding_hero_feature h2 {
+  color: #333;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0 0 6px 0;
+  border: none;
+  padding: 0;
+}
+
+.bx_coding_hero_feature p {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+@media only screen and (max-width: 680px) {
+  .bx_coding_hero {
+    padding: 22px 16px;
+  }
+
+  .bx_coding_hero_title {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+
+  .bx_coding_hero_text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .bx_coding_hero_features {
+    grid-template-columns: 1fr;
+  }
+}
+
+.garan_description {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 5px;
+  overflow: visible !important; /* Wichtig: Verhindert Abschneiden */
+}
+
+.garan_description img {
+  max-width: 105px;
+}
+
+/* 1. Container (Small Label) */
+.bx-eu-garan-label-small,
+#bx-eu-garan-label-small {
+  position: relative !important;
+  display: inline-block;
+  max-width: 126px;
+  cursor: pointer;
+}
+
+.bx-eu-garan-label-small > svg,
+#bx-eu-garan-label-small > svg {
+  pointer-events: none;
+  width: 100%;
+  display: block;
+}
+
+/* 2. Popup (Big Label) Basis-Styling */
+.bx-eu-garan-label-big,
+#bx-eu-garan-label-big {
+  display: block !important;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  z-index: 9999;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0.2s;
+  /* Ausrichtung Standard: nach unten (unabhängig vom offen/geschlossen-Status) */
+  top: 100%;
+  bottom: auto;
+  margin-top: 5px;
+}
+
+.bx-eu-garan-label-big svg,
+#bx-eu-garan-label-big svg {
+  width: 100%;
+  min-width: 360px;
+}
+
+/* 3. Zustand: Offen (Standard nach unten) */
+.bx-eu-garan-label-small .bx-eu-garan-label-big.bx-eu-garan-open,
+#bx-eu-garan-label-small #bx-eu-garan-label-big.bx-eu-garan-open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0s;
+}
+
+/* 4. Zustand: Offen nach oben (Ausrichtung bleibt auch beim Ausblenden erhalten) */
+.bx-eu-garan-label-small .bx-eu-garan-label-big.bx-eu-garan-top,
+#bx-eu-garan-label-small #bx-eu-garan-label-big.bx-eu-garan-top {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+/* 5. Sonstige Labels & Buttons */
+.bx_eu_garan_labels {
+  display: inline-flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.bx_eu_garan_labels > * {
+  flex: 0 0 auto;
+}
+
+/* templates/tpl_modified/module/product_info/product_info_tabs_v1.html */
+.bx_eu_garan_labels .bx_eu_garan_legal_label_btn {
+  display: block;
+  max-width: 110px;
+}
+
+/* templates/tpl_modified/module/order_details.html  */
+div.highlightbox td.ord_table_left.toppad div.garan_description .bx_eu_garan_legal_label_btn {
+  max-width: 85px;
+}
+
+/* templates/tpl_modified/module/checkout_confirmation.html */
+div.highlightbox.checkoutborder td.ord_table_left div.garan_description .bx_eu_garan_legal_label_btn {
+  max-width: 105px;
+}
