@@ -6,36 +6,131 @@
  * ██╔══██╗ ██╔══╝   ██║╚██╗██║ ██╔══██║  ██╔██╗
  * ██████╔╝ ███████╗ ██║ ╚████║ ██║  ██║ ██╔╝ ██╗
  * ╚═════╝  ╚══════╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝
- * BX Global Sort - JavaScript
+ * BX EU Garan - JavaScript
  * 
- * jQuery UI Sortable Integration mit automatischer AJAX-Speicherung.
- * Enthält:
- * - Sortable-Konfiguration für Tabellen (tbody Drag & Drop)
- * - AJAX Auto-Save Funktion (saveSortOrder) mit Toast-Notifications
- * - Placeholder-Styling während des Dragging (7 Spalten)
- * - Automatische Sort-Order-Aktualisierung in Echtzeit
- * - Visuelles Feedback (saving/saved/error States)
- * - jQuery 1.8.3 kompatible POST-Request-Serialisierung
- * 
- * @package    BX Global Sort
+ * @package    BX EU Garan
  * @subpackage JavaScript
  * @category   Admin
  * @author     Axel Benkert
- * @version    1.2
+ * @version    1.2.5
  * @since      1.0.0
  * @date       2025-11-09
- * @copyright  2020-2025 Axel Benkert
+ * @copyright  2020-2026 Axel Benkert
  * @license    GNU General Public License
- * @requires   jQuery 1.8.3+, jQuery UI 1.12.1 
  */
 
  defined('_VALID_XTC') or die('Direct Access to this location is not allowed.');
 
- if (defined('MODULE_BX_EU_GARAN_STATUS') && MODULE_BX_EU_GARAN_STATUS == 'True' && basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php') {
+ if ( defined('MODULE_BX_EU_GARAN_STATUS') && 
+      MODULE_BX_EU_GARAN_STATUS == 'True' && 
+      (basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php' || basename($_SERVER['PHP_SELF']) == 'categories.php')) {
 ?>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 <script>
   "use strict";
+  document.addEventListener("DOMContentLoaded", function() {
+
+    var setups = [
+      { sliderId: "bx_eu_garan_repair_score", outputId: "repair_score_value" },
+      { sliderId: "bx_eu_garan_availability_years", outputId: "availability_years_value" }
+    ];
+
+    setups.forEach(function(item) {
+      var slider = document.getElementById(item.sliderId);
+      var output = document.getElementById(item.outputId);
+      
+      if (slider && output) {
+        output.textContent = slider.value;
+        slider.addEventListener("input", function() {
+          output.textContent = this.value;
+        });
+      }
+    });
+
+    // Findet alle <details>-Elemente mit der Klasse "store-state"
+    const allDetails = document.querySelectorAll('details.store-state');
+
+    allDetails.forEach(details => {
+      // Erstellt einen eindeutigen Schlüssel für den localStorage, z.B. "detailsState_details-features"
+      const storageKey = `detailsState_${details.id}`;
+
+      // 1. Zustand beim Laden der Seite wiederherstellen
+      const savedState = localStorage.getItem(storageKey);
+      if (savedState === 'open') {
+        details.setAttribute('open', 'true');
+      } else if (savedState === 'closed') {
+        details.removeAttribute('open');
+      }
+
+      // 2. Auf Änderungen reagieren und im localStorage speichern
+      details.addEventListener('toggle', () => {
+        if (details.open) {
+          localStorage.setItem(storageKey, 'open');
+        } else {
+          localStorage.setItem(storageKey, 'closed');
+        }
+      });
+    });
+    // Tabs initialisieren
+    document.querySelectorAll('.bx-tabs').forEach(container => {
+      const nav = container.querySelector('.bx-tab-nav');
+
+      if (!nav) {
+          return;
+      }
+
+      const tabs = nav.querySelectorAll('.bx-tab');
+      const contents = container.querySelectorAll('.bx-tab-content');
+
+      const storageKey = 'activeTab_' + container.dataset.tabs;
+
+      function activateTab(tab, save = true) {
+        const targetId = tab.dataset.tab;
+        const target = container.querySelector('#' + CSS.escape(targetId));
+
+        if (!target) {
+          return;
+        }
+
+        tabs.forEach(item => {
+          const active = item === tab;
+
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        contents.forEach(content => {
+          content.classList.toggle('active', content === target);
+        });
+
+        if (save) {
+          localStorage.setItem(storageKey, targetId);
+        }
+      }
+
+      // Gespeicherten Tab wiederherstellen
+      const savedTab = localStorage.getItem(storageKey);
+
+      const initialTab =
+          [...tabs].find(tab => tab.dataset.tab === savedTab) ||
+          tabs[0];
+
+      if (initialTab) {
+        activateTab(initialTab, false);
+      }
+
+      // Tab-Navigation
+      nav.addEventListener('click', event => {
+        const tab = event.target.closest('.bx-tab');
+
+        if (!tab || !nav.contains(tab)) {
+            return;
+        }
+
+        activateTab(tab);
+      });
+    });
+
+  });
 
   /**
    * Blendet die feste Message-Stack-Box kurz ein und automatisch wieder aus.

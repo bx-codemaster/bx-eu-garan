@@ -57,6 +57,8 @@
   define('MODULE_BX_EU_GARAN_TEXT_SUCCESSFULLY_REMOVED', 'BX EU Garan wurde vollständig entfernt!');
   define('MODULE_BX_EU_GARAN_TEXT_REMOVAL_INCOMPLETE', 'BX EU Garan wurde teilweise entfernt. Bitte prüfen Sie die Fehlermeldungen und löschen Sie die verbliebenen Dateien manuell per FTP.');
   define('MODULE_BX_EU_GARAN_TEXT_COULD_NOT_BE_DELETED', 'Die folgenden Dateien konnten nicht gelöscht werden:');
+  define('MODULE_BX_EU_GARAN_NO_BRAND_TITLE', 'Markenhinweis (No-Name)');
+  define('MODULE_BX_EU_GARAN_NO_BRAND_DESC', 'Falls ein Produkt kein Markenartikel ist, kann hier ein alternative Marke vermerkt werden.');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_TITLE', 'Garantieinformationen');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_DESC', 'Hier können Sie die Garantieinformationen für Ihre Produkte eingeben. Diese Informationen werden auf der Produktdetailseite angezeigt und informieren Ihre Kunden über die Herstellergarantie und EU-Konformität Ihrer Produkte.');
   define('MODULE_BX_EU_GARAN_NEW_WINDOW_TITLE', 'In neuem Fenster öffnen?');
@@ -65,3 +67,9 @@
   define('MODULE_BX_EU_GARAN_CATEGORIES_DEINSTALL_FIRST', 'Bitte deinstallieren Sie zuerst das Modul "BX EU Garan Kategorien" bevor Sie das Hauptmodul deinstallieren. (Module -> Klassenerweiterungen -> Kategorien)');
   define('MODULE_BX_EU_GARAN_ORDER_DEINSTALL_FIRST', 'Bitte deinstallieren Sie zuerst das Modul "BX EU Garan Bestellungen" bevor Sie das Hauptmodul deinstallieren. (Module -> Klassenerweiterungen -> Bestellungen)');
   define('MODULE_BX_EU_GARAN_CART_DEINSTALL_FIRST', 'Bitte deinstallieren Sie zuerst das Modul "BX EU Garan Warenkorb" bevor Sie das Hauptmodul deinstallieren. (Module -> Klassenerweiterungen -> Warenkorb)');
+
+  define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_NEXT', 'Bitte installieren Sie jetzt das Modul "BX EU Garan Kategorien". (Module -> Klassenerweiterungen -> Kategorien)');
+  define('MODULE_BX_EU_GARAN_ORDER_INSTALL_NEXT', 'Bitte installieren Sie jetzt das Modul "BX EU Garan Bestellungen". (Module -> Klassenerweiterungen -> Bestellungen)');
+  define('MODULE_BX_EU_GARAN_CART_INSTALL_NEXT', 'Bitte installieren Sie jetzt das Modul "BX EU Garan Warenkorb". (Module -> Klassenerweiterungen -> Warenkorb)');
+
+  define('MODULE_BX_EU_GARAN_EXTENSIONS_MISSING', 'Fehlende Erweiterungen: %s. Diese sind Voraussetzung für eine erfolgreiche Installation des Moduls.');

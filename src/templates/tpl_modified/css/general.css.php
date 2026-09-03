@@ -24,13 +24,25 @@
     DIR_TMPL.'stylesheet.css',
     DIR_TMPL_CSS.'bx_eu_garan.css',
   );
+  
+  if (defined('THEME_COLOR')
+      && is_file(DIR_FS_CATALOG.DIR_TMPL_CSS.'themes/'.THEME_COLOR.'.css')
+      )
+  {
+    array_unshift($css_array, DIR_TMPL_CSS.'themes/'.THEME_COLOR.'.css');
+  }
+  
+  if (is_file(DIR_FS_CATALOG.DIR_TMPL_CSS.'tpl_custom.css')) {
+     array_push($css_array, DIR_TMPL_CSS.'tpl_custom.css');
+  }
+  
   $css_min = DIR_TMPL.'stylesheet.min.css';
 
   $this_f_time = filemtime(DIR_FS_CATALOG.DIR_TMPL_CSS.'general.css.php');
 
   if (COMPRESS_STYLESHEET == 'true') {
     require_once(DIR_FS_BOXES_INC.'combine_files.inc.php');
-    $css_array = combine_files($css_array,$css_min,true,$this_f_time);
+    $css_array = combine_files($css_array, $css_min, true, $this_f_time);
   }
 
   // Put CSS-Inline-Definitions here, these CSS-files will be loaded at the TOP of every page
@@ -39,4 +51,3 @@
     $css .= strpos($css,$css_min) === false ? '?v=' . filemtime(DIR_FS_CATALOG.$css) : '';
     echo '<link rel="stylesheet" href="'.DIR_WS_BASE.$css.'" type="text/css" media="screen" />'.PHP_EOL;
   }
-?>

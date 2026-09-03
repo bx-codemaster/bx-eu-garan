@@ -56,6 +56,8 @@
   define('MODULE_BX_EU_GARAN_TEXT_FILES_FAILED', 'Failed to delete (please remove manually via FTP):');
   define('MODULE_BX_EU_GARAN_TEXT_SUCCESSFULLY_REMOVED', 'BX EU Garan was successfully removed!');
   define('MODULE_BX_EU_GARAN_TEXT_REMOVAL_INCOMPLETE', 'BX EU Garan was partially removed. Please check the error messages and delete the remaining files manually via FTP.');
+  define('MODULE_BX_EU_GARAN_NO_BRAND_TITLE', 'Brand Notice (No-Name)');
+  define('MODULE_BX_EU_GARAN_NO_BRAND_DESC', 'If a product is not a branded item, an alternative brand can be noted here.');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_TITLE', 'Warranty Information');
   define('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP_DESC', 'Here you can enter the warranty information for your products. This information will be displayed on the product detail page and informs your customers about the manufacturer\'s warranty and EU compliance of your products.');
   define('MODULE_BX_EU_GARAN_NEW_WINDOW_TITLE', 'Open in a new window?');
@@ -64,3 +66,9 @@
   define('MODULE_BX_EU_GARAN_CATEGORIES_DEINSTALL_FIRST', 'Please uninstall the "BX EU Garan Categories" module first before uninstalling the main module. (Modules -> Class Extensions -> Categories)');
   define('MODULE_BX_EU_GARAN_ORDER_DEINSTALL_FIRST', 'Please uninstall the "BX EU Garan Orders" module first before uninstalling the main module. (Modules -> Class Extensions -> Orders)');
   define('MODULE_BX_EU_GARAN_CART_DEINSTALL_FIRST', 'Please uninstall the "BX EU Garan Cart" module first before uninstalling the main module. (Modules -> Class Extensions -> Cart)');
+
+  define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_NEXT', 'Please install the "BX EU Garan Categories" module now. (Modules -> Class Extensions -> Categories)');
+  define('MODULE_BX_EU_GARAN_ORDER_INSTALL_NEXT', 'Please install the "BX EU Garan Orders" module now. (Modules -> Class Extensions -> Orders)');
+  define('MODULE_BX_EU_GARAN_CART_INSTALL_NEXT', 'Please install the "BX EU Garan Cart" module now. (Modules -> Class Extensions -> Cart)');
+
+  define('MODULE_BX_EU_GARAN_EXTENSIONS_MISSING', 'Missing extensions: %s. These are required for a successful installation of the module.');

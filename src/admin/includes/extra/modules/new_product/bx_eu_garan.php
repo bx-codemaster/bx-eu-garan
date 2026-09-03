@@ -14,10 +14,10 @@ $bx_eu_garan_values = array(
 	'repair_score'             => 0,
 	'parts_availability_years' => 0,
 	'parts_available'          => '',
-	'parts_cost_info'          => '',
 	'manual_url'               => '',
-	'repair_restrictions'      => '',
-	'repair_service_url'       => ''
+	'service-languages'        => array(),
+	'repair-languages'         => array(),
+	'parts-cost-languages'     => array(),
 );
 
 $bx_eu_garan_reference = array(
@@ -45,11 +45,25 @@ if (isset($pInfo->products_id) && (int)$pInfo->products_id > 0) {
 		$bx_eu_garan_values['repair_score']             = isset($repair['repair_score']) ? (int)$repair['repair_score'] : 0;
 		$bx_eu_garan_values['parts_availability_years'] = isset($repair['parts_availability_years']) ? (int)$repair['parts_availability_years'] : 0;
 		$bx_eu_garan_values['parts_available']          = isset($repair['parts_available']) ? (string)$repair['parts_available'] : '';
-		$bx_eu_garan_values['parts_cost_info']          = isset($repair['parts_cost_info']) ? (string)$repair['parts_cost_info'] : '';
 		$bx_eu_garan_values['manual_url']               = isset($repair['manual_url']) ? (string)$repair['manual_url'] : '';
-		$bx_eu_garan_values['repair_restrictions']      = isset($repair['repair_restrictions']) ? (string)$repair['repair_restrictions'] : '';
-		$bx_eu_garan_values['repair_service_url']       = isset($repair['repair_service_url']) ? (string)$repair['repair_service_url'] : '';
 	}
+
+	$languages_query = xtc_db_query("SELECT * FROM `bx_eu_garan_products_languages` WHERE `products_id` = '" . (int)$product_id . "';");
+	$service_array = array();
+	$repair_array  = array();
+	$parts_cost_array = array();
+	if ($languages_query && xtc_db_num_rows($languages_query) > 0) {
+		while ($result = xtc_db_fetch_array($languages_query)) {
+			// Die Sprach-ID als Key setzen und den jeweiligen Text als Wert speichern
+			$language_id = (int)$result['language_id']; // Prüfen Sie hier den exakten Spaltennamen in der DB (z. B. languages_id)
+			$service_array[$language_id] = $result['service'] ?? '';
+			$repair_array[$language_id]  = $result['repair'] ?? '';
+			$parts_cost_array[$language_id]  = $result['parts_cost'] ?? '';
+		}
+	}
+	$bx_eu_garan_values['service-languages'] = $service_array;
+	$bx_eu_garan_values['repair-languages']  = $repair_array;
+	$bx_eu_garan_values['parts-cost-languages']  = $parts_cost_array;
 }
 
 if (!empty($_POST)) {
@@ -61,10 +75,7 @@ if (!empty($_POST)) {
 	$bx_eu_garan_values['repair_score']             = isset($_POST['bx_eu_garan_repair_score']) ? (int)$_POST['bx_eu_garan_repair_score'] : 0;
 	$bx_eu_garan_values['parts_availability_years'] = isset($_POST['bx_eu_garan_availability_years']) ? (int)$_POST['bx_eu_garan_availability_years'] : 0;
 	$bx_eu_garan_values['parts_available']          = isset($_POST['bx_eu_garan_parts_available']) ? (string)$_POST['bx_eu_garan_parts_available'] : '';
-	$bx_eu_garan_values['parts_cost_info']          = isset($_POST['bx_eu_garan_parts_cost_info']) ? (string)$_POST['bx_eu_garan_parts_cost_info'] : '';
 	$bx_eu_garan_values['manual_url']               = isset($_POST['bx_eu_garan_manual_url']) ? (string)$_POST['bx_eu_garan_manual_url'] : '';
-	$bx_eu_garan_values['repair_restrictions']      = isset($_POST['bx_eu_garan_repair_restrictions']) ? (string)$_POST['bx_eu_garan_repair_restrictions'] : '';
-	$bx_eu_garan_values['repair_service_url']       = isset($_POST['bx_eu_garan_repair_service_url']) ? (string)$_POST['bx_eu_garan_repair_service_url'] : '';
 }
 
 $bx_eu_garan_reference = bx_eu_garan_get_product_reference_data(
@@ -156,10 +167,12 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 				<td></td>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE; ?></span></td>
 			</tr>
+			<!--// Die Änderung der URL ist nicht zulässig 
 			<tr>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_QR_URL; ?></span></td>
 				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_qr_url', $bx_eu_garan_values['qr_url'], 'style="width: 100%"'); ?></span></td>
 			</tr>
+			//-->
 		</table>
 	</div>
 </details>
@@ -204,8 +217,12 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 				<td><span class="main fixed_sumo" style="width:155px;"><?php echo xtc_draw_pull_down_menu('bx_eu_garan_parts_available', $parts_available_array, $bx_eu_garan_values['parts_available'], 'style="width: 155px"'); ?></span></td>
 			</tr>
 			<tr>
-				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO; ?></span></td>
-				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_parts_cost_info', $bx_eu_garan_values['parts_cost_info'], 'style="width: 100%"'); ?></span></td>
+				<td style="vertical-align: top; padding-top: 1rem;"><span class="main"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO; ?></span></td>
+				<td>
+				<?php
+					echo bx_draw_tab_nav('parts-cost-languages', TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO, $bx_eu_garan_values['parts-cost-languages'], 'input', false);
+				?>
+				</td>
 			</tr>
 			<tr>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE_YEARS; ?></span></td>
@@ -248,69 +265,52 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 							</datalist>
 						</div>
 						<div >
-							Aktueller Wert: <span id="availability_years_value" style="font-weight: bold;"><?php echo (int)$bx_eu_garan_values['parts_availability_years']; ?></span>
+							<?php echo TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE; ?> <span id="availability_years_value" style="font-weight: bold;"><?php echo (int)$bx_eu_garan_values['parts_availability_years']; ?></span>
 						</div>
 					</div>
 				</td>
-			</tr>
-			<tr>
-				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL; ?></span></td>
-				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_repair_service_url', $bx_eu_garan_values['repair_service_url'], 'style="width: 100%"'); ?></span></td>
 			</tr>			
 			<tr>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL; ?></span></td>
-				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_manual_url', $bx_eu_garan_values['manual_url'], 'style="width: 100%"'); ?></span></td>
-			</tr>
-			<tr>
-				<td style="vertical-align: top;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS; ?></span></td>
-				<td><span class="main"><?php echo xtc_draw_textarea_field('bx_eu_garan_repair_restrictions', 'soft', 70, 4, $bx_eu_garan_values['repair_restrictions']); ?></span></td>
+				<td>
+					<span class="main">
+					<?php
+					$protocol = (isset($request_type) && $request_type === 'NONSSL')
+							? HTTP_SERVER
+							: HTTPS_SERVER;
+
+					$manualsDir = DIR_FS_CATALOG . 'pub/manuals/';
+					$manualsUrl = rtrim($protocol, '/') . '/pub/manuals/';
+
+					$manualFiles = [
+						[
+							'id'   => '',
+							'text' => TEXT_BX_EU_GARAN_PLEASE_CHOOSE
+						]
+					];
+
+					if (is_dir($manualsDir) && is_readable($manualsDir)) {
+						foreach (new FilesystemIterator($manualsDir, FilesystemIterator::SKIP_DOTS) as $file) {
+							if ($file->isFile()) {
+								$filename = $file->getFilename();
+
+								$manualFiles[] = [
+									'id'   => $manualsUrl . rawurlencode($filename),
+									'text' => $filename
+								];
+							}
+						}
+					}
+
+					echo xtc_draw_pull_down_menu('bx_eu_garan_manual_url', $manualFiles, $bx_eu_garan_values['manual_url'], 'style="width: 100%"');
+					?>
+					</span>
+				</td>
 			</tr>
 		</table>
+		<?php
+			echo bx_draw_tab_nav('service-languages', TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL, $bx_eu_garan_values['service-languages'], 'input');
+			echo bx_draw_tab_nav('repair-languages', TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS, $bx_eu_garan_values['repair-languages'], 'area');
+		?>
 	</div>
 </details>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-	var setups = [
-		{ sliderId: "bx_eu_garan_repair_score", outputId: "repair_score_value" },
-		{ sliderId: "bx_eu_garan_availability_years", outputId: "availability_years_value" }
-	];
-
-	setups.forEach(function(item) {
-		var slider = document.getElementById(item.sliderId);
-		var output = document.getElementById(item.outputId);
-		
-		if (slider && output) {
-			output.textContent = slider.value;
-			slider.addEventListener("input", function() {
-				output.textContent = this.value;
-			});
-		}
-	});
-
-
-  // Findet alle <details>-Elemente mit der Klasse "store-state"
-  const allDetails = document.querySelectorAll('details.store-state');
-
-  allDetails.forEach(details => {
-    // Erstellt einen eindeutigen Schlüssel für den localStorage, z.B. "detailsState_details-features"
-    const storageKey = `detailsState_${details.id}`;
-
-    // 1. Zustand beim Laden der Seite wiederherstellen
-    const savedState = localStorage.getItem(storageKey);
-    if (savedState === 'open') {
-      details.setAttribute('open', 'true');
-    } else if (savedState === 'closed') {
-      details.removeAttribute('open');
-    }
-
-    // 2. Auf Änderungen reagieren und im localStorage speichern
-    details.addEventListener('toggle', () => {
-      if (details.open) {
-        localStorage.setItem(storageKey, 'open');
-      } else {
-        localStorage.setItem(storageKey, 'closed');
-      }
-    });
-  });
-});
-</script>

@@ -170,7 +170,7 @@ class bx_eu_garan_order
       'label_small'     => '',
     ];
 
-    if (strtolower((string)MODULE_BX_EU_GARAN_STATUS) !== 'true') {
+    if (defined('MODULE_BX_EU_GARAN_STATUS') && MODULE_BX_EU_GARAN_STATUS !== 'True') {
       $this->context_cache[$products_id] = $context;
       return $context;
     }
@@ -308,6 +308,8 @@ class bx_eu_garan_order
 
         if (!empty($product_data['manufacturers_name'])) {
           $manufacturerName = trim((string)$product_data['manufacturers_name']);
+        } else {
+          $manufacturerName = MODULE_BX_EU_GARAN_NO_BRAND;
         }
 
         if (!empty($product_data['products_manufacturers_model'])) {
@@ -329,7 +331,7 @@ class bx_eu_garan_order
 
           $brandNodes = $big_xpath->query('//*[@id="text_brand"]');
           if ($brandNodes instanceof DOMNodeList && $brandNodes->length > 0) {
-            $brandNodes->item(0)->nodeValue = $manufacturerName !== '' ? $manufacturerName : 'Brand/Trademark';
+            $brandNodes->item(0)->nodeValue = $manufacturerName;
           }
 
           $modelNodes = $big_xpath->query('//*[@id="text_model"]');

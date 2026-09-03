@@ -22,4 +22,12 @@
  * @license    GNU General Public License
  */
 
+if(!isset($filename_array)) {
+  $filename_array = array();
+}
+
+if(defined('PROJECT_MAJOR_VERSION') && (int)PROJECT_MAJOR_VERSION < 3) {
+  define('FILENAME_BX_EU_GARAN', 'bx_eu_garan.php');
+} else {
   $filename_array = array_merge($filename_array, array("FILENAME_BX_EU_GARAN" => "bx_eu_garan.php"));
+}

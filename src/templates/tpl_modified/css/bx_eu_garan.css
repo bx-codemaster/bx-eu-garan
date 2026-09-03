@@ -179,6 +179,12 @@
   cursor: pointer;
 }
 
+.bx-eu-garan-label-small:focus-visible,
+#bx-eu-garan-label-small:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
 .bx-eu-garan-label-small > svg,
 #bx-eu-garan-label-small > svg {
   pointer-events: none;

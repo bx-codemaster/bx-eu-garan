@@ -1,96 +1,103 @@
 {config_load file="$language/lang_$language.conf" section="shopping_cart"}
 {config_load file="lang_`$language`.custom"}
 {config_load file="lang_`$language`.section" section="shopping_cart"}
-<table class="order_table">
-  <tr class="headerrow">
-    <td class="ord_table_center">{#text_qty#}</td>
-    <td class="ord_table_left">&nbsp;</td>
-    <td class="ord_table_left">{#text_article#}</td>
-    <td class="ord_table_center">{#text_remove#}</td>
-    <td class="ord_table_right">{#text_single#}</td>
-    <td class="ord_table_right">{#text_total#}</td>
-  </tr>
-  {foreach name=aussen item=module_data from=$module_content} 
-  <tr class="mainrow {cycle values="m_row1,m_row2"}">
-    <td class="ord_table_center ord_width60 ord_quantity">{$module_data.PRODUCTS_QTY}</td>
-    <td class="ord_table_left ord_width90"><img class="cartimage" src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME|onlytext}" title="{$module_data.PRODUCTS_NAME|onlytext}" /></td>
-    <td class="ord_table_left toppad">
-      <a class="ord_prdoducts_name" href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a>
-      {if is_array($module_data.ATTRIBUTES) && count($module_data.ATTRIBUTES) > 0} 
-      <ul class="attributes_list">
-        {foreach key=key_data item=item_data from=$module_data.ATTRIBUTES} 
-        <li><strong>{$item_data.NAME}:</strong> {$item_data.VALUE_NAME}</li>
-        {/foreach} 
-      </ul>
-      {/if}
-      {if $module_data.PRODUCTS_VPE}<div class="shipping">{$module_data.PRODUCTS_VPE}</div>{/if}
-      {if $module_data.PRODUCTS_MODEL}<div class="shipping"><strong>{$smarty.const.HEADER_MODEL}:</strong> {$module_data.PRODUCTS_MODEL}</div>{/if}
-      {if $module_data.PRODUCTS_SHIPPING_TIME}<div class="shipping"><strong>{$smarty.const.SHIPPING_TIME}</strong> {$module_data.PRODUCTS_SHIPPING_TIME}</div>{/if}
-      {if $module_data.BUTTON_WISHLIST != ''}<span class="ord_wishlist">&laquo; {$module_data.BUTTON_WISHLIST}</span>{/if}
-      <!-- BOF $BX_EU_GARAN -->
-      {if $module_data.EU_GARAN_LEGAL_LABEL_BTN || $module_data.EU_GARAN_LABEL_SMALL}
-        <div class="garan_description">
-          {if $module_data.EU_GARAN_LEGAL_LABEL_BTN}{$module_data.EU_GARAN_LEGAL_LABEL_BTN}{/if}
-          {if $module_data.EU_GARAN_LABEL_SMALL}{$module_data.EU_GARAN_LABEL_SMALL}{/if}
+<div class="order_details">
+
+  <div class="orderflex">  
+
+    <div class="orderflex_row orderflex_row_header">
+      <div class="of_header_col_img">&nbsp;</div>
+      <div class="of_header_col_flex">{#text_article#}</div>
+      <div class="of_header_col_summary">
+        <div class="of_header_col_qty">{#text_qty#}</div>
+        <div class="of_header_col_total">{#text_total#}</div>
+      </div>
+    </div> 
+
+    {foreach name=aussen item=module_data from=$module_content}    
+      <div class="orderflex_row">
+
+        <div class="of_col_img">
+          <div class="prod_image">
+            {if $module_data.PRODUCTS_IMAGE != ''}        
+              {if $smarty.const.PICTURESET_ACTIVE === true}
+                <img class="lazyload" data-src="{$module_data.PRODUCTS_IMAGE|replace:"thumbnail_":"mini_"}" alt="{$module_data.PRODUCTS_NAME|onlytext}" title="{$module_data.PRODUCTS_NAME|onlytext}" />
+              {else}
+                <img class="lazyload" data-src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME|onlytext}" title="{$module_data.PRODUCTS_NAME|onlytext}" />
+              {/if}
+              <noscript><img src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME|onlytext}" title="{$module_data.PRODUCTS_NAME|onlytext}" /></noscript>
+            {/if}  
+          </div>
         </div>
-      {/if}
-      <!-- EOF $BX_EU_GARAN -->
-    </td>
-    <td class="ord_table_center ord_width90 delete toppad">{$module_data.BUTTON_DELETE}</td>
-    <td class="ord_table_right ord_width110 toppad">{$module_data.PRODUCTS_SINGLE_PRICE}</td>
-    <td class="ord_table_right ord_width110 toppad">{$module_data.PRODUCTS_PRICE}</td>
-  </tr>
-  {/foreach}
-</table>
-<div class="hr_10"></div>
-<div class="ord_subtotal cf">
-  {if isset($TOTAL_BLOCK_ARRAY) && count($TOTAL_BLOCK_ARRAY) > 0}
-    <div class="total_table_right">
-      <table class="total_table">
-        {foreach name=aussen item=order_total_values from=$TOTAL_BLOCK_ARRAY}
-        <tr>
-          <td class="ord_table_right">{$order_total_values.title}</td>
-          <td class="ord_table_right ord_width120">{$order_total_values.text}</td>
-        </tr>
-        {/foreach}
-        {if isset($shipping_content) && count($shipping_content) > 0}
-          {if $SELECT_COUNTRY}
-          <tr>
-            <td class="ord_table_right" colspan="2">{$SELECT_COUNTRY}</td>
-          </tr>
+
+        <div class="of_col_flex">
+
+          <div class="of_productname">
+            <a href="{$module_data.PRODUCTS_LINK}" title="{$module_data.PRODUCTS_NAME|onlytext}">{$module_data.PRODUCTS_NAME}</a>
+          </div>        
+
+          {if $module_data.PRODUCTS_SHORT_DESCRIPTION}<div class="of_description">{$module_data.PRODUCTS_SHORT_DESCRIPTION}</div>{/if}
+
+          <!-- BOF $BX_EU_GARAN -->
+          {if $module_data.EU_GARAN_LEGAL_LABEL_BTN || $module_data.EU_GARAN_LABEL_SMALL}
+            <div class="garan_description">
+              {if $module_data.EU_GARAN_LEGAL_LABEL_BTN}{$module_data.EU_GARAN_LEGAL_LABEL_BTN}{/if}
+              {if $module_data.EU_GARAN_LABEL_SMALL}{$module_data.EU_GARAN_LABEL_SMALL}{/if}
+            </div>
           {/if}
-          {foreach name=aussen item=shipping_data from=$shipping_content}
-          <tr>
-            <td class="ord_table_right">{$shipping_data.NAME}:</td>
-            <td class="ord_table_right ord_width120">{$shipping_data.VALUE}</td>
-          </tr>
-          {/foreach}
-        {/if}
-        {if $total}
-        <tr>
-          <td class="ord_table_right"><strong>{#text_total#}:</strong></td>
-          <td class="ord_table_right ord_width120"><strong>{$total}</strong></td>
-        <tr>
-        {/if}
-      </table>
-    </div>
-    <br class="clearfix" /> 
-  {else}
-    {if $smarty.const.MODULE_SMALL_BUSINESS != 'true'}
-      {if $UST_CONTENT}{$UST_CONTENT}{else}{$smarty.const.TAX_INFO_EXCL|sprintf:''}<br />{/if}
-    {/if}
-    <strong>{$TOTAL_CONTENT}</strong>
-    {if isset($shipping_content) && count($shipping_content) > 0}
-      {if $SELECT_COUNTRY}<div class="shipping_container">{$SELECT_COUNTRY}</div>{else}<br />{/if}
-      {foreach name=aussen item=shipping_data from=$shipping_content}
-        <div class="shipping_hinweis">{$shipping_data.NAME}: {$shipping_data.VALUE}</div>
-      {/foreach}
-    {/if}
-    {if $total}<strong>{#text_total#}: {$total}</strong>{/if}
-  {/if}
-  
-  {if isset($FREE_SHIPPING_INFO)}{$FREE_SHIPPING_INFO}{/if}
-  
-  {*if $TOTAL_WEIGHT}<br />{#text_total_weight#} {$TOTAL_WEIGHT|number_format:2:",":"."} kg{/if*}
+          <!-- EOF $BX_EU_GARAN -->
+
+          {if $module_data.PRODUCTS_MODEL || $module_data.PRODUCTS_SHIPPING_TIME || $module_data.PRODUCTS_VPE}
+            <div class="of_inforows">
+              {if $module_data.PRODUCTS_VPE}<div class="of_infoline">{$module_data.PRODUCTS_VPE}</div>{/if}
+              {if $module_data.PRODUCTS_MODEL}<div class="of_infoline"><strong>{$smarty.const.HEADER_MODEL}:</strong> {$module_data.PRODUCTS_MODEL}</div>{/if}
+              {if $module_data.PRODUCTS_SHIPPING_TIME}<div class="of_infoline"><strong>{$smarty.const.SHIPPING_TIME}</strong> {$module_data.PRODUCTS_SHIPPING_TIME}</div>{/if}
+            </div>
+          {/if}
+    
+          {if is_array($module_data.ATTRIBUTES) && count($module_data.ATTRIBUTES) > 0}
+            <ul class="of_attributes">
+              {foreach key=key_data item=item_data from=$module_data.ATTRIBUTES}
+                <li><strong>{$item_data.NAME}:</strong> {$item_data.VALUE_NAME}</li>
+              {/foreach}
+            </ul>
+          {/if}
+        
+          <div class="of_action">                                                
+            {if $module_data.BUTTON_WISHLIST != ''}<span class="of_wishlist">{$module_data.BUTTON_WISHLIST|replace:"\">":" \"><i class=\"fa-regular fa-heart\"></i>"}</span>{/if}
+            <span class="of_delete">{$module_data.BUTTON_DELETE}</span>
+          </div>                                                                                              
+        
+        </div>
+
+        <div class="of_col_summary">
+          <div class="of_col_qty">
+            <div class="of_col_qty_label">{#text_qty#}</div>
+            <div class="of_col_qty_inner">
+              <div class="of_quantity_field">{$module_data.PRODUCTS_QTY|replace:"type=\"text\"":"type=\"tel\" aria-label=\"{#products_basket_quantity#}\""}</div>
+              <div class="of_quantity_update">
+                <span class="cssButton cssButtonColor1">
+                  <span class="cssButtonIcon"><i class="fa-solid fa-rotate"></i></span>
+                  <button type="submit" class="cssButtonText" title="{#order_text_update#}">{#order_text_update#}</button>
+                </span>
+              </div>            
+            </div>
+          </div>
+
+          <div class="of_col_total">
+            <div class="of_col_total_inner">
+              {$module_data.PRODUCTS_PRICE}
+              {if $module_data.PRODUCTS_QUANTITY > 1}
+                <div class="of_col_total_singleprice">{#order_text_each#} {$module_data.PRODUCTS_SINGLE_PRICE}</div>
+              {/if}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {/foreach}
+
+  </div>
+
   {if $PAYPAL_INSTALLMENT && !$PAYPALPLAN}{$PAYPAL_INSTALLMENT}{/if}
 </div>

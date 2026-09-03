@@ -167,7 +167,7 @@
 }
 
 .garan_description img {
-  max-width: 110px;
+  max-width: 105px;
 }
 
 /* 1. Container (Small Label) */
@@ -175,8 +175,14 @@
 #bx-eu-garan-label-small {
   position: relative !important;
   display: inline-block;
-  max-width: 162px;
+  max-width: 126px;
   cursor: pointer;
+}
+
+.bx-eu-garan-label-small:focus-visible,
+#bx-eu-garan-label-small:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
 
 .bx-eu-garan-label-small > svg,
@@ -247,7 +253,18 @@
   flex: 0 0 auto;
 }
 
+/* templates/tpl_modified/module/product_info/product_info_tabs_v1.html */
 .bx_eu_garan_labels .bx_eu_garan_legal_label_btn {
   display: block;
-  max-width: 125px;
+  max-width: 110px;
+}
+
+/* templates/tpl_modified/module/order_details.html  */
+div.highlightbox td.ord_table_left.toppad div.garan_description .bx_eu_garan_legal_label_btn {
+  max-width: 85px;
+}
+
+/* templates/tpl_modified/module/checkout_confirmation.html */
+div.highlightbox.checkoutborder td.ord_table_left div.garan_description .bx_eu_garan_legal_label_btn {
+  max-width: 105px;
 }

@@ -31,7 +31,7 @@
   define('TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE', 'Die harmonisierte Mitteilung zur gesetzlichen Gewährleistung ist immer relevant.<br>Die harmonisierte Kennzeichnung zur Garantie wird nur angezeigt, wenn eine freiwillige Herstellergarantie besteht.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Bitte mindestens ein Feld zum Setzen auswählen.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'Keine Produkte mit den gewählten Filtern gefunden.');
-  define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', 'Änderung erfolgreich. Produkte: %d, Garantie-Updates: %d, Reparierbarkeits-Updates: %d.');
+  define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', '%d Produkte aktualisiert (%d Garantie, %d Reparierbarkeit, %d Sprachdaten).');
   define('TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED', 'Gewährleistungsinhalt erfolgreich gespeichert.');
   define('TEXT_BX_EU_GARAN_PREVIEW_RESULT', 'Vorschau: <strong>%d</strong> Produkte betroffen.');
   define('TEXT_BX_EU_GARAN_AUTOPLAY_WARNING_TITLE', 'WARNUNG!');
@@ -79,7 +79,7 @@
   define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR-URL (optional)');
   define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Reparierbarkeitswert (0-10)');
   define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL', 'Reparatur-Service (URL)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Reparatur-Anleitung (URL)');
+  define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Handbuch (URL)');
   define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Reparatur-Einschränkungen');
   
   define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE', 'Ersatzteile verfügbar');
@@ -180,3 +180,6 @@
   define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Kategorien" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Kategorien)');
   define('MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Bestellungen" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Bestellungen)');
   define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Warenkorb" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Warenkorb)');
+
+  define('TEXT_BX_EU_GARAN_PLEASE_CHOOSE', '-- Bitte wählen --');
+  

@@ -61,6 +61,7 @@ class bx_eu_garan {
 		$keys = array('MODULE_BX_EU_GARAN_VERSION',
 					  			'MODULE_BX_EU_GARAN_STATUS',
 					  			'MODULE_BX_EU_GARAN_CONFIG_ID',
+									'MODULE_BX_EU_GARAN_NO_BRAND',
 				  				'MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP',
 									'MODULE_BX_EU_GARAN_NEW_WINDOW',
 								 );
@@ -73,6 +74,22 @@ class bx_eu_garan {
 	  * @return void
 	  */
 	public function install(): void {
+		global $messageStack;
+
+		$extensions         = ['gd', 'dom', 'libxml'];
+		$extensions_missing = [];
+
+		foreach ($extensions as $ext) {
+			if (!extension_loaded($ext)) {
+				$extensions_missing[] = $ext;
+			}
+		}
+		if (!empty($extensions_missing)) {
+			$messageStack->add_session(sprintf(MODULE_BX_EU_GARAN_EXTENSIONS_MISSING, implode(', ', $extensions_missing)), 'error');
+			xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
+      return;
+		}
+
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." ADD ".$this->code." INTEGER(1) DEFAULT 0");
 	  xtc_db_query("UPDATE ".TABLE_ADMIN_ACCESS." SET ".$this->code." = 1");
 
@@ -113,8 +130,9 @@ class bx_eu_garan {
 									 VALUES ('MODULE_BX_EU_GARAN_STATUS', 'True', '".$freeId["id"]."', '1', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), '),
 													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '".$freeId["id"]."', '2', NOW(), '', 'bx_configuration_field_version('),
 													('MODULE_BX_EU_GARAN_CONFIG_ID', '".$freeId["id"]."', '".$freeId["id"]."', '3', NOW(), '', 'bx_configuration_field_version('),
-													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '".$freeId["id"]."', '4', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module('),
-													('MODULE_BX_EU_GARAN_NEW_WINDOW', 'False', '".$freeId["id"]."', '5', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), ')";
+													('MODULE_BX_EU_GARAN_NO_BRAND', 'Modified Basics', '".$freeId["id"]."', '4', NOW(), '', ''),
+													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '".$freeId["id"]."', '5', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module('),
+													('MODULE_BX_EU_GARAN_NEW_WINDOW', 'False', '".$freeId["id"]."', '6', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), ')";
 	  xtc_db_query($query);
 
 		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_products_warranty_guarantee (
@@ -134,9 +152,8 @@ class bx_eu_garan {
 								products_id INT NOT NULL UNIQUE,
 								repair_score TINYINT UNSIGNED DEFAULT NULL,
 								parts_available TINYINT(1) DEFAULT NULL,
-								parts_cost_info VARCHAR(500) DEFAULT NULL,
+								parts_availability_years INT DEFAULT NULL,
 								manual_url VARCHAR(500) DEFAULT NULL,
-								repair_restrictions TEXT DEFAULT NULL,
 								created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 								updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
@@ -156,8 +173,23 @@ class bx_eu_garan {
 								created_at DATETIME NOT NULL
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
+		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_eu_garan_products_languages (
+				products_id INT UNSIGNED NOT NULL,
+				language_id INT UNSIGNED NOT NULL,
+				service TEXT NULL,
+				repair TEXT NULL,
+				parts_cost TEXT NULL,
+				PRIMARY KEY (products_id, language_id)
+		) ENGINE=InnoDB;");
+
 		$this->addProductsForeignKeyIfPossible('bx_products_warranty_guarantee', 'fk_bx_eu_garan_warranty_products');
 		$this->addProductsForeignKeyIfPossible('bx_products_repairability', 'fk_bx_eu_garan_repair_products');
+
+		$messageStack->add_session(MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_NEXT, 'info');
+		$messageStack->add_session(MODULE_BX_EU_GARAN_ORDER_INSTALL_NEXT, 'info');
+		$messageStack->add_session(MODULE_BX_EU_GARAN_CART_INSTALL_NEXT, 'info');
+		xtc_redirect(xtc_href_link(FILENAME_MODULE_EXPORT, 'set=system&module=bx_eu_garan'));
+		return;
 	}
 
 	public function update() {}
@@ -264,6 +296,7 @@ class bx_eu_garan {
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." DROP ".$this->code);
 		xtc_db_query("DROP TABLE IF EXISTS bx_products_warranty_guarantee");
 		xtc_db_query("DROP TABLE IF EXISTS bx_products_repairability");
+		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_products_languages");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_mass_log");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_presets");
 		
@@ -292,46 +325,61 @@ class bx_eu_garan {
 	  $result = true;
 
 	  // Dateien definieren
-	  $dirs_and_files   = array();
+		$dirs_and_files   = array();
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'images/icons/heading/bx_eu_garan.png';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/css/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/css/bx_modules.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/filenames/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/functions/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/javascript/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/menu/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/extra/modules/new_product/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/categories/bx_eu_garan_categories.php';
-		$dirs_and_files[] = DIR_FS_CATALOG.DIR_ADMIN.'includes/modules/system/bx_eu_garan.php';
-
+		$dirs_and_files[] = DIR_FS_CATALOG.'images/warranty_guarantee/';
 		$dirs_and_files[] = DIR_FS_CATALOG.'includes/classes/bx_dependency_resolver.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'includes/external/bx_composer_libs/modified_qrcode/';
 		$dirs_and_files[] = DIR_FS_CATALOG.'includes/extra/header/header_head/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'includes/extra/modules/order_details_cart_content/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'includes/extra/modules/product_info_end/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'includes/modules/order/bx_eu_garan_order.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'includes/modules/shopping_cart/bx_eu_garan_cart.php';
-
-		$dirs_and_files[] = DIR_FS_CATALOG.'media/content/warranty_guarantee.php';
-		$dirs_and_files[] = DIR_FS_CATALOG.'images/warranty_guarantee/';
-
-		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/extra/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/extra/admin/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/categories/bx_eu_garan_categories.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/order/bx_eu_garan_order.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/shopping_cart/bx_eu_garan_cart.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/english/modules/system/bx_eu_garan.php';
-
-		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/extra/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/extra/admin/bx_eu_garan.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/categories/bx_eu_garan_categories.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/order/bx_eu_garan_order.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/shopping_cart/bx_eu_garan_cart.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'lang/german/modules/system/bx_eu_garan.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'media/content/warranty_guarantee.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'media/sounds/kave_msri-police-intro-sfx-323774.mp3';
 /*
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified/css/bx_eu_garan.css';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified/css/general.css.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified/module/checkout_confirmation.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified/module/order_details.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified/module/product_info/product_info_tabs_v1.html';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/css/bx_eu_garan.css';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/css/general.css.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/module/checkout_confirmation.html';
 		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/module/order_details.html';
 		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_nova/module/product_info/product_info_v1_tabs.html';
 
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/css/bx_eu_garan.css';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/css/general.css.php';
 		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/module/checkout_confirmation.html';
 		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/module/order_details.html';
 		$dirs_and_files[] = DIR_FS_CATALOG.'templates/tpl_modified_responsive/module/product_info/product_info_tabs_v1.html';
+
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/xtc5/css/bx_eu_garan.css';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/xtc5/css/general.css.php';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/xtc5/module/checkout_confirmation.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/xtc5/module/order_details.html';
+		$dirs_and_files[] = DIR_FS_CATALOG.'templates/xtc5/module/product_info/product_info_tabs_v1.html';
 */
 	  // Dateien löschen
 	  foreach ($dirs_and_files as $dir_or_file) {

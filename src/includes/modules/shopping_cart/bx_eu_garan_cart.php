@@ -177,7 +177,7 @@ class bx_eu_garan_cart
       'label_small'     => '',
     ];
 
-    if (strtolower((string)MODULE_BX_EU_GARAN_STATUS) !== 'true') {
+    if (defined('MODULE_BX_EU_GARAN_STATUS') && MODULE_BX_EU_GARAN_STATUS !== 'True') {
       $this->context_cache[$products_id] = $context;
       return $context;
     }
@@ -189,6 +189,7 @@ class bx_eu_garan_cart
 
     $default_legal_qr_url = 'https://europa.eu/youreurope/legal-guarantee/index.htm?lang='.$language_code;
     $legal_warranty_content_group = (int)MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP;
+    
     $legal_qr_url_raw = $legal_warranty_content_group > 0
       ? xtc_href_link(FILENAME_CONTENT, 'coID='.(int)$legal_warranty_content_group)
       : $default_legal_qr_url;
@@ -316,6 +317,8 @@ class bx_eu_garan_cart
 
         if (!empty($product_data['manufacturers_name'])) {
           $manufacturerName = trim((string)$product_data['manufacturers_name']);
+        } else{
+          $manufacturerName = MODULE_BX_EU_GARAN_NO_BRAND;
         }
 
         if (!empty($product_data['products_manufacturers_model'])) {
@@ -337,7 +340,7 @@ class bx_eu_garan_cart
 
           $brandNodes = $big_xpath->query('//*[@id="text_brand"]');
           if ($brandNodes instanceof DOMNodeList && $brandNodes->length > 0) {
-            $brandNodes->item(0)->nodeValue = $manufacturerName !== '' ? $manufacturerName : 'Brand/Trademark';
+            $brandNodes->item(0)->nodeValue = $manufacturerName;
           }
 
           $modelNodes = $big_xpath->query('//*[@id="text_model"]');

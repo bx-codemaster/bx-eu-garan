@@ -12,7 +12,7 @@
     "price": "free", 
     "date": "2026-08-13 00:00:00",
     "php": {
-      "version": "^7.4 || ^8.0"
+      "version": "^8.0"
     },
     "modifiedCompatibility": [
       "3.0.1",

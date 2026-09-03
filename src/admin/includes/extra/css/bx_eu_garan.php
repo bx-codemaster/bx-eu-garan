@@ -31,7 +31,8 @@
   if (defined('MODULE_BX_EU_GARAN_STATUS') && 
               MODULE_BX_EU_GARAN_STATUS == 'True' && 
               basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php' ||
-              basename($_SERVER['PHP_SELF']) == 'categories.php'
+              basename($_SERVER['PHP_SELF']) == 'categories.php' ||
+              basename($_SERVER['PHP_SELF']) == 'module_export.php'
               ) {
 ?>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -102,6 +103,45 @@
       padding: 10px 0;
       text-align: center;
       display: none;
+    }
+
+    .bx-tab-nav {
+        display: flex;
+        gap: 2px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .bx-tab {
+        display: inline-block;
+        padding: 8px 15px;
+        cursor: pointer;
+        background: #eee;
+        border: 1px solid #ccc;
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        user-select: none;
+    }
+
+    .bx-tab:hover {
+        background: #e5e5e5;
+    }
+
+    .bx-tab.active {
+        background: #fff;
+        font-weight: bold;
+        position: relative;
+        top: 1px;
+    }
+
+    .bx-tab-content {
+        display: none;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    .bx-tab-content.active {
+        display: block;
     }
   </style>
 <?php

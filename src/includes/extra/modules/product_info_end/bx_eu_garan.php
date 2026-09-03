@@ -6,6 +6,7 @@
 if (!isset($info_smarty) || !is_object($info_smarty) || !isset($product) || !is_object($product)) {
   return;
 }
+
 if (defined('MODULE_BX_EU_GARAN_STATUS') && constant('MODULE_BX_EU_GARAN_STATUS') !== 'True') {
   return;
 }
@@ -41,7 +42,7 @@ $showWarrantyLabel = (
   && $warranty['requires_additional_cost'] === 0
 );
 
-$manufacturerName = '';
+$manufacturerName = MODULE_BX_EU_GARAN_NO_BRAND;
 if (isset($product->data['manufacturers_name']) && $product->data['manufacturers_name'] !== '') {
   $manufacturerName = (string)$product->data['manufacturers_name'];
 } elseif (isset($product->data['manufacturers_id']) && (int)$product->data['manufacturers_id'] > 0) {
@@ -51,7 +52,7 @@ if (isset($product->data['manufacturers_name']) && $product->data['manufacturers
   );
   if ($manufacturerQuery && xtc_db_num_rows($manufacturerQuery) > 0) {
     $manufacturerData = xtc_db_fetch_array($manufacturerQuery);
-    $manufacturerName = isset($manufacturerData['manufacturers_name']) ? (string)$manufacturerData['manufacturers_name'] : '';
+    $manufacturerName = isset($manufacturerData['manufacturers_name']) ? (string)$manufacturerData['manufacturers_name'] : MODULE_BX_EU_GARAN_NO_BRAND;
   }
 }
 
@@ -74,7 +75,7 @@ $legalQrUrlRaw = $legalWarrantyContentGroup > 0
   ? xtc_href_link(FILENAME_CONTENT, 'coID='.(int)$legalWarrantyContentGroup)
   : $defaultLegalQrUrl;
 
-$legalQrUrl    = htmlspecialchars($legalQrUrlRaw, ENT_QUOTES, 'UTF-8');
+$legalQrUrl = htmlspecialchars($legalQrUrlRaw, ENT_QUOTES, 'UTF-8');
 
 $legal_label_path = DIR_WS_IMAGES . 'warranty_guarantee/';
 
@@ -159,7 +160,7 @@ if ($showWarrantyLabel) {
 
       $brandNodes = $bigXpath->query('//*[@id="text_brand"]');
       if ($brandNodes instanceof DOMNodeList && $brandNodes->length > 0) {
-        $brandNodes->item(0)->nodeValue = $manufacturerName !== '' ? $manufacturerName : 'Brand/Trademark';
+        $brandNodes->item(0)->nodeValue = $manufacturerName;
       }
 
       $modelNodes = $bigXpath->query('//*[@id="text_model"]');

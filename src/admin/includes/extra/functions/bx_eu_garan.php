@@ -224,6 +224,38 @@
                     VALUES ('".$keyEscaped."', '".$valueEscaped."', '".$groupId."', '50', NOW(), '', '')");
     }
   }
+  
+  if (!function_exists('bx_draw_tab_nav')) {
+    function bx_draw_tab_nav(string $thema, string $title, array $values = array(), string $type = 'input', $fieldset = true): string {
+      $languages = xtc_get_languages();
+
+      $i = 0;
+      $return =  ($fieldset ? '<fieldset>'. PHP_EOL : '')
+        . ($fieldset ? '  <legend>' . $title . '</legend>'. PHP_EOL : '');
+      $return .=  '  <div class="bx-tabs" data-tabs="' . $thema . '">'. PHP_EOL
+        . '    <div class="bx-tab-nav" role="tablist">'. PHP_EOL;
+      foreach ($languages as $i => $language) {
+        $lng_image = xtc_image(DIR_WS_LANGUAGES . $language['directory'] .'/admin/images/'. $language['image'], $language['name']);
+        $return .= '      <div class="bx-tab'.($i === 0 ? ' active' : '').'" role="tab" aria-selected="false" data-tab="' . $thema . '-' . $i . '">'.$lng_image.' <span>'.$language['name'].'</span></div>'. PHP_EOL;
+      }
+      $return .= '    </div> <!-- .bx-tab-nav -->'. PHP_EOL;
+
+      $i = 0;
+      foreach ($languages as $i => $language) {
+        $return .= '  <div id="' . $thema . '-' . $i . '" class="bx-tab-content'.($i === 0 ? ' active' : '').'" role="tabpanel">'. PHP_EOL;
+        $value = isset($values[$language['id']]) ? htmlspecialchars((string)$values[$language['id']], ENT_QUOTES, 'UTF-8') : '';
+        if ($type === 'input') {
+          $return .= '  <input type="text" name="' . $thema . '[' . $language['id'] . ']" value="'.$value.'" style="width: 100%" />'. PHP_EOL;
+        } elseif ($type === 'area') {
+          $return .= '  <textarea name="' . $thema . '[' . $language['id'] . ']" rows="4" style="width: 100%">'.$value.'</textarea>'. PHP_EOL;
+        }
+        $return .= '  </div>'. PHP_EOL;
+      }
+      $return .= '  </div> <!-- .bx-tabs -->'. PHP_EOL;
+      $return .= ($fieldset ? '</fieldset>' : '');
+      return $return;
+    }
+  }
 
   /**
    * Konfigurationseingabefeld für die Modulversion (read-only)
