@@ -23,7 +23,8 @@
 
  if ( defined('MODULE_BX_EU_GARAN_STATUS') && 
       MODULE_BX_EU_GARAN_STATUS == 'True' && 
-      (basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php' || basename($_SERVER['PHP_SELF']) == 'categories.php')) {
+      (basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php' || 
+       basename($_SERVER['PHP_SELF']) == 'categories.php')) {
 ?>
 <script>
   "use strict";
@@ -129,6 +130,24 @@
         activateTab(tab);
       });
     });
+
+    // Öffnet oder schließt das Details-Element basierend auf dem Status des Kontrollkästchens "delete_filtered_entries"
+    const checkbox = document.getElementById('delete_filtered_entries');
+    const details  = document.querySelector('details.check_delete');
+
+    if (checkbox && details) {
+      // 1. Beim Laden der Seite
+      if (checkbox.checked) {
+        details.open = true;
+      } else {
+        details.open = false;
+      }
+
+      // 2. Auf spätere Klicks/Änderungen durch den Nutzer reagieren
+      checkbox.addEventListener('change', function() {
+        details.open = this.checked;
+      });
+    }
 
   });
 

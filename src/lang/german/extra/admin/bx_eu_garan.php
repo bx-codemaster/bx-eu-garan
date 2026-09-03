@@ -86,6 +86,10 @@
   define('TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO', 'Ersatzteile - Kosteninformationen');
   define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE_YEARS', 'Ersatzteilen - Verfügbarkeit in Jahren');
   define('TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE', 'Aktueller Wert:');
+  
+  define('TEXT_BX_EU_GARAN_DELETE_FILTERED_ENTRIES', 'Gefilterte Einträge löschen');
+  define('TEXT_BX_EU_GARAN_DELETE_ENTRIES_WARRANTY', 'Einträge mit Gewährleistung löschen');
+  define('TEXT_BX_EU_GARAN_DELETE_ENTRIES_REPAIRABILITY', 'Einträge mit Reparierbarkeitswert löschen');
 
   define('TEXT_BX_EU_GARAN_FILTER_ALL_CATEGORIES', 'Alle Kategorien');
   define('TEXT_BX_EU_GARAN_FILTER_ALL_MANUFACTURERS', 'Alle Hersteller');
@@ -182,4 +186,7 @@
   define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Warenkorb" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Warenkorb)');
 
   define('TEXT_BX_EU_GARAN_PLEASE_CHOOSE', '-- Bitte wählen --');
+  define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_SUCCESS', 'Das Handbuch wurde erfolgreich hochgeladen.');
+  define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_FAILED', 'Fehler beim Hochladen des Handbuchs.');
+  define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_DIR_NOT_WRITABLE', 'Das Verzeichnis für Handbücher ist nicht beschreibbar: %s');
   

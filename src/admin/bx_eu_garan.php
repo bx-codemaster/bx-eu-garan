@@ -60,7 +60,9 @@
       'filter_include_subcategories' => isset($_POST['filter_include_subcategories']) ? 1 : 0,
       'filter_manufacturers_id'      => isset($_POST['filter_manufacturers_id']) ? (string)$_POST['filter_manufacturers_id'] : '',
       'filter_status'                => isset($_POST['filter_status']) ? (string)$_POST['filter_status'] : '',
-      
+      'delete_filtered_entries'      => isset($_POST['delete_filtered_entries']) ? 1 : 0,
+      'delete_entries_warranty'      => isset($_POST['delete_entries_warranty']) ? 1 : 0,
+      'delete_entries_repairability' => isset($_POST['delete_entries_repairability']) ? 1 : 0,
       'set_manufacturer_guarantee_available' => isset($_POST['set_manufacturer_guarantee_available']) ? 1 : 0,
       'manufacturer_guarantee_available'     => ($manufacturerGuaranteeAvailableRaw === 'true') ? 1 : 0,
       
@@ -109,6 +111,9 @@
   } else {
     $formData = array(
       'filter_category_id'           => 0,
+      'delete_filtered_entries'      => 0,
+      'delete_entries_repairability' => 0,
+      'delete_entries_warranty'      => 0,
       'filter_include_subcategories' => 1,
       'filter_manufacturers_id'      => '',
       'filter_status'                => '',
@@ -150,6 +155,15 @@
     ? 1
     : 0;
   $formData['set_parts_cost_info'] = isset($formData['set_parts_cost_info']) && (int)$formData['set_parts_cost_info'] === 1
+    ? 1
+    : 0;
+  $formData['delete_filtered_entries'] = isset($formData['delete_filtered_entries']) && (int)$formData['delete_filtered_entries'] === 1
+    ? 1
+    : 0;
+  $formData['delete_entries_warranty'] = isset($formData['delete_entries_warranty']) && (int)$formData['delete_entries_warranty'] === 1
+    ? 1
+    : 0;
+  $formData['delete_entries_repairability'] = isset($formData['delete_entries_repairability']) && (int)$formData['delete_entries_repairability'] === 1
     ? 1
     : 0;
 
@@ -255,7 +269,7 @@
         }
 
         // Check: Wurde überhaupt mindestens eine Checkbox zum Ändern angehakt?
-        if (empty($warrantyUpdates) && empty($repairUpdates)) {
+        if (empty($warrantyUpdates) && empty($repairUpdates) && $formData['delete_filtered_entries'] === 0) {
           $messageStack->add_session(TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD, 'error');
           xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
         }
@@ -531,26 +545,62 @@ $messageStack->output();
                   <p class="info_message" style="margin:0 0 12px 0;"><?php echo TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE; ?></p>
                   <table class="tableConfig">
                     <tr class="dataTableHeadingRow" style="border-left: 1px solid #aaaaaa;">
-                      <td class="dataTableHeadingContent" colspan="2"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_FILTER; ?></td>
+                      <td class="dataTableHeadingContent" colspan="3"><?php echo TEXT_BX_EU_GARAN_TABLE_HEADING_FILTER; ?></td>
                     </tr>
                     <tr>
                       <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_CATEGORY; ?></td>
-                      <td class="col-single-right">
+                      <td class="col-middle">
                         <?php echo xtc_draw_pull_down_menu('filter_category_id', $categorySelectData, (int)$formData['filter_category_id']); ?>
                         <label style="margin-left:10px;">
 <?php echo xtc_draw_checkbox_field('filter_include_subcategories', '1', $formData['filter_include_subcategories'] === 1); ?> <?php echo TEXT_BX_EU_GARAN_FIELD_INCLUDE_SUBCATEGORIES; ?>
                         </label>
                       </td>
+                      <td class="col-right valign_t" rowspan="3">
+                        <details class="check_delete">
+                          <summary>
+                            <label style="margin-left:10px;">
+                              <?php
+                                echo xtc_draw_checkbox_field(
+                                'delete_filtered_entries', 
+                                '1', 
+                                ($formData['delete_filtered_entries'] === 1), 
+                                $formData['delete_filtered_entries'],
+                                'id="delete_filtered_entries"'); ?>
+                              <?php echo '<span>'.TEXT_BX_EU_GARAN_DELETE_FILTERED_ENTRIES.'</span>'; ?>
+                            </label>
+                          </summary>
+                          <label style="margin-left:10px;">
+                            <?php
+                              echo xtc_draw_checkbox_field(
+                              'delete_entries_warranty', 
+                              '1', 
+                              ($formData['delete_entries_warranty'] === 1), 
+                              $formData['delete_entries_warranty'],
+                              'id="delete_entries_warranty"'); ?>
+                            <?php echo '<span>'.TEXT_BX_EU_GARAN_DELETE_ENTRIES_WARRANTY.'</span>'; ?>
+                          </label>
+                          <label style="margin-left:10px;">
+                            <?php
+                              echo xtc_draw_checkbox_field(
+                              'delete_entries_repairability', 
+                              '1', 
+                              ($formData['delete_entries_repairability'] === 1), 
+                              $formData['delete_entries_repairability'],
+                              'id="delete_entries_repairability"'); ?>
+                            <?php echo '<span>'.TEXT_BX_EU_GARAN_DELETE_ENTRIES_REPAIRABILITY.'</span>'; ?>
+                          </label>
+                        </details>
+                      </td>
                     </tr>
                     <tr>
                       <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_MANUFACTURER; ?></td>
-                      <td class="col-single-right">
+                      <td class="col-middle">
                         <?php echo xtc_draw_pull_down_menu('filter_manufacturers_id', $manufacturerSelectData, (string)$formData['filter_manufacturers_id']); ?>
                       </td>
                     </tr>
                     <tr>
                       <td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_PRODUCT_STATUS; ?></td>
-                      <td class="col-single-right">
+                      <td class="col-middle">
                         <?php echo xtc_draw_pull_down_menu('filter_status', $statusSelectData, (string)$formData['filter_status']); ?>
                       </td>
                     </tr>
@@ -858,7 +908,7 @@ $messageStack->output();
   $heading  = array();
   $contents = array();
 
-  if (!empty($messageStack->errors['error'])) {
+  if (!empty($messageStack->errors['error']) && defined('MODULE_BX_EU_GARAN_ENABLE_AUDIO') && MODULE_BX_EU_GARAN_ENABLE_AUDIO === 'True') {
     echo '<audio id="bx-eu-garan-error-sound" autoplay src="../media/sounds/nonono.mp3"></audio>';
 
     $heading[]  = array('text' => '<strong id="bx-eu-garan-error_heading" style="display:none;">'.TEXT_BX_EU_GARAN_AUTOPLAY_WARNING_TITLE.'</strong>');
@@ -870,7 +920,7 @@ $messageStack->output();
     echo $box->infoBox($heading, $contents);
   }
 
-  if (!empty($messageStack->errors['error'])) {
+  if (!empty($messageStack->errors['error']) && defined('MODULE_BX_EU_GARAN_ENABLE_AUDIO') && MODULE_BX_EU_GARAN_ENABLE_AUDIO === 'True') {
     echo '<script>
       (function() {
         var audio   = document.getElementById("bx-eu-garan-error-sound");

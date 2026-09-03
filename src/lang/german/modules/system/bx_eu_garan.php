@@ -51,6 +51,9 @@
   define('MODULE_BX_EU_GARAN_CONFIG_ID_TITLE', 'Konfigurations-ID');
   define('MODULE_BX_EU_GARAN_CONFIG_ID_DESC', 'Die eindeutige ID für die Modulkonfiguration. Wird automatisch generiert und sollte nicht geändert werden.');
 
+  define('MODULE_BX_EU_GARAN_ENABLE_AUDIO_TITLE', 'Audio aktivieren?');
+  define('MODULE_BX_EU_GARAN_ENABLE_AUDIO_DESC', 'Soll Audioausgabe für Fehlermeldungen aktiviert werden?');
+
   // Custom Deinstallation Messages
   define('MODULE_BX_EU_GARAN_TEXT_FILES_DELETED', 'Erfolgreich gelöscht:');
   define('MODULE_BX_EU_GARAN_TEXT_FILES_FAILED', 'Fehler beim Löschen (bitte manuell per FTP entfernen):');

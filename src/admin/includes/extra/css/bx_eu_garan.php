@@ -143,6 +143,95 @@
     .bx-tab-content.active {
         display: block;
     }
+
+    /* Container-Design für das details-Element */
+    details.check_delete {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.5rem;
+      max-width: 450px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #334155;
+      transition: all 0.75s ease-in-out;
+    }
+
+    details.check_delete[open] {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Header/Summary styling */
+    details.check_delete summary {
+      cursor: pointer;
+      font-weight: 600;
+      list-style: none; /* Standart-Dreieck entfernen */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      padding: 0;
+    }
+
+    /* Eigenes Pfeil-Icon erzeugen */
+    details.check_delete summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.check_delete summary::after {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid #64748b;
+      border-bottom: 2px solid #64748b;
+      transform: rotate(-45deg);
+      transition: transform 0.2s ease;
+      margin-right: 12px;
+      margin-left: 0;
+    }
+
+    details.check_delete[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    details.check_delete summary:hover {
+      color: #0f172a;
+    }
+
+    /* Styling für alle Labels & Zeilen */
+    details.check_delete label {
+      display: flex;
+      align-items: center;
+      margin-left: 0 !important; /* Überschreibt das Inline-Style */
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      font-size: 0.95rem;
+    }
+
+    /* Einrückung für die untergeordneten Elemente */
+    details.check_delete > label {
+      margin-top: 4px;
+      margin-left: 16px !important; 
+      color: #475569;
+    }
+
+    details.check_delete label:hover {
+      background-color: #f1f5f9;
+    }
+
+    details.check_delete input[type="checkbox"].ChkBox:not(old):not([disabled]) + em {
+      line-height: 21px;
+      margin-right: 0px;
+    }
+
+    /* Hilfs-Tag für Abstand ausblenden/nutzen */
+    details.check_delete label em {
+      display: none; /* Das inline-nbsp wird nicht mehr benötigt */
+    }
   </style>
 <?php
   }

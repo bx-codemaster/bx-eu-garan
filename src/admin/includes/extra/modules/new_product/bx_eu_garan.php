@@ -3,8 +3,6 @@
 	 BX EU Garan - new_product admin hook
 	 ---------------------------------------------------------------------------------------*/
 
-defined('_VALID_XTC') or die('Direct Access to this location is not allowed.');
-
 $bx_eu_garan_values = array(
 	'manufacturer_guarantee_available' => 0,
 	'guarantee_years'          => '',
@@ -304,6 +302,16 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 
 					echo xtc_draw_pull_down_menu('bx_eu_garan_manual_url', $manualFiles, $bx_eu_garan_values['manual_url'], 'style="width: 100%"');
 					?>
+					</span>
+					<span class="main">
+					<?php
+					echo xtc_draw_file_field('new_manual_file',  false, 'form="bx_eu_garan_upload_form" accept=".pdf,.epub,.doc,.docx,application/pdf,application/epub+zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"'); ?>
+					<div style="margin-top: 8px;">
+						<button type="submit" name="submit_action" value="upload_manual" class="button" form="bx_eu_garan_upload_form"><?php echo TEXT_BX_IMAGE_MAGICK_PREVIEW_FILE_UPLOAD_BUTTON; ?></button>
+					</div><!-- /submit-upload -->
+					<div style="margin-top: 8px; color: #666;">
+						<?php echo TEXT_BX_IMAGE_MAGICK_PREVIEW_FILE_ALLOWED_TYPES; ?>
+					</div>
 					</span>
 				</td>
 			</tr>

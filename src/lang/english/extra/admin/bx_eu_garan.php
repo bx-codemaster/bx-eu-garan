@@ -180,3 +180,9 @@
   define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST', 'Please install the "BX EU Garan Categories" module first before using the main module. (Modules -> Class Extensions -> Categories)');
   define('MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST', 'Please install the "BX EU Garan Orders" module first before using the main module. (Modules -> Class Extensions -> Orders)');
   define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Please install the "BX EU Garan Cart" module first before using the main module. (Modules -> Class Extensions -> Cart)');
+
+  define('TEXT_BX_EU_GARAN_PLEASE_CHOOSE', '-- Please choose --');
+  define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_SUCCESS', 'The manual was successfully uploaded.');
+  define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_FAILED', 'Error uploading the manual.');
+  define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_DIR_NOT_WRITABLE', 'The directory for manuals is not writable: %s');
+  
