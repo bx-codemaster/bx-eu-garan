@@ -97,6 +97,27 @@ $info_smarty->assign('BX_EU_GARAN_WARRANTY_YEARS', (int)$warranty['guarantee_yea
 $info_smarty->assign('BX_EU_GARAN_WARRANTY_MANUFACTURER', $manufacturerName);
 $info_smarty->assign('BX_EU_GARAN_WARRANTY_MODEL', $modelIdentifier);
 
+$repairability_sql = "SELECT * FROM bx_products_repairability bpr 
+                        LEFT JOIN bx_eu_garan_products_languages bpl 
+                              ON bpl.products_id = bpr.products_id AND bpl.language_id = '".(int)$_SESSION['languages_id']."'
+                      WHERE bpr.products_id = '".$productId."' LIMIT 1;";
+
+$repairability_query = xtc_db_query($repairability_sql);
+
+if(xtc_db_num_rows($repairability_query) > 0) {
+  $repairability = xtc_db_fetch_array($repairability_query, true);
+  
+  $info_smarty->assign('BX_EU_GARAN_REPAIRABILITY_TITLE', 'Repairability');
+  $info_smarty->assign('BX_EU_GARAN_REPAIRABILITY_ARRAY', $repairability);
+
+
+  $link   = xtc_href_link(FILENAME_PRODUCT_INFO);
+  $offset = strlen(FILENAME_PRODUCT_INFO)*-1;
+  $url    = substr($link, 0, $offset);
+  $src    = $url.'templates/'.CURRENT_TEMPLATE.'/img/';
+  $info_smarty->assign('BX_EU_GARAN_REPAIRABILITY_SRC', $src);
+}
+
 if ($showWarrantyLabel) {
   $years = sprintf('%02d', (int)$warranty['guarantee_years']);
 

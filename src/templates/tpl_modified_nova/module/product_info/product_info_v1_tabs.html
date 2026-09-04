@@ -187,7 +187,7 @@
           </div>
         {/if}
         <!-- EOF $BX_EU_GARAN -->
-        
+
         {if $PAYPALPLAN}{$PAYPALPLAN}{/if}
 
         {if $ADD_CART_BUTTON != ''}
@@ -242,7 +242,8 @@
           {if isset($MODULE_products_media) && $MODULE_products_media != ''}<li id="media">{#products_media#}</li>{/if}
           {if isset($MODULE_products_reviews) && $MODULE_products_reviews != ''}<li id="reviews">{#products_reviews#}{if $PRODUCTS_RATING_COUNT > 0}<span class="count">{$PRODUCTS_RATING_COUNT}</span>{/if}</li>{/if}
           {if isset($MANUFACTURER_CONTACT_ADDRESS) || isset($MANUFACTURER_RESPONSIBLE_ADDRESS) || $MANUFACTURER_ADD_DESCRIPTION != ''}<li id="manufacturers">{#manufacturers_info#}</li>{/if}
-        </ul>
+          {if isset($BX_EU_GARAN_REPAIRABILITY_TITLE) && $BX_EU_GARAN_REPAIRABILITY_TITLE != ''}<li id="repairability">{$BX_EU_GARAN_REPAIRABILITY_TITLE}</li>{/if}
+        </ul>{debug}
         <div class="resp-tabs-container">
           {if $PRODUCTS_DESCRIPTION != ''}
             <div class="pd_description">
@@ -291,6 +292,14 @@
                 {/if}
               </div>
             </div>
+          {/if}
+          
+          {if isset($MODULE_products_reviews) && $MODULE_products_reviews != ''}
+            <div>{$MODULE_products_reviews}</div>
+          {/if}
+
+          {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY) && $BX_EU_GARAN_REPAIRABILITY_ARRAY|is_array}
+            <div>{$BX_EU_GARAN_REPAIRABILITY_ARRAY}</div>
           {/if}
         </div>
       </div>

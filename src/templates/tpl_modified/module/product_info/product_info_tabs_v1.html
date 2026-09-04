@@ -240,6 +240,7 @@
           {if isset($MODULE_products_media) && $MODULE_products_media != ''}<li id="media">{#products_media#}</li>{/if}
           {if isset($MODULE_products_reviews) && $MODULE_products_reviews != ''}<li id="reviews">{#products_reviews#}{if $PRODUCTS_RATING_COUNT > 0}<span class="count">{$PRODUCTS_RATING_COUNT}</span>{/if}</li>{/if}
           {if isset($MANUFACTURER_CONTACT_ADDRESS) || isset($MANUFACTURER_RESPONSIBLE_ADDRESS) || $MANUFACTURER_ADD_DESCRIPTION != ''}<li id="manufacturers">{#manufacturers_info#}</li>{/if}
+          {if isset($BX_EU_GARAN_REPAIRABILITY_TITLE) && $BX_EU_GARAN_REPAIRABILITY_TITLE != ''}<li id="repairability">{$BX_EU_GARAN_REPAIRABILITY_TITLE}</li>{/if}
         </ul>
         <div class="resp-tabs-container">
           {if $PRODUCTS_DESCRIPTION != ''}
@@ -288,6 +289,53 @@
                   </div>
                 {/if}
               </div>
+            </div>
+          {/if}
+          {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY) && $BX_EU_GARAN_REPAIRABILITY_ARRAY|is_array}
+            <div>
+              {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score']) && isset($BX_EU_GARAN_REPAIRABILITY_SRC)}
+                {if $BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score'] lte 2}
+                  <img src="{$BX_EU_GARAN_REPAIRABILITY_SRC}bx_repairability_A.png" alt="Repairability" style="max-width: 50px;">
+                {elseif $BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score'] lte 4}
+                  <img src="{$BX_EU_GARAN_REPAIRABILITY_SRC}bx_repairability_B.png" alt="Repairability" style="max-width: 50px;">
+                {elseif $BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score'] lte 6}
+                  <img src="{$BX_EU_GARAN_REPAIRABILITY_SRC}bx_repairability_C.png" alt="Repairability" style="max-width: 50px;">
+                {elseif $BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score'] lte 8}
+                  <img src="{$BX_EU_GARAN_REPAIRABILITY_SRC}bx_repairability_D.png" alt="Repairability" style="max-width: 50px;">
+                {elseif $BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score'] lte 10}
+                  <img src="{$BX_EU_GARAN_REPAIRABILITY_SRC}bx_repairability_E.png" alt="Repairability" style="max-width: 50px;">
+                {/if}
+              {/if}
+              <br>
+              {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score'])}
+                Repair Score: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['repair_score']}<br>
+              {/if}
+
+              {if $BX_EU_GARAN_REPAIRABILITY_ARRAY['parts_available'] eq 1}
+                Parts available: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['parts_available']}<br>
+                Parts availability years: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['parts_availability_years']}<br>
+              {/if}
+
+              {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY['manual_url'])}
+                Manual URL: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['manual_url']}<br>
+              {/if}
+
+              {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY['updated_at'])}
+                Updated at: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['updated_at']}<br>
+              {/if}
+
+              {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY['repair'])}
+                Repair: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['repair']}<br>
+              {/if}
+
+              {if isset($BX_EU_GARAN_REPAIRABILITY_ARRAY['parts_cost'])}
+                Parts cost: {$BX_EU_GARAN_REPAIRABILITY_ARRAY['parts_cost']}<br>
+              {/if}
+              <!--//
+              {foreach from=$BX_EU_GARAN_REPAIRABILITY_ARRAY key=key item=item}
+                  {$key}: {$item}<br>
+              {/foreach}
+              //-->
             </div>
           {/if}
         </div>
