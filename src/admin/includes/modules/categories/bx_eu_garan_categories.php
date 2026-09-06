@@ -15,13 +15,13 @@ class bx_eu_garan_categories {
   public int $sort_order;
   public ?bool $_check = null;
 
-  private string $tableWarranty          = 'bx_products_warranty_guarantee';
+  private string $tableWarranty = 'bx_products_warranty_guarantee';
 
   public function __construct() {
     $this->code        = 'bx_eu_garan_categories';
     $this->name        = 'MODULE_'.strtoupper($this->code);
     $this->title       = defined($this->name.'_TITLE') ? constant($this->name.'_TITLE') : 'BX EU Garan Produkt-Hooks';
-    $this->description = defined($this->name.'_DESCRIPTION') ? constant($this->name.'_DESCRIPTION') : 'Speichert EU-Garantie- und Reparierbarkeitsdaten beim Produktspeichern.';
+    $this->description = defined($this->name.'_DESCRIPTION') ? constant($this->name.'_DESCRIPTION') : 'Speichert EU-Garantiedaten beim Produktspeichern.';
     $this->enabled     = defined($this->name.'_STATUS') && constant($this->name.'_STATUS') == 'true';
     $this->sort_order  = defined($this->name.'_SORT_ORDER') ? constant($this->name.'_SORT_ORDER') : 999;
   }
@@ -37,7 +37,6 @@ class bx_eu_garan_categories {
         $this->_check = xtc_db_num_rows($check_query) > 0;
       }
     }
-
     return $this->_check;
   }
 
@@ -46,11 +45,7 @@ class bx_eu_garan_categories {
     defined($this->name.'_STATUS_DESC') or define($this->name.'_STATUS_DESC', TEXT_DEFAULT_STATUS_DESC);
     defined($this->name.'_SORT_ORDER_TITLE') or define($this->name.'_SORT_ORDER_TITLE', TEXT_DEFAULT_SORT_ORDER_TITLE);
     defined($this->name.'_SORT_ORDER_DESC') or define($this->name.'_SORT_ORDER_DESC', TEXT_DEFAULT_SORT_ORDER_DESC);
-
-    return array(
-      $this->name.'_STATUS',
-      $this->name.'_SORT_ORDER',
-    );
+    return array($this->name.'_STATUS', $this->name.'_SORT_ORDER');
   }
 
   public function install(): void {
@@ -66,28 +61,14 @@ class bx_eu_garan_categories {
 
   public function insert_product_after(array $products_data, int $products_id): void {
     $products_id = (int)$products_id;
-    if ($products_id <= 0) {
-      return;
-    }
+    if ($products_id <= 0) return;
 
-    $manufacturerGuaranteeAvailable = (isset($products_data['bx_eu_garan_manufacturer_guarantee_available']) && (int)$products_data['bx_eu_garan_manufacturer_guarantee_available'] === 1) 
-                                        ? 1 : 0;
-
-    $guaranteeYears                 = isset($products_data['bx_eu_garan_guarantee_years']) 
-                                        ? (int)$products_data['bx_eu_garan_guarantee_years'] : 0;
-    
-    $coversFullProduct              = (isset($products_data['bx_eu_garan_covers_full_product']) && (int)$products_data['bx_eu_garan_covers_full_product'] === 1) 
-                                       ? 1 : 0;
-    
-    $requiresAdditionalCost         = (isset($products_data['bx_eu_garan_requires_additional_cost']) && (int)$products_data['bx_eu_garan_requires_additional_cost'] === 1) 
-                                       ? 1 : 0;
-    
-    $qrUrl                          = isset($products_data['bx_eu_garan_qr_url']) 
-                                       ? trim((string)$products_data['bx_eu_garan_qr_url']) : '';
-
-    if ($guaranteeYears < 0) {
-      $guaranteeYears = 0;
-    }
+    $manufacturerGuaranteeAvailable = (isset($products_data['bx_eu_garan_manufacturer_guarantee_available']) && (int)$products_data['bx_eu_garan_manufacturer_guarantee_available'] === 1) ? 1 : 0;
+    $guaranteeYears = isset($products_data['bx_eu_garan_guarantee_years']) ? (int)$products_data['bx_eu_garan_guarantee_years'] : 0;
+    $coversFullProduct = (isset($products_data['bx_eu_garan_covers_full_product']) && (int)$products_data['bx_eu_garan_covers_full_product'] === 1) ? 1 : 0;
+    $requiresAdditionalCost = (isset($products_data['bx_eu_garan_requires_additional_cost']) && (int)$products_data['bx_eu_garan_requires_additional_cost'] === 1) ? 1 : 0;
+    $qrUrl = isset($products_data['bx_eu_garan_qr_url']) ? trim((string)$products_data['bx_eu_garan_qr_url']) : '';
+    if ($guaranteeYears < 0) $guaranteeYears = 0;
 
     $warrantyQuery = "INSERT INTO `".$this->tableWarranty."`
       (`products_id`, `manufacturer_guarantee_available`, `guarantee_years`, `covers_full_product`, `requires_additional_cost`, `qr_url`, `created_at`, `updated_at`)
@@ -108,32 +89,24 @@ class bx_eu_garan_categories {
         `requires_additional_cost` = VALUES(`requires_additional_cost`),
         `qr_url` = VALUES(`qr_url`),
         `updated_at` = NOW()";
-    
     xtc_db_query($warrantyQuery);
   }
 
   public function remove_product(int $products_id): void {
     $products_id = (int)$products_id;
-
-    if ($products_id <= 0) {
-      return;
-    }
-
+    if ($products_id <= 0) return;
     xtc_db_query("DELETE FROM `".$this->tableWarranty."` WHERE `products_id` = '".$products_id."'");
   }
 
   public function duplicate_product_after(array $sql_data_array, int $src_products_id, int $dest_categories_id, int $dup_products_id): array {
     $src_products_id = (int)$src_products_id;
     $dup_products_id = (int)$dup_products_id;
-
     if ($src_products_id > 0 && $dup_products_id > 0) {
       xtc_db_query("START TRANSACTION");
       try {
         $warrantyQuery = xtc_db_query("SELECT * FROM `".$this->tableWarranty."` WHERE `products_id` = '".$src_products_id."' LIMIT 1");
-        
         if ($warrantyQuery && xtc_db_num_rows($warrantyQuery) > 0) {
           $row = xtc_db_fetch_array($warrantyQuery);
-
           $insert = "INSERT INTO `".$this->tableWarranty."`
             (`products_id`, `manufacturer_guarantee_available`, `guarantee_years`, `covers_full_product`, `requires_additional_cost`, `qr_url`, `created_at`, `updated_at`)
             VALUES (
@@ -151,18 +124,13 @@ class bx_eu_garan_categories {
         xtc_db_query("COMMIT");
       } catch (\Throwable $e) {
         xtc_db_query("ROLLBACK");
-        // Fehler ins Shop-Log schreiben
       }
     }
     return $sql_data_array;
   }
 
   private function toSqlNullableString(?string $value): string {
-    if ($value === null || $value === '') {
-      return 'NULL';
-    }
-
+    if ($value === null || $value === '') return 'NULL';
     return "'".xtc_db_input((string)$value)."'";
   }
-
 }
