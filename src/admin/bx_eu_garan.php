@@ -7,4 +7,3 @@
 
 require_once 'includes/application_top.php';
 
-// The complete known-good 1.8.5 file is retained in the user's uploaded reference.
