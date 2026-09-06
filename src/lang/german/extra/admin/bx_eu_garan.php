@@ -31,7 +31,7 @@
   define('TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE', 'Die harmonisierte Mitteilung zur gesetzlichen Gewährleistung ist immer relevant.<br>Die harmonisierte Kennzeichnung zur Garantie wird nur angezeigt, wenn eine freiwillige Herstellergarantie besteht.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Bitte mindestens ein Feld zum Setzen auswählen.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'Keine Produkte mit den gewählten Filtern gefunden.');
-  define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', '%d Produkte aktualisiert (%d Garantie, %d Reparierbarkeit, %d Sprachdaten).');
+  define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', '%d Produkte aktualisiert (%d Garantie).');
   define('TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED', 'Gewährleistungsinhalt erfolgreich gespeichert.');
   define('TEXT_BX_EU_GARAN_PREVIEW_RESULT', 'Vorschau: <strong>%d</strong> Produkte betroffen.');
   define('TEXT_BX_EU_GARAN_AUTOPLAY_WARNING_TITLE', 'WARNUNG!');

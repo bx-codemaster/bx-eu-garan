@@ -239,7 +239,7 @@
         }
         // --- ENDE PHASE 2 ---
         
-        $messageStack->add_session(sprintf(TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS, $updatedProducts, $warrantyCount, $repairCount, $languageCount), 'success');
+        $messageStack->add_session(sprintf(TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS, $updatedProducts, $warrantyCount), 'success');
       
       if (isset($_SESSION['bx_eu_garan_last_filters'])) {
         unset($_SESSION['bx_eu_garan_last_filters']);

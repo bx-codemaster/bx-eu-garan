@@ -31,7 +31,7 @@
   define('TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE', 'The harmonized notice for statutory warranty is always relevant.<br>The harmonized labeling for the guarantee is only displayed if a voluntary manufacturer guarantee exists.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Please select at least one field to set.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'No products found with the selected filters.');
-  define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', '%d products updated (%d warranty, %d repairability, %d language data).');
+  define('TEXT_BX_EU_GARAN_FEEDBACK_SUCCESS', '%d products updated (%d warranty).');
   define('TEXT_BX_EU_GARAN_FEEDBACK_WARRANTY_CONTENT_SAVED', 'Warranty content saved successfully.');
   define('TEXT_BX_EU_GARAN_PREVIEW_RESULT', 'Preview: <strong>%d</strong> products affected.');
   define('TEXT_BX_EU_GARAN_AUTOPLAY_WARNING_TITLE', 'WARNING!');
