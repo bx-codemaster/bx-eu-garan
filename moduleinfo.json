@@ -8,7 +8,7 @@
     "srcDir": "src",
     "version": "auto",
     "shortDescription": "Harmonisierte Mitteilung und harmonisierte Kennzeichnung für Gewährleistung und Herstellergarantie",
-    "description": "Dieses Modul setzt die Vorgaben zur harmonisierten Mitteilung der gesetzlichen Gewährleistung und zur harmonisierten Kennzeichnung der freiwilligen Herstellergarantie um. Die entsprechenden Garantie- und Gewährleistungsinformationen werden in den Produktdetails und in der Produktverwaltung bereitgestellt. Reparierbarkeitsinformationen sind nicht Bestandteil dieses Moduls und werden separat umgesetzt. https://youtu.be/oTblPx7arVQ  https://youtu.be/8iZs-IopLVU  https://youtu.be/hMiMy0Y7g10",
+    "description": "Dieses Modul setzt die Vorgaben zur harmonisierten Mitteilung der gesetzlichen Gewährleistung und zur harmonisierten Kennzeichnung der freiwilligen Herstellergarantie um. Die entsprechenden Garantie- und Gewährleistungsinformationen werden in den Produktdetails und in der Produktverwaltung bereitgestellt. https://youtu.be/oTblPx7arVQ  https://youtu.be/8iZs-IopLVU  https://youtu.be/hMiMy0Y7g10",
     "price": "free",
     "date": "2026-09-06 00:00:00",
     "php": {
