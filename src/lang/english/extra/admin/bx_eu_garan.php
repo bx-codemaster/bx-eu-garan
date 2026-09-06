@@ -1,16 +1,10 @@
 <?php
 /** 
- * ██████╗  ███████╗ ███╗   ██╗  █████╗  ██╗  ██╗
- * ██╔══██╗ ██╔════╝ ████╗  ██║ ██╔══██╗ ╚██╗██╔╝
- * ██████╔╝ █████╗   ██╔██╗ ██║ ███████║  ╚███╔╝
- * ██╔══██╗ ██╔══╝   ██║╚██╗██║ ██╔══██║  ██╔██╗
- * ██████╔╝ ███████╗ ██║ ╚████║ ██║  ██║ ██╔╝ ██╗
- * ╚═════╝  ╚══════╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝
  * BX EU Garan - English Language Texts
- * 
+ *
  * Interface texts for the BX EU module (Admin area).
  * All UI elements, buttons, and descriptions in English.
- * 
+ *
  * @package    BX EU Garan
  * @subpackage Language
  * @category   Admin
@@ -23,11 +17,10 @@
 
   define('HEADING_BX_EU_GARAN_TITLE', 'BX EU Warranty and Manufacturer Guarantee');
   define('HEADING_BX_EU_GARAN_SUB_TITLE', 'Central management of the harmonized warranty notice and the voluntary manufacturer guarantee.');
-  define('HEADING_BX_EU_GARAN_MASS_EDIT_TITLE', 'Mass Edit Manufacturer Guarantee and Repairability');
+  define('HEADING_BX_EU_GARAN_MASS_EDIT_TITLE', 'Mass Edit Manufacturer Guarantee');
   define('HEADING_BX_EU_GARAN_PRODUCT_WARRANTY', 'BX EU Manufacturer Guarantee');
-  define('HEADING_BX_EU_GARAN_PRODUCT_REPAIRABILITY', 'BX EU Repairability');
 
-  define('TEXT_BX_EU_GARAN_MASS_EDIT_DESCRIPTION', 'Set selected fields of the voluntary manufacturer guarantee and repairability for many products simultaneously using category and/or manufacturer filters.');
+  define('TEXT_BX_EU_GARAN_MASS_EDIT_DESCRIPTION', 'Set selected fields of the voluntary manufacturer guarantee for many products simultaneously using category and/or manufacturer filters.');
   define('TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE', 'The harmonized notice for statutory warranty is always relevant.<br>The harmonized labeling for the guarantee is only displayed if a voluntary manufacturer guarantee exists.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Please select at least one field to set.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'No products found with the selected filters.');
@@ -56,7 +49,6 @@
   define('TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST', 'Additional Costs Required');
   define('TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST_NOTE', 'Labeling is only required if no additional costs are incurred.');
   define('TEXT_BX_EU_GARAN_FIELD_QR_URL', 'QR URL');
-  define('TEXT_BX_EU_GARAN_FIELD_REPAIR_SCORE', 'Repairability Score (0-10)');
   define('TEXT_BX_EU_GARAN_FIELD_MANUAL_URL', 'Manual URL');
   define('TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE', '<strong>Statutory Warranty:</strong> always relevant and automatically displayed.<br><strong>Voluntary Manufacturer Guarantee:</strong> only indicate if it actually exists for this product.');
   define('TEXT_BX_EU_GARAN_PRODUCT_ENABLED', 'Voluntary Manufacturer Guarantee Available');
@@ -72,19 +64,12 @@
   define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_NOT_REQUIRED', 'No');
   define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE', '<strong>Required only if:</strong>
     <ul>
-    <li>✅ voluntary manufacturer guarantee is available</li>
-    <li>✅ valid for more than 2 years</li>
-    <li>✅ no additional costs are incurred</li>
+    <li>voluntary manufacturer guarantee is available</li>
+    <li>valid for more than 2 years</li>
+    <li>no additional costs are incurred</li>
     </ul>');
   define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR-URL (optional)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Repairability Score (0-10)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL', 'Repair Service (URL)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Manual (URL)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Repair Restrictions');
-  
-  define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE', 'Parts Available');
-  define('TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO', 'Parts - Cost Information');
-  define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE_YEARS', 'Parts - Availability in Years');
+
   define('TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE', 'Current Value:');
 
   define('TEXT_BX_EU_GARAN_FILTER_ALL_CATEGORIES', 'All Categories');
@@ -176,7 +161,7 @@
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_2', 'Verbraucherzentrale: Provides detailed guides on current rulings and practical enforcement (e.g., on the 2022 reform of the law of obligations).');
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_3', 'Stiftung Warentest: Regularly publishes comparisons on handling complaints with major retailers.');
   define('TEXT_WARRANTY_AND_GUARANTEE_NOTE', 'Note: This explanation is for informational purposes and does not constitute legal advice.');
-    
+
   define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST', 'Please install the "BX EU Garan Categories" module first before using the main module. (Modules -> Class Extensions -> Categories)');
   define('MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST', 'Please install the "BX EU Garan Orders" module first before using the main module. (Modules -> Class Extensions -> Orders)');
   define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Please install the "BX EU Garan Cart" module first before using the main module. (Modules -> Class Extensions -> Cart)');
@@ -185,4 +170,3 @@
   define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_SUCCESS', 'The manual was successfully uploaded.');
   define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_FAILED', 'Error uploading the manual.');
   define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_DIR_NOT_WRITABLE', 'The directory for manuals is not writable: %s');
-  

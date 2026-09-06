@@ -7,10 +7,10 @@
     "website": "https://www.der-eisenhans.de",
     "srcDir": "src",
     "version": "auto",
-    "shortDescription": "Harmonisierte Mitteilung - Harmonisierte Kennzeichnung - Reparierbarkeitswert",
-    "description": "Diese Modul setzt die Vorgaben zur Harmonisierte Mitteilung - Harmonisierte Kennzeichnung - Reparierbarkeitswert um. Es werden die entsprechenden Felder in den Produktdetails und in der Produktliste angezeigt. Die Daten werden über die Produktverwaltung gepflegt. https://youtu.be/oTblPx7arVQ  https://youtu.be/8iZs-IopLVU https://youtu.be/hMiMy0Y7g10",
-    "price": "free", 
-    "date": "2026-08-13 00:00:00",
+    "shortDescription": "Harmonisierte Mitteilung und harmonisierte Kennzeichnung für Gewährleistung und Herstellergarantie",
+    "description": "Dieses Modul setzt die Vorgaben zur harmonisierten Mitteilung der gesetzlichen Gewährleistung und zur harmonisierten Kennzeichnung der freiwilligen Herstellergarantie um. Die entsprechenden Garantie- und Gewährleistungsinformationen werden in den Produktdetails und in der Produktverwaltung bereitgestellt. https://youtu.be/oTblPx7arVQ  https://youtu.be/8iZs-IopLVU  https://youtu.be/hMiMy0Y7g10",
+    "price": "free",
+    "date": "2026-09-06 00:00:00",
     "php": {
       "version": "^8.0"
     },

@@ -1,16 +1,10 @@
 <?php
 /** 
- * ██████╗  ███████╗ ███╗   ██╗  █████╗  ██╗  ██╗
- * ██╔══██╗ ██╔════╝ ████╗  ██║ ██╔══██╗ ╚██╗██╔╝
- * ██████╔╝ █████╗   ██╔██╗ ██║ ███████║  ╚███╔╝
- * ██╔══██╗ ██╔══╝   ██║╚██╗██║ ██╔══██║  ██╔██╗
- * ██████╔╝ ███████╗ ██║ ╚████║ ██║  ██║ ██╔╝ ██╗
- * ╚═════╝  ╚══════╝ ╚═╝  ╚═══╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝
  * BX EU Garan - Deutsche Sprachtexte
- * 
+ *
  * Interface-Texte für das BX EU Modul (Admin-Bereich).
  * Alle UI-Elemente, Buttons und Beschreibungen in deutscher Sprache.
- * 
+ *
  * @package    BX EU Garan
  * @subpackage Language
  * @category   Admin
@@ -23,11 +17,10 @@
 
   define('HEADING_BX_EU_GARAN_TITLE', 'BX EU Gewährleistung und Herstellergarantie');
   define('HEADING_BX_EU_GARAN_SUB_TITLE', 'Zentrale Verwaltung der harmonisierten Gewährleistungsmitteilung und der freiwilligen Herstellergarantie.');
-  define('HEADING_BX_EU_GARAN_MASS_EDIT_TITLE', 'Massenbearbeitung Herstellergarantie und Reparierbarkeit');
+  define('HEADING_BX_EU_GARAN_MASS_EDIT_TITLE', 'Massenbearbeitung Herstellergarantie');
   define('HEADING_BX_EU_GARAN_PRODUCT_WARRANTY', 'BX EU Herstellergarantie');
-  define('HEADING_BX_EU_GARAN_PRODUCT_REPAIRABILITY', 'BX EU Reparierbarkeit');
 
-  define('TEXT_BX_EU_GARAN_MASS_EDIT_DESCRIPTION', 'Setzen Sie ausgewählte Felder der freiwilligen Herstellergarantie und Reparierbarkeit für viele Produkte gleichzeitig per Kategorie- und/oder Herstellerfilter.');
+  define('TEXT_BX_EU_GARAN_MASS_EDIT_DESCRIPTION', 'Setzen Sie ausgewählte Felder der freiwilligen Herstellergarantie für viele Produkte gleichzeitig per Kategorie- und/oder Herstellerfilter.');
   define('TEXT_BX_EU_GARAN_MASS_EDIT_LEGAL_NOTE', 'Die harmonisierte Mitteilung zur gesetzlichen Gewährleistung ist immer relevant.<br>Die harmonisierte Kennzeichnung zur Garantie wird nur angezeigt, wenn eine freiwillige Herstellergarantie besteht.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD', 'Bitte mindestens ein Feld zum Setzen auswählen.');
   define('TEXT_BX_EU_GARAN_FEEDBACK_NO_PRODUCTS_FOUND', 'Keine Produkte mit den gewählten Filtern gefunden.');
@@ -56,7 +49,6 @@
   define('TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST', 'Zusatzkosten erforderlich');
   define('TEXT_BX_EU_GARAN_FIELD_REQUIRES_ADDITIONAL_COST_NOTE', 'Die Kennzeichnung ist nur erforderlich, wenn keine Zusatzkosten anfallen.');
   define('TEXT_BX_EU_GARAN_FIELD_QR_URL', 'QR URL');
-  define('TEXT_BX_EU_GARAN_FIELD_REPAIR_SCORE', 'Reparierbarkeits-Score (0-10)');
   define('TEXT_BX_EU_GARAN_FIELD_MANUAL_URL', 'Handbuch URL');
   define('TEXT_BX_EU_GARAN_PRODUCT_LEGAL_NOTE', '<strong>Gesetzliche Gewährleistung:</strong> immer relevant und automatisch anzuzeigen.<br><strong>Freiwillige Herstellergarantie:</strong> nur angeben, wenn sie für dieses Produkt tatsächlich besteht.');
   define('TEXT_BX_EU_GARAN_PRODUCT_ENABLED', 'Freiwillige Herstellergarantie vorhanden');
@@ -72,24 +64,15 @@
   define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_NOT_REQUIRED', 'Nein');
   define('TEXT_BX_EU_GARAN_PRODUCT_LABEL_RULE_NOTE', '<strong>Erforderlich nur wenn:</strong>
     <ul>
-    <li>✅ freiwillige Herstellergarantie vorliegt</li>
-    <li>✅ mehr als 2 Jahre gilt</li>
-    <li>✅ keine Zusatzkosten anfallen</li>
+    <li>freiwillige Herstellergarantie vorliegt</li>
+    <li>mehr als 2 Jahre gilt</li>
+    <li>keine Zusatzkosten anfallen</li>
     </ul>');
   define('TEXT_BX_EU_GARAN_PRODUCT_QR_URL', 'QR-URL (optional)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE', 'Reparierbarkeitswert (0-10)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL', 'Reparatur-Service (URL)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL', 'Handbuch (URL)');
-  define('TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS', 'Reparatur-Einschränkungen');
-  
-  define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE', 'Ersatzteile verfügbar');
-  define('TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO', 'Ersatzteile - Kosteninformationen');
-  define('TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE_YEARS', 'Ersatzteilen - Verfügbarkeit in Jahren');
+
   define('TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE', 'Aktueller Wert:');
-  
   define('TEXT_BX_EU_GARAN_DELETE_FILTERED_ENTRIES', 'Gefilterte Einträge löschen');
   define('TEXT_BX_EU_GARAN_DELETE_ENTRIES_WARRANTY', 'Einträge mit Gewährleistung löschen');
-  define('TEXT_BX_EU_GARAN_DELETE_ENTRIES_REPAIRABILITY', 'Einträge mit Reparierbarkeitswert löschen');
 
   define('TEXT_BX_EU_GARAN_FILTER_ALL_CATEGORIES', 'Alle Kategorien');
   define('TEXT_BX_EU_GARAN_FILTER_ALL_MANUFACTURERS', 'Alle Hersteller');
@@ -180,7 +163,7 @@
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_2', 'Verbraucherzentrale: Bietet detaillierte Leitfäden zu aktuellen Urteilen und der praktischen Durchsetzung (z. B. zur Schuldrechtsreform 2022).');
   define('TEXT_WARRANTY_AND_GUARANTEE_SOURCE_3', 'Stiftung Warentest: Veröffentlicht regelmäßig Vergleiche zur Handhabung von Reklamationen bei großen Händlern.');
   define('TEXT_WARRANTY_AND_GUARANTEE_NOTE', 'Hinweis: Diese Erläuterung dient der Information und stellt keine Rechtsberatung dar.');
-  
+
   define('MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Kategorien" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Kategorien)');
   define('MODULE_BX_EU_GARAN_ORDER_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Bestellungen" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Bestellungen)');
   define('MODULE_BX_EU_GARAN_CART_INSTALL_FIRST', 'Bitte installieren Sie zuerst das Modul "BX EU Garan Warenkorb" bevor Sie das Hauptmodul verwenden. (Module -> Klassenerweiterungen -> Warenkorb)');
@@ -189,4 +172,3 @@
   define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_SUCCESS', 'Das Handbuch wurde erfolgreich hochgeladen.');
   define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_FAILED', 'Fehler beim Hochladen des Handbuchs.');
   define('TEXT_BX_EU_GARAN_MESSAGE_UPLOAD_DIR_NOT_WRITABLE', 'Das Verzeichnis für Handbücher ist nicht beschreibbar: %s');
-  
