@@ -12,7 +12,6 @@
 
   $allowed_pages = array(
       'bx_eu_garan.php',
-      'bx_eu_repairability.php',
       'categories.php',
       'start.php',
       'module_export.php'
