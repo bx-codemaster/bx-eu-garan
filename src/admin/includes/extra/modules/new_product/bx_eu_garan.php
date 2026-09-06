@@ -53,12 +53,6 @@ $bx_eu_garan_reference = bx_eu_garan_get_product_reference_data(
 	) : array()
 );
 
-$parts_available_array = array(
-	array('id' => '', 'text'  => TEXT_BX_EU_GARAN_NO_INFO_PROVIDED),
-	array('id' => '1', 'text' => CFG_TXT_YES),
-	array('id' => '0', 'text' => CFG_TXT_NO),
-);
-
 $isGuaranteeLabelRequired = bx_eu_garan_is_harmonized_guarantee_label_required(
 	$bx_eu_garan_values['manufacturer_guarantee_available'],
 	(int) $bx_eu_garan_values['guarantee_years'],
@@ -94,9 +88,7 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 			</tr>
 			<tr>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_GUARANTEE_YEARS; ?></span></td>
-				<td>
-					<span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_guarantee_years', $bx_eu_garan_values['guarantee_years'], 'style="width: 85px"', false, 'number'); ?></span>
-				</td>
+				<td><span class="main"><?php echo xtc_draw_input_field('bx_eu_garan_guarantee_years', $bx_eu_garan_values['guarantee_years'], 'style="width: 85px"', false, 'number'); ?></span></td>
 			</tr>
 			<tr>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUFACTURER_AUTO; ?></span></td>
@@ -120,13 +112,7 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 			</tr>
 			<tr>
 				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_LABEL_REQUIREMENT; ?></span></td>
-				<td>
-					<span class="main">
-						<span style="display:inline-block;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:700;line-height:15px;color:#fff;background:<?php echo $labelRequirementColor; ?>;">
-							<?php echo $labelRequirementText; ?>
-						</span>
-					</span>
-				</td>
+				<td><span class="main"><span style="display:inline-block;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:700;line-height:15px;color:#fff;background:<?php echo $labelRequirementColor; ?>;"><?php echo $labelRequirementText; ?></span></span></td>
 			</tr>
 			<tr>
 				<td></td>
