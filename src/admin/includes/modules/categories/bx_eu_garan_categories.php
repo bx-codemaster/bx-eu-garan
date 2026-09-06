@@ -15,11 +15,11 @@ class bx_eu_garan_categories {
   public int $sort_order;
   public ?bool $_check = null;
 
-  private string $tableWarranty          = 'bx_products_warranty_guarantee';
+  private string $tableWarranty = TABLE_BX_EU_GARAN_GUARANTEE;
 
   public function __construct() {
     $this->code        = 'bx_eu_garan_categories';
-    $this->name        = 'MODULE_'.strtoupper($this->code);
+    $this->name        = 'MODULE_CATEGORIES_'.strtoupper($this->code);
     $this->title       = defined($this->name.'_TITLE') ? constant($this->name.'_TITLE') : 'BX EU Garan Produkt-Hooks';
     $this->description = defined($this->name.'_DESCRIPTION') ? constant($this->name.'_DESCRIPTION') : 'Speichert EU-Garantie- und Reparierbarkeitsdaten beim Produktspeichern.';
     $this->enabled     = defined($this->name.'_STATUS') && constant($this->name.'_STATUS') == 'true';

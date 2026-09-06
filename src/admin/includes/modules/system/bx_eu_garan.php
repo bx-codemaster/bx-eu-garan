@@ -137,7 +137,7 @@ class bx_eu_garan {
 													('MODULE_BX_EU_GARAN_ENABLE_AUDIO', 'True', '".$freeId["id"]."', '7', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), ')";
 	  xtc_db_query($query);
 
-		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_products_warranty_guarantee (
+		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_eu_garan_guarantee (
 								id INT AUTO_INCREMENT PRIMARY KEY,
 								products_id INT NOT NULL UNIQUE,
 								manufacturer_guarantee_available TINYINT(1) DEFAULT 0,
@@ -164,7 +164,7 @@ class bx_eu_garan {
 								created_at DATETIME NOT NULL
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
-		$this->addProductsForeignKeyIfPossible('bx_products_warranty_guarantee', 'fk_bx_eu_garan_warranty_products');
+		$this->addProductsForeignKeyIfPossible('bx_eu_garan_guarantee', 'fk_bx_eu_garan_guarantee_products');
 	
 		$messageStack->add_session(MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_NEXT, 'info');
 		$messageStack->add_session(MODULE_BX_EU_GARAN_ORDER_INSTALL_NEXT, 'info');
@@ -275,7 +275,7 @@ class bx_eu_garan {
 	  xtc_db_query("DELETE FROM ".TABLE_CONFIGURATION." WHERE configuration_key in ('".implode("', '", $this->keys())."')");
 	  xtc_db_query("DELETE FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_title = 'BX EU Garan Konfiguration'");
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." DROP ".$this->code);
-		xtc_db_query("DROP TABLE IF EXISTS bx_products_warranty_guarantee");
+		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_guarantee");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_mass_log");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_presets");
 		

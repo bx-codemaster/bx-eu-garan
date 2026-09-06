@@ -48,7 +48,6 @@
       'filter_include_subcategories' => isset($_POST['filter_include_subcategories']) ? 1 : 0,
       'filter_manufacturers_id'       => isset($_POST['filter_manufacturers_id']) ? (string)$_POST['filter_manufacturers_id'] : '',
       'filter_status'                 => isset($_POST['filter_status']) ? (string)$_POST['filter_status'] : '',
-      'delete_filtered_entries'       => isset($_POST['delete_filtered_entries']) ? 1 : 0,
       'delete_entries_warranty'       => isset($_POST['delete_entries_warranty']) ? 1 : 0,
       'set_manufacturer_guarantee_available' => isset($_POST['set_manufacturer_guarantee_available']) ? 1 : 0,
       'manufacturer_guarantee_available'     => ($manufacturerGuaranteeAvailableRaw === 'true') ? 1 : 0,
@@ -67,7 +66,6 @@
   } else {
     $formData = array(
       'filter_category_id'            => 0,
-      'delete_filtered_entries'       => 0,
       'delete_entries_warranty'       => 0,
       'filter_include_subcategories'  => 1,
       'filter_manufacturers_id'       => '',
@@ -86,7 +84,6 @@
     $_SESSION['bx_eu_garan_last_filters'] = $formData;
   }
 
-  $formData['delete_filtered_entries'] = isset($formData['delete_filtered_entries']) && (int)$formData['delete_filtered_entries'] === 1 ? 1 : 0;
   $formData['delete_entries_warranty'] = isset($formData['delete_entries_warranty']) && (int)$formData['delete_entries_warranty'] === 1 ? 1 : 0;
 
   switch ($action) {
@@ -148,7 +145,7 @@
           $warrantyUpdates[] = "qr_url = VALUES(qr_url)";
         }
 
-        if (empty($warrantyUpdates) && $formData['delete_filtered_entries'] === 0) {
+        if (empty($warrantyUpdates) && $formData['delete_entries_warranty'] === 0) {
           $messageStack->add_session(TEXT_BX_EU_GARAN_FEEDBACK_SELECT_AT_LEAST_ONE_FIELD, 'error');
           xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN, '', 'SSL'));
         }
@@ -159,8 +156,11 @@
         foreach ($productIds as $productId) {
           $productId = (int)$productId;
 
-          if (!empty($warrantyUpdates)) {
-            $warrantySql = "INSERT INTO bx_products_warranty_guarantee (products_id, ".implode(', ', $warrantyColumns).", created_at, updated_at)
+          if ($formData['delete_entries_warranty'] === 1) {
+            xtc_db_query("DELETE FROM ".TABLE_BX_EU_GARAN_GUARANTEE." WHERE products_id = '".$productId."'");
+            $warrantyCount++;
+          } elseif (!empty($warrantyUpdates)) {
+            $warrantySql = "INSERT INTO ".TABLE_BX_EU_GARAN_GUARANTEE." (products_id, ".implode(', ', $warrantyColumns).", created_at, updated_at)
                             VALUES ('".$productId."', ".implode(', ', $warrantyValues).", NOW(), NOW())
                             ON DUPLICATE KEY UPDATE ".implode(', ', $warrantyUpdates).", updated_at = NOW()";
             xtc_db_query($warrantySql);
@@ -179,14 +179,18 @@
           ];
 
           $logChanges = [];
-          if ($formData['set_manufacturer_guarantee_available']) $logChanges['manufacturer_guarantee_available'] = $formData['manufacturer_guarantee_available'];
-          if ($formData['set_guarantee_years'])                  $logChanges['guarantee_years']                  = $formData['guarantee_years'];
-          if ($formData['set_covers_full_product'])              $logChanges['covers_full_product']              = $formData['covers_full_product'];
-          if ($formData['set_requires_additional_cost'])         $logChanges['requires_additional_cost']         = $formData['requires_additional_cost'];
-          if ($formData['set_qr_url'])                           $logChanges['qr_url']                           = $formData['qr_url'];
+          if ($formData['delete_entries_warranty']) {
+            $logChanges['deleted'] = true;
+          } else {
+            if ($formData['set_manufacturer_guarantee_available']) $logChanges['manufacturer_guarantee_available'] = $formData['manufacturer_guarantee_available'];
+            if ($formData['set_guarantee_years'])                  $logChanges['guarantee_years']                  = $formData['guarantee_years'];
+            if ($formData['set_covers_full_product'])              $logChanges['covers_full_product']              = $formData['covers_full_product'];
+            if ($formData['set_requires_additional_cost'])         $logChanges['requires_additional_cost']         = $formData['requires_additional_cost'];
+            if ($formData['set_qr_url'])                           $logChanges['qr_url']                           = $formData['qr_url'];
+          }
 
           xtc_db_query("
-            INSERT INTO bx_eu_garan_mass_log
+            INSERT INTO ".TABLE_BX_EU_GARAN_MASS_LOG."
               (executed_at, affected_products_count, filters_json, changes_json)
             VALUES (
               NOW(),
@@ -210,7 +214,7 @@
       $presetName = isset($_POST['preset_name']) ? trim((string)$_POST['preset_name']) : '';
       if (!empty($presetName)) {
         xtc_db_query("
-          INSERT INTO `bx_eu_garan_presets`
+          INSERT INTO ".TABLE_BX_EU_GARAN_PRESETS."
             (`preset_name`, `preset_data_json`, `created_at`)
           VALUES (
             '" . xtc_db_input($presetName) . "',
@@ -220,13 +224,13 @@
         ");
         $messageStack->add_session('Preset erfolgreich gespeichert!', 'success');
       }
-      xtc_redirect(xtc_href_link('bx_eu_garan.php'));
+      xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN));
       break;
 
     case 'load_preset':
       $presetId = isset($_GET['preset_id']) ? (int)$_GET['preset_id'] : 0;
       if ($presetId > 0) {
-        $preset_query = xtc_db_query("SELECT preset_data_json FROM bx_eu_garan_presets WHERE id = '" . $presetId . "' LIMIT 1");
+        $preset_query = xtc_db_query("SELECT preset_data_json FROM ".TABLE_BX_EU_GARAN_PRESETS." WHERE id = '" . $presetId . "' LIMIT 1");
         if ($preset_query && xtc_db_num_rows($preset_query) > 0) {
           $preset_arr = xtc_db_fetch_array($preset_query);
           $decodedData = json_decode($preset_arr['preset_data_json'], true);
@@ -236,15 +240,15 @@
           }
         }
       }
-      xtc_redirect(xtc_href_link('bx_eu_garan.php'));
+      xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN));
       break;
 
     case 'delete_preset':
       $presetId = isset($_GET['preset_id']) ? (int)$_GET['preset_id'] : 0;
       if ($presetId > 0) {
-        xtc_db_query("DELETE FROM bx_eu_garan_presets WHERE id = '" . $presetId . "'");
+        xtc_db_query("DELETE FROM ".TABLE_BX_EU_GARAN_PRESETS." WHERE id = '" . $presetId . "'");
       }
-      xtc_redirect(xtc_href_link('bx_eu_garan.php'));
+      xtc_redirect(xtc_href_link(FILENAME_BX_EU_GARAN));
       break;
 
     default:
@@ -308,7 +312,7 @@ $messageStack->output();
                       <td style="vertical-align: top; width: 60%; border-left: 1px solid #ddd; padding-left: 20px;">
                         <h3><?php echo TEXT_BX_EU_GARAN_LOAD_PRESETS; ?></h3>
                         <?php
-                        $presets_query = xtc_db_query("SELECT id, preset_name, created_at FROM bx_eu_garan_presets ORDER BY preset_name ASC");
+                        $presets_query = xtc_db_query("SELECT id, preset_name, created_at FROM ".TABLE_BX_EU_GARAN_PRESETS." ORDER BY preset_name ASC");
                         if ($presets_query && xtc_db_num_rows($presets_query) > 0) {
                           echo '<table style="width: 100%; border-collapse: collapse;">';
                           while ($p_row = xtc_db_fetch_array($presets_query)) {
@@ -346,18 +350,10 @@ $messageStack->output();
                         </label>
                       </td>
                       <td class="col-right valign_t" rowspan="3">
-                        <details class="check_delete">
-                          <summary>
-                            <label style="margin-left:10px;">
-                              <?php echo xtc_draw_checkbox_field('delete_filtered_entries', '1', ($formData['delete_filtered_entries'] === 1), $formData['delete_filtered_entries'], 'id="delete_filtered_entries"'); ?>
-                              <span><?php echo TEXT_BX_EU_GARAN_DELETE_FILTERED_ENTRIES; ?></span>
-                            </label>
-                          </summary>
-                          <label style="margin-left:10px;">
-                            <?php echo xtc_draw_checkbox_field('delete_entries_warranty', '1', ($formData['delete_entries_warranty'] === 1), $formData['delete_entries_warranty'], 'id="delete_entries_warranty"'); ?>
-                            <span><?php echo TEXT_BX_EU_GARAN_DELETE_ENTRIES_WARRANTY; ?></span>
-                          </label>
-                        </details>
+                        <label style="margin-left:10px;">
+                          <?php echo xtc_draw_checkbox_field('delete_entries_warranty', '1', ($formData['delete_entries_warranty'] === 1), $formData['delete_entries_warranty'], 'id="delete_entries_warranty"'); ?>
+                          <span><?php echo TEXT_BX_EU_GARAN_DELETE_ENTRIES_WARRANTY; ?></span>
+                        </label>
                       </td>
                     </tr>
                     <tr><td class="col-left"><?php echo TEXT_BX_EU_GARAN_FIELD_MANUFACTURER; ?></td><td class="col-middle"><?php echo xtc_draw_pull_down_menu('filter_manufacturers_id', $manufacturerSelectData, (string)$formData['filter_manufacturers_id']); ?></td></tr>
@@ -391,7 +387,8 @@ $messageStack->output();
   $heading[] = array('text' => '<strong>'.TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_TITLE.'</strong>');
   $warrantyContentFormHtml  = xtc_draw_form('bx_eu_garan_warranty_content_form', 'bx_eu_garan.php');
   $warrantyContentFormHtml .= '<div class="main" style="margin-bottom:8px;">'.TEXT_BX_EU_GARAN_LEGAL_WARRANTY_BOX_DESCRIPTION.'</div>';
-  $warrantyContentFormHtml .= '<div style="margin-bottom:10px;">'.xtc_cfg_select_content('warranty_content_group', (string)$warrantyContentGroupId).'</div>';
+  $warrantyContentControl = xtc_cfg_select_content('warranty_content_group', (int)$warrantyContentGroupId);
+  $warrantyContentFormHtml .= '<div style="margin-bottom:10px;">'. (string)$warrantyContentControl.'</div>';
   $warrantyContentFormHtml .= '<button class="button" type="submit" name="action" value="save_warranty_content">'.BUTTON_BX_EU_GARAN_SAVE_WARRANTY_CONTENT.'</button>';
   $warrantyContentFormHtml .= '</form>';
   $contents[] = array('text' => $warrantyContentFormHtml);

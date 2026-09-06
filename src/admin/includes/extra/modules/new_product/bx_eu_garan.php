@@ -24,7 +24,7 @@ $bx_eu_garan_reference = array(
 if (isset($pInfo->products_id) && (int)$pInfo->products_id > 0) {
 	$product_id = (int)$pInfo->products_id;
 
-	$warranty_query = xtc_db_query("SELECT * FROM bx_products_warranty_guarantee WHERE products_id = '".$product_id."' LIMIT 1");
+	$warranty_query = xtc_db_query("SELECT * FROM ".TABLE_BX_EU_GARAN_GUARANTEE." WHERE products_id = '".$product_id."' LIMIT 1");
 	if ($warranty_query && xtc_db_num_rows($warranty_query) > 0) {
 		$warranty = xtc_db_fetch_array($warranty_query);
 		$bx_eu_garan_values['manufacturer_guarantee_available'] = isset($warranty['manufacturer_guarantee_available']) ? (int)$warranty['manufacturer_guarantee_available'] : 0;

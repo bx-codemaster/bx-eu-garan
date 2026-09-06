@@ -24,7 +24,7 @@ $warranty = array(
   'qr_url'                           => '',
 );
 
-$warrantyQuery = xtc_db_query("SELECT * FROM bx_products_warranty_guarantee WHERE products_id = '".$productId."' LIMIT 1");
+$warrantyQuery = xtc_db_query("SELECT * FROM ".TABLE_BX_EU_GARAN_GUARANTEE." WHERE products_id = '".$productId."' LIMIT 1");
 
 if ($warrantyQuery && xtc_db_num_rows($warrantyQuery) > 0) {
   $row = xtc_db_fetch_array($warrantyQuery);

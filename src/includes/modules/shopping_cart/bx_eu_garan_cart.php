@@ -12,7 +12,7 @@
  * - module configuration table entries (`install`, `remove`, `keys`)
  *
  * Data source:
- * - `bx_products_warranty_guarantee` per-product metadata
+ * - `bx_eu_garan_guarantee` per-product metadata
  */
 
 class bx_eu_garan_cart
@@ -204,7 +204,7 @@ class bx_eu_garan_cart
 
     $query = xtc_db_query("SELECT manufacturer_guarantee_available, guarantee_years,
                                   covers_full_product, requires_additional_cost, qr_url
-                             FROM bx_products_warranty_guarantee
+                             FROM ".TABLE_BX_EU_GARAN_GUARANTEE."
                             WHERE products_id = '".(int)$products_id."'
                             LIMIT 1");
     if ($query && xtc_db_num_rows($query) > 0) {
