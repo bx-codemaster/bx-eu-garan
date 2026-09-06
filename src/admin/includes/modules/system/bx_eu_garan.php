@@ -24,7 +24,7 @@ class bx_eu_garan {
 
 	public function __construct() {
 	  $this->code        = 'bx_eu_garan';
-	  $this->version     = '1.7.3';
+	  $this->version     = '1.8.5';
 		$this->development_status = 'd'; // 'p' = production ready, 'd' = in development
 	  $this->title       = MODULE_BX_EU_GARAN_TITLE;
 	  $this->description = MODULE_BX_EU_GARAN_DESC;
@@ -63,11 +63,11 @@ class bx_eu_garan {
 					  			'MODULE_BX_EU_GARAN_CONFIG_ID',
 									'MODULE_BX_EU_GARAN_ENABLE_AUDIO',
 									'MODULE_BX_EU_GARAN_NO_BRAND',
-				  				'MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP',
+				  				'MODULE_BX_EU_GARAN_CONTENT_GROUP',
 									'MODULE_BX_EU_GARAN_NEW_WINDOW',
 								 );
 		return $keys;
-    }
+  }
 
 	/**
 	  * Actions performed when the user clicks the install button.
@@ -132,7 +132,7 @@ class bx_eu_garan {
 													('MODULE_BX_EU_GARAN_VERSION', '".$this->version."', '".$freeId["id"]."', '2', NOW(), '', 'bx_configuration_field_version('),
 													('MODULE_BX_EU_GARAN_CONFIG_ID', '".$freeId["id"]."', '".$freeId["id"]."', '3', NOW(), '', 'bx_configuration_field_version('),
 													('MODULE_BX_EU_GARAN_NO_BRAND', 'Modified Basics', '".$freeId["id"]."', '4', NOW(), '', ''),
-													('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP', '0', '".$freeId["id"]."', '5', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module('),
+													('MODULE_BX_EU_GARAN_CONTENT_GROUP', '0', '".$freeId["id"]."', '5', NOW(), 'xtc_cfg_display_content', 'xtc_cfg_select_content_module('),
 													('MODULE_BX_EU_GARAN_NEW_WINDOW', 'False', '".$freeId["id"]."', '6', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), '),
 													('MODULE_BX_EU_GARAN_ENABLE_AUDIO', 'True', '".$freeId["id"]."', '7', NOW(), '', 'xtc_cfg_select_option(array(\'True\', \'False\'), ')";
 	  xtc_db_query($query);
@@ -145,17 +145,6 @@ class bx_eu_garan {
 								covers_full_product TINYINT(1) DEFAULT 1,
 								requires_additional_cost TINYINT(1) DEFAULT 0,
 								qr_url VARCHAR(500),
-								created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-								updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-
-		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_products_repairability (
-								id INT AUTO_INCREMENT PRIMARY KEY,
-								products_id INT NOT NULL UNIQUE,
-								repair_score TINYINT UNSIGNED DEFAULT NULL,
-								parts_available TINYINT(1) DEFAULT NULL,
-								parts_availability_years INT DEFAULT NULL,
-								manual_url VARCHAR(500) DEFAULT NULL,
 								created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 								updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
@@ -175,18 +164,8 @@ class bx_eu_garan {
 								created_at DATETIME NOT NULL
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
-		xtc_db_query("CREATE TABLE IF NOT EXISTS bx_eu_garan_products_languages (
-				products_id INT UNSIGNED NOT NULL,
-				language_id INT UNSIGNED NOT NULL,
-				service TEXT NULL,
-				repair TEXT NULL,
-				parts_cost TEXT NULL,
-				PRIMARY KEY (products_id, language_id)
-		) ENGINE=InnoDB;");
-
 		$this->addProductsForeignKeyIfPossible('bx_products_warranty_guarantee', 'fk_bx_eu_garan_warranty_products');
-		$this->addProductsForeignKeyIfPossible('bx_products_repairability', 'fk_bx_eu_garan_repair_products');
-
+	
 		$messageStack->add_session(MODULE_BX_EU_GARAN_CATEGORIES_INSTALL_NEXT, 'info');
 		$messageStack->add_session(MODULE_BX_EU_GARAN_ORDER_INSTALL_NEXT, 'info');
 		$messageStack->add_session(MODULE_BX_EU_GARAN_CART_INSTALL_NEXT, 'info');
@@ -297,8 +276,6 @@ class bx_eu_garan {
 	  xtc_db_query("DELETE FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_title = 'BX EU Garan Konfiguration'");
 	  xtc_db_query("ALTER TABLE ".TABLE_ADMIN_ACCESS." DROP ".$this->code);
 		xtc_db_query("DROP TABLE IF EXISTS bx_products_warranty_guarantee");
-		xtc_db_query("DROP TABLE IF EXISTS bx_products_repairability");
-		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_products_languages");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_mass_log");
 		xtc_db_query("DROP TABLE IF EXISTS bx_eu_garan_presets");
 		

@@ -29,11 +29,10 @@
 
   defined('_VALID_XTC') or die('Direct Access to this location is not allowed.');
   if (defined('MODULE_BX_EU_GARAN_STATUS') && 
-              MODULE_BX_EU_GARAN_STATUS == 'True' && 
-              basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php' ||
-              basename($_SERVER['PHP_SELF']) == 'categories.php' ||
-              basename($_SERVER['PHP_SELF']) == 'module_export.php'
-              ) {
+      MODULE_BX_EU_GARAN_STATUS == 'True' && 
+      (basename($_SERVER['PHP_SELF']) == 'bx_eu_garan.php' ||
+       basename($_SERVER['PHP_SELF']) == 'categories.php')
+     ) {
 ?>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>

@@ -12,15 +12,13 @@
 
   $allowed_pages = array(
       'bx_eu_garan.php',
+      'bx_eu_repairability.php',
       'categories.php',
       'start.php',
       'module_export.php'
   );
   
-  if (defined('MODULE_BX_EU_GARAN_STATUS') && 
-              MODULE_BX_EU_GARAN_STATUS == 'True' && 
-              in_array(basename($_SERVER['PHP_SELF']), $allowed_pages)
-      ) { 
+  if ( in_array(basename($_SERVER['PHP_SELF']), $allowed_pages)) { 
 ?>
 <style>
 :root {

@@ -3,19 +3,16 @@
 	 BX EU Garan - new_product admin hook
 	 ---------------------------------------------------------------------------------------*/
 
+if (!defined('MODULE_BX_EU_GARAN_STATUS') || constant('MODULE_BX_EU_GARAN_STATUS') !== 'True') {
+  return;
+}
+
 $bx_eu_garan_values = array(
 	'manufacturer_guarantee_available' => 0,
 	'guarantee_years'          => '',
 	'covers_full_product'      => 1,
 	'requires_additional_cost' => 0,
 	'qr_url'                   => '',
-	'repair_score'             => 0,
-	'parts_availability_years' => 0,
-	'parts_available'          => '',
-	'manual_url'               => '',
-	'service-languages'        => array(),
-	'repair-languages'         => array(),
-	'parts-cost-languages'     => array(),
 );
 
 $bx_eu_garan_reference = array(
@@ -36,32 +33,6 @@ if (isset($pInfo->products_id) && (int)$pInfo->products_id > 0) {
 		$bx_eu_garan_values['requires_additional_cost'] = isset($warranty['requires_additional_cost']) ? (int)$warranty['requires_additional_cost'] : 0;
 		$bx_eu_garan_values['qr_url']                   = isset($warranty['qr_url']) ? (string)$warranty['qr_url'] : '';
 	}
-
-	$repair_query = xtc_db_query("SELECT * FROM bx_products_repairability WHERE products_id = '".$product_id."' LIMIT 1");
-	if ($repair_query && xtc_db_num_rows($repair_query) > 0) {
-		$repair = xtc_db_fetch_array($repair_query);
-		$bx_eu_garan_values['repair_score']             = isset($repair['repair_score']) ? (int)$repair['repair_score'] : 0;
-		$bx_eu_garan_values['parts_availability_years'] = isset($repair['parts_availability_years']) ? (int)$repair['parts_availability_years'] : 0;
-		$bx_eu_garan_values['parts_available']          = isset($repair['parts_available']) ? (string)$repair['parts_available'] : '';
-		$bx_eu_garan_values['manual_url']               = isset($repair['manual_url']) ? (string)$repair['manual_url'] : '';
-	}
-
-	$languages_query = xtc_db_query("SELECT * FROM `bx_eu_garan_products_languages` WHERE `products_id` = '" . (int)$product_id . "';");
-	$service_array = array();
-	$repair_array  = array();
-	$parts_cost_array = array();
-	if ($languages_query && xtc_db_num_rows($languages_query) > 0) {
-		while ($result = xtc_db_fetch_array($languages_query)) {
-			// Die Sprach-ID als Key setzen und den jeweiligen Text als Wert speichern
-			$language_id = (int)$result['language_id']; // Prüfen Sie hier den exakten Spaltennamen in der DB (z. B. languages_id)
-			$service_array[$language_id] = $result['service'] ?? '';
-			$repair_array[$language_id]  = $result['repair'] ?? '';
-			$parts_cost_array[$language_id]  = $result['parts_cost'] ?? '';
-		}
-	}
-	$bx_eu_garan_values['service-languages'] = $service_array;
-	$bx_eu_garan_values['repair-languages']  = $repair_array;
-	$bx_eu_garan_values['parts-cost-languages']  = $parts_cost_array;
 }
 
 if (!empty($_POST)) {
@@ -70,10 +41,6 @@ if (!empty($_POST)) {
 	$bx_eu_garan_values['covers_full_product']      = (isset($_POST['bx_eu_garan_covers_full_product']) && (int)$_POST['bx_eu_garan_covers_full_product'] === 1) ? 1 : 0;
 	$bx_eu_garan_values['requires_additional_cost'] = (isset($_POST['bx_eu_garan_requires_additional_cost']) && (int)$_POST['bx_eu_garan_requires_additional_cost'] === 1) ? 1 : 0;
 	$bx_eu_garan_values['qr_url']                   = isset($_POST['bx_eu_garan_qr_url']) ? (string)$_POST['bx_eu_garan_qr_url'] : '';
-	$bx_eu_garan_values['repair_score']             = isset($_POST['bx_eu_garan_repair_score']) ? (int)$_POST['bx_eu_garan_repair_score'] : 0;
-	$bx_eu_garan_values['parts_availability_years'] = isset($_POST['bx_eu_garan_availability_years']) ? (int)$_POST['bx_eu_garan_availability_years'] : 0;
-	$bx_eu_garan_values['parts_available']          = isset($_POST['bx_eu_garan_parts_available']) ? (string)$_POST['bx_eu_garan_parts_available'] : '';
-	$bx_eu_garan_values['manual_url']               = isset($_POST['bx_eu_garan_manual_url']) ? (string)$_POST['bx_eu_garan_manual_url'] : '';
 }
 
 $bx_eu_garan_reference = bx_eu_garan_get_product_reference_data(
@@ -172,153 +139,5 @@ $labelRequirementColor = $isGuaranteeLabelRequired ? '#b42318' : '#027a48';
 			</tr>
 			//-->
 		</table>
-	</div>
-</details>
-
-<details id="details-repairability" class="bxac-card store-state">
-	<summary class="bxac-summary">
-		<span class="bxac-arrow">▸</span>
-		<span class="bxac-title">
-			<?php echo HEADING_BX_EU_GARAN_PRODUCT_REPAIRABILITY; ?>
-		</span>
-	</summary>
-	<div class="bxac-body">
-		<table class="tableInput border0">
-			<tr>
-				<td style="width:280px;"><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SCORE; ?></span></td>
-				<td class="main">
-					<div  style="display: flex; align-items: center; gap: 15px;">
-						<div id="repair_score_slider">
-							<input type="range" min="0" max="10" step="1" id="bx_eu_garan_repair_score" name="bx_eu_garan_repair_score" value="<?php echo (int)$bx_eu_garan_values['repair_score']; ?>" list="scores" style="min-width: 250px;">
-							<datalist id="scores">
-								<option value="0"></option>
-								<option value="1"></option>
-								<option value="2"></option>
-								<option value="3"></option>
-								<option value="4"></option>
-								<option value="5"></option>
-								<option value="6"></option>
-								<option value="7"></option>
-								<option value="8"></option>
-								<option value="9"></option>
-								<option value="10"></option>
-							</datalist>
-						</div>
-						<div >
-							Aktueller Wert: <span id="repair_score_value" style="font-weight: bold;"><?php echo (int)$bx_eu_garan_values['repair_score']; ?></span>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE; ?></span></td>
-				<td><span class="main fixed_sumo" style="width:155px;"><?php echo xtc_draw_pull_down_menu('bx_eu_garan_parts_available', $parts_available_array, $bx_eu_garan_values['parts_available'], 'style="width: 155px"'); ?></span></td>
-			</tr>
-			<tr>
-				<td style="vertical-align: top; padding-top: 1rem;"><span class="main"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO; ?></span></td>
-				<td>
-				<?php
-					echo bx_draw_tab_nav('parts-cost-languages', TEXT_BX_EU_GARAN_FIELD_PARTS_COST_INFO, $bx_eu_garan_values['parts-cost-languages'], 'input', false);
-				?>
-				</td>
-			</tr>
-			<tr>
-				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_FIELD_PARTS_AVAILABLE_YEARS; ?></span></td>
-				<td class="main">
-					<div style="display: flex; align-items: center; gap: 15px;">				
-						<div id="repair_availability_years_slider">
-							<input type="range" min="0" max="30" step="1" id="bx_eu_garan_availability_years" name="bx_eu_garan_availability_years" value="<?php echo (int)$bx_eu_garan_values['parts_availability_years']; ?>" list="availability_years" style="min-width: 250px;">
-							<datalist id="availability_years">
-								<option value="0"></option>
-								<option value="1"></option>
-								<option value="2"></option>
-								<option value="3"></option>
-								<option value="4"></option>
-								<option value="5"></option>
-								<option value="6"></option>
-								<option value="7"></option>
-								<option value="8"></option>
-								<option value="9"></option>
-								<option value="10"></option>
-								<option value="11"></option>
-								<option value="12"></option>
-								<option value="13"></option>
-								<option value="14"></option>
-								<option value="15"></option>
-								<option value="16"></option>
-								<option value="17"></option>
-								<option value="18"></option>
-								<option value="19"></option>
-								<option value="20"></option>
-								<option value="21"></option>
-								<option value="22"></option>
-								<option value="23"></option>
-								<option value="24"></option>
-								<option value="25"></option>
-								<option value="26"></option>
-								<option value="27"></option>
-								<option value="28"></option>
-								<option value="29"></option>
-								<option value="30"></option>
-							</datalist>
-						</div>
-						<div >
-							<?php echo TEXT_BX_EU_GARAN_FIELD_CURRENT_VALUE; ?> <span id="availability_years_value" style="font-weight: bold;"><?php echo (int)$bx_eu_garan_values['parts_availability_years']; ?></span>
-						</div>
-					</div>
-				</td>
-			</tr>			
-			<tr>
-				<td><span class="main"><?php echo TEXT_BX_EU_GARAN_PRODUCT_MANUAL_URL; ?></span></td>
-				<td>
-					<span class="main">
-					<?php
-					$protocol = (isset($request_type) && $request_type === 'NONSSL')
-							? HTTP_SERVER
-							: HTTPS_SERVER;
-
-					$manualsDir = DIR_FS_CATALOG . 'pub/manuals/';
-					$manualsUrl = rtrim($protocol, '/') . '/pub/manuals/';
-
-					$manualFiles = [
-						[
-							'id'   => '',
-							'text' => TEXT_BX_EU_GARAN_PLEASE_CHOOSE
-						]
-					];
-
-					if (is_dir($manualsDir) && is_readable($manualsDir)) {
-						foreach (new FilesystemIterator($manualsDir, FilesystemIterator::SKIP_DOTS) as $file) {
-							if ($file->isFile()) {
-								$filename = $file->getFilename();
-
-								$manualFiles[] = [
-									'id'   => $manualsUrl . rawurlencode($filename),
-									'text' => $filename
-								];
-							}
-						}
-					}
-
-					echo xtc_draw_pull_down_menu('bx_eu_garan_manual_url', $manualFiles, $bx_eu_garan_values['manual_url'], 'style="width: 100%"');
-					?>
-					</span>
-					<span class="main">
-					<?php
-					echo xtc_draw_file_field('new_manual_file',  false, 'form="bx_eu_garan_upload_form" accept=".pdf,.epub,.doc,.docx,application/pdf,application/epub+zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"'); ?>
-					<div style="margin-top: 8px;">
-						<button type="submit" name="submit_action" value="upload_manual" class="button" form="bx_eu_garan_upload_form"><?php echo TEXT_BX_IMAGE_MAGICK_PREVIEW_FILE_UPLOAD_BUTTON; ?></button>
-					</div><!-- /submit-upload -->
-					<div style="margin-top: 8px; color: #666;">
-						<?php echo TEXT_BX_IMAGE_MAGICK_PREVIEW_FILE_ALLOWED_TYPES; ?>
-					</div>
-					</span>
-				</td>
-			</tr>
-		</table>
-		<?php
-			echo bx_draw_tab_nav('service-languages', TEXT_BX_EU_GARAN_PRODUCT_REPAIR_SERVICE_URL, $bx_eu_garan_values['service-languages'], 'input');
-			echo bx_draw_tab_nav('repair-languages', TEXT_BX_EU_GARAN_PRODUCT_REPAIR_RESTRICTIONS, $bx_eu_garan_values['repair-languages'], 'area');
-		?>
 	</div>
 </details>

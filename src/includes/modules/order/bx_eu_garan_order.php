@@ -85,7 +85,6 @@ class bx_eu_garan_order
    */
   public function keys()
   {
-
     defined($this->name.'_STATUS_TITLE') OR define($this->name.'_STATUS_TITLE', TEXT_DEFAULT_STATUS_TITLE);
     defined($this->name.'_STATUS_DESC') OR define($this->name.'_STATUS_DESC', TEXT_DEFAULT_STATUS_DESC);
     defined($this->name.'_SORT_ORDER_TITLE') OR define($this->name.'_SORT_ORDER_TITLE', TEXT_DEFAULT_SORT_ORDER_TITLE);
@@ -181,7 +180,7 @@ class bx_eu_garan_order
     }
 
     $default_legal_qr_url         = 'https://europa.eu/youreurope/legal-guarantee/index.htm?lang='.$language_code;
-    $legal_warranty_content_group = (int)MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP;
+    $legal_warranty_content_group = (int)MODULE_BX_EU_GARAN_CONTENT_GROUP;
     $legal_qr_url_raw = $legal_warranty_content_group > 0
       ? xtc_href_link(FILENAME_CONTENT, 'coID='.(int)$legal_warranty_content_group)
       : $default_legal_qr_url;

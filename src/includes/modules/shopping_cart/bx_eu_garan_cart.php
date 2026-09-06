@@ -188,7 +188,7 @@ class bx_eu_garan_cart
     }
 
     $default_legal_qr_url = 'https://europa.eu/youreurope/legal-guarantee/index.htm?lang='.$language_code;
-    $legal_warranty_content_group = (int)MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP;
+    $legal_warranty_content_group = (int)MODULE_BX_EU_GARAN_CONTENT_GROUP;
     
     $legal_qr_url_raw = $legal_warranty_content_group > 0
       ? xtc_href_link(FILENAME_CONTENT, 'coID='.(int)$legal_warranty_content_group)

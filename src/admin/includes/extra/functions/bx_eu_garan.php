@@ -196,35 +196,6 @@
     }
   }
   
-  if (!function_exists('bx_eu_garan_get_configuration_value')) {
-    function bx_eu_garan_get_configuration_value(string $key, string $default = ''): string {
-      $query = xtc_db_query("SELECT configuration_value FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".xtc_db_input($key)."' LIMIT 1");
-      if ($query && xtc_db_num_rows($query) > 0) {
-        $row = xtc_db_fetch_array($query);
-        return isset($row['configuration_value']) ? (string)$row['configuration_value'] : (string)$default;
-      }
-
-      return (string)$default;
-    }
-  }
-
-  if (!function_exists('bx_eu_garan_set_configuration_value')) {
-    function bx_eu_garan_set_configuration_value(string $key, string $value): void {
-      $keyEscaped   = xtc_db_input($key);
-      $valueEscaped = xtc_db_input($value);
-      $existsQuery  = xtc_db_query("SELECT configuration_id FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".$keyEscaped."' LIMIT 1");
-
-      if ($existsQuery && xtc_db_num_rows($existsQuery) > 0) {
-        xtc_db_query("UPDATE ".TABLE_CONFIGURATION." SET configuration_value = '".$valueEscaped."', last_modified = NOW() WHERE configuration_key = '".$keyEscaped."'");
-        return;
-      }
-
-      $groupId = defined('MODULE_BX_EU_GARAN_CONFIG_ID') ? (int)constant('MODULE_BX_EU_GARAN_CONFIG_ID') : 6;
-      xtc_db_query("INSERT INTO ".TABLE_CONFIGURATION." (configuration_key, configuration_value, configuration_group_id, sort_order, date_added, set_function, use_function)
-                    VALUES ('".$keyEscaped."', '".$valueEscaped."', '".$groupId."', '50', NOW(), '', '')");
-    }
-  }
-  
   if (!function_exists('bx_draw_tab_nav')) {
     function bx_draw_tab_nav(string $thema, string $title, array $values = array(), string $type = 'input', $fieldset = true): string {
       $languages = xtc_get_languages();
@@ -256,7 +227,36 @@
       return $return;
     }
   }
+  
+  if (!function_exists('bx_eu_garan_get_configuration_value')) {
+    function bx_eu_garan_get_configuration_value(string $key, string $default = ''): string {
+      $query = xtc_db_query("SELECT configuration_value FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".xtc_db_input($key)."' LIMIT 1");
+      if ($query && xtc_db_num_rows($query) > 0) {
+        $row = xtc_db_fetch_array($query);
+        return isset($row['configuration_value']) ? (string)$row['configuration_value'] : (string)$default;
+      }
 
+      return (string)$default;
+    }
+  }
+
+  if (!function_exists('bx_eu_garan_set_configuration_value')) {
+    function bx_eu_garan_set_configuration_value(string $key, string $value): void {
+      $keyEscaped   = xtc_db_input($key);
+      $valueEscaped = xtc_db_input($value);
+      $existsQuery  = xtc_db_query("SELECT configuration_id FROM ".TABLE_CONFIGURATION." WHERE configuration_key = '".$keyEscaped."' LIMIT 1");
+
+      if ($existsQuery && xtc_db_num_rows($existsQuery) > 0) {
+        xtc_db_query("UPDATE ".TABLE_CONFIGURATION." SET configuration_value = '".$valueEscaped."', last_modified = NOW() WHERE configuration_key = '".$keyEscaped."'");
+        return;
+      }
+
+      $groupId = defined('MODULE_BX_EU_GARAN_CONFIG_ID') ? (int)constant('MODULE_BX_EU_GARAN_CONFIG_ID') : 6;
+      xtc_db_query("INSERT INTO ".TABLE_CONFIGURATION." (configuration_key, configuration_value, configuration_group_id, sort_order, date_added, set_function, use_function)
+                    VALUES ('".$keyEscaped."', '".$valueEscaped."', '".$groupId."', '50', NOW(), '', '')");
+    }
+  }
+  
   /**
    * Konfigurationseingabefeld für die Modulversion (read-only)
    */

@@ -7,7 +7,7 @@ if (!isset($info_smarty) || !is_object($info_smarty) || !isset($product) || !is_
   return;
 }
 
-if (defined('MODULE_BX_EU_GARAN_STATUS') && constant('MODULE_BX_EU_GARAN_STATUS') !== 'True') {
+if (!defined('MODULE_BX_EU_GARAN_STATUS') || constant('MODULE_BX_EU_GARAN_STATUS') !== 'True') {
   return;
 }
 
@@ -42,7 +42,7 @@ $showWarrantyLabel = (
   && $warranty['requires_additional_cost'] === 0
 );
 
-$manufacturerName = MODULE_BX_EU_GARAN_NO_BRAND;
+$manufacturerName = defined('MODULE_BX_EU_GARAN_NO_BRAND') ? MODULE_BX_EU_GARAN_NO_BRAND : 'No Brand';
 if (isset($product->data['manufacturers_name']) && $product->data['manufacturers_name'] !== '') {
   $manufacturerName = (string)$product->data['manufacturers_name'];
 } elseif (isset($product->data['manufacturers_id']) && (int)$product->data['manufacturers_id'] > 0) {
@@ -67,8 +67,8 @@ if (!empty($product->data['products_manufacturers_model'])) {
 
 $defaultLegalQrUrl = 'https://europa.eu/youreurope/citizens/consumers/shopping/guarantees/index_'.$_SESSION["language_code"].'.htm';
 
-$legalWarrantyContentGroup = defined('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP')
-  ? (int)constant('MODULE_BX_EU_GARAN_WARRANTY_CONTENT_GROUP')
+$legalWarrantyContentGroup = defined('MODULE_BX_EU_GARAN_CONTENT_GROUP')
+  ? (int)constant('MODULE_BX_EU_GARAN_CONTENT_GROUP')
   : 0;
 
 $legalQrUrlRaw = $legalWarrantyContentGroup > 0
@@ -96,27 +96,6 @@ $info_smarty->assign('BX_EU_GARAN_SHOW_WARRANTY_LABEL', $showWarrantyLabel ? '1'
 $info_smarty->assign('BX_EU_GARAN_WARRANTY_YEARS', (int)$warranty['guarantee_years']);
 $info_smarty->assign('BX_EU_GARAN_WARRANTY_MANUFACTURER', $manufacturerName);
 $info_smarty->assign('BX_EU_GARAN_WARRANTY_MODEL', $modelIdentifier);
-
-$repairability_sql = "SELECT * FROM bx_products_repairability bpr 
-                        LEFT JOIN bx_eu_garan_products_languages bpl 
-                              ON bpl.products_id = bpr.products_id AND bpl.language_id = '".(int)$_SESSION['languages_id']."'
-                      WHERE bpr.products_id = '".$productId."' LIMIT 1;";
-
-$repairability_query = xtc_db_query($repairability_sql);
-
-if(xtc_db_num_rows($repairability_query) > 0) {
-  $repairability = xtc_db_fetch_array($repairability_query, true);
-  
-  $info_smarty->assign('BX_EU_GARAN_REPAIRABILITY_TITLE', 'Repairability');
-  $info_smarty->assign('BX_EU_GARAN_REPAIRABILITY_ARRAY', $repairability);
-
-
-  $link   = xtc_href_link(FILENAME_PRODUCT_INFO);
-  $offset = strlen(FILENAME_PRODUCT_INFO)*-1;
-  $url    = substr($link, 0, $offset);
-  $src    = $url.'templates/'.CURRENT_TEMPLATE.'/img/';
-  $info_smarty->assign('BX_EU_GARAN_REPAIRABILITY_SRC', $src);
-}
 
 if ($showWarrantyLabel) {
   $years = sprintf('%02d', (int)$warranty['guarantee_years']);

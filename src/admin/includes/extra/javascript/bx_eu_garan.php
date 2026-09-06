@@ -29,24 +29,6 @@
 <script>
   "use strict";
   document.addEventListener("DOMContentLoaded", function() {
-
-    var setups = [
-      { sliderId: "bx_eu_garan_repair_score", outputId: "repair_score_value" },
-      { sliderId: "bx_eu_garan_availability_years", outputId: "availability_years_value" }
-    ];
-
-    setups.forEach(function(item) {
-      var slider = document.getElementById(item.sliderId);
-      var output = document.getElementById(item.outputId);
-      
-      if (slider && output) {
-        output.textContent = slider.value;
-        slider.addEventListener("input", function() {
-          output.textContent = this.value;
-        });
-      }
-    });
-
     // Findet alle <details>-Elemente mit der Klasse "store-state"
     const allDetails = document.querySelectorAll('details.store-state');
 
