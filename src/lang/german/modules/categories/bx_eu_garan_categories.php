@@ -4,4 +4,4 @@
    ---------------------------------------------------------------------------------------*/
 
 define('MODULE_CATEGORIES_BX_EU_GARAN_CATEGORIES_TITLE', 'BX EU Garan Kategorien');
-define('MODULE_CATEGORIES_BX_EU_GARAN_CATEGORIES_DESCRIPTION', 'Speichert EU-Garantie- und Reparierbarkeitsdaten beim Anlegen und Bearbeiten von Produkten.');
+define('MODULE_CATEGORIES_BX_EU_GARAN_CATEGORIES_DESCRIPTION', 'Speichert EU-Garantiedaten beim Anlegen und Bearbeiten von Produkten.');
