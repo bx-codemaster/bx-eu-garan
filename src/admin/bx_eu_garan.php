@@ -299,7 +299,7 @@ $messageStack->output();
         <table class="tableCenter">
           <tr>
             <td class="boxCenterLeft">
-              <div id="headboard"><div class="main"><?php echo HEADING_BX_EU_GARAN_TITLE; ?></div></div>
+              <div class="bx-headboard"><div class="main"><?php echo HEADING_BX_EU_GARAN_TITLE; ?></div></div>
               <?php echo xtc_draw_form('bx_eu_garan_form', 'bx_eu_garan.php'); ?>
                 <div class="clear div_box" style="max-width: 100%; border-radius: 4px;">
                   <table style="width: 100%;">

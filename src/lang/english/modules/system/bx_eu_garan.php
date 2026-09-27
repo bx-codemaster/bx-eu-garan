@@ -28,7 +28,7 @@
   <details class="bxac-card">
     <summary class="bxac-summary" style="list-style: none;">
       <span class="bxac-arrow">▸</span>
-      ' . xtc_image(DIR_WS_ICONS.'heading/bx_eu_garan.png', 'BX EU Garan', '', '', 'style="max-height: 32px; margin: 2px;"') . '
+      ' . xtc_image(DIR_WS_ICONS.'heading/bx_eu_garan.png', 'BX EU Garan') . '
       <span class="bxac-title">BX EU Garan</span>
     </summary>
     <div class="bxac-body">

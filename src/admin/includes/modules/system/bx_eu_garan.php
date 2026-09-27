@@ -145,6 +145,7 @@ class bx_eu_garan {
 								covers_full_product TINYINT(1) DEFAULT 1,
 								requires_additional_cost TINYINT(1) DEFAULT 0,
 								qr_url VARCHAR(500),
+								revision INT NOT NULL DEFAULT 1,
 								created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 								updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
